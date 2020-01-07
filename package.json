@@ -1,6 +1,6 @@
 {
     "name": "think_validtion",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Validtion Util for Koatty and ThinkORM.",
     "scripts": {
         "build": "trash ./dist && tsc",
