@@ -2,7 +2,7 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-01-09 17:26:25
+ * @ version: 2020-01-09 19:39:05
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
@@ -10,11 +10,9 @@ import helper from "think_lib";
 import { ValidatorCls, ValidRules, ClassValidator, ValidatorFuncs } from "./ValidateUtil";
 import { cnname, idnumber, zipcode, mobile, platenumber, getOriginMetadata, recursiveGetMetadata, defineNewProperty, PARAM_TYPE_KEY, PARAM_RULE_KEY } from "./Lib";
 import { registerDecorator, ValidationArguments, ValidationOptions } from "class-validator";
-
-// export checkParamsType
-export { checkParamsType } from "./Lib";
+// export for manual verification
 export { ClassValidator, FunctionValidator } from "./ValidateUtil";
-// export decorators of class-validator
+// export decorators from class-validator
 export { IsDefined } from "class-validator";
 
 /**
@@ -38,10 +36,12 @@ export function Validated(): MethodDecorator {
                 props.map && props.map((value: any, index: number) => {
                     if (helper.isObject(value) && helper.isClass(paramtypes[index])) {
                         ps.push(ClassValidator.valid(paramtypes[index], value));
+                    } else {
+                        ps.push(Promise.resolve(value));
                     }
                 });
                 if (ps.length > 0) {
-                    await Promise.all(ps);
+                    props = await Promise.all(ps);
                 }
                 // tslint:disable-next-line: no-invalid-this
                 return value.apply(this, props);
@@ -81,7 +81,7 @@ export function Valid(rule: ValidRules | ValidRules[] | Function, message?: stri
 }
 
 /**
- *
+ * append to the target class method to validated parameter.
  *
  * @export
  * @param {*} target
@@ -98,6 +98,21 @@ export function validParamter(target: any, propertyKey: string) {
         }
         return props;
     });
+}
+
+/**
+ * Set property as included in the process of transformation.
+ *
+ * @export
+ * @param {Object} object
+ * @param {string} propertyName
+ */
+export function setExpose(object: Object, propertyName: string) {
+    const types = Reflect.getMetadata("design:type", object, propertyName);
+    if (types) {
+        const originMap = getOriginMetadata(PARAM_TYPE_KEY, object);
+        originMap.set(propertyName, types.name);
+    }
 }
 
 /**
@@ -125,11 +140,7 @@ export function Expose(): PropertyDecorator {
  */
 export function IsCnName(validationOptions?: ValidationOptions): PropertyDecorator {
     return function (object: Object, propertyName: string) {
-        const types = Reflect.getMetadata("design:type", object, propertyName);
-        if (types) {
-            const originMap = getOriginMetadata(PARAM_TYPE_KEY, object);
-            originMap.set(propertyName, types.name);
-        }
+        setExpose(object, propertyName);
 
         registerDecorator({
             name: "IsCnName",
@@ -158,11 +169,7 @@ export function IsCnName(validationOptions?: ValidationOptions): PropertyDecorat
  */
 export function IsIdNumber(validationOptions?: ValidationOptions): PropertyDecorator {
     return function (object: Object, propertyName: string) {
-        const types = Reflect.getMetadata("design:type", object, propertyName);
-        if (types) {
-            const originMap = getOriginMetadata(PARAM_TYPE_KEY, object);
-            originMap.set(propertyName, types.name);
-        }
+        setExpose(object, propertyName);
 
         registerDecorator({
             name: "IsIdNumber",
@@ -191,11 +198,7 @@ export function IsIdNumber(validationOptions?: ValidationOptions): PropertyDecor
  */
 export function IsZipCode(validationOptions?: ValidationOptions): PropertyDecorator {
     return function (object: Object, propertyName: string) {
-        const types = Reflect.getMetadata("design:type", object, propertyName);
-        if (types) {
-            const originMap = getOriginMetadata(PARAM_TYPE_KEY, object);
-            originMap.set(propertyName, types.name);
-        }
+        setExpose(object, propertyName);
 
         registerDecorator({
             name: "IsZipCode",
@@ -224,11 +227,7 @@ export function IsZipCode(validationOptions?: ValidationOptions): PropertyDecora
  */
 export function IsMobile(validationOptions?: ValidationOptions): PropertyDecorator {
     return function (object: Object, propertyName: string) {
-        const types = Reflect.getMetadata("design:type", object, propertyName);
-        if (types) {
-            const originMap = getOriginMetadata(PARAM_TYPE_KEY, object);
-            originMap.set(propertyName, types.name);
-        }
+        setExpose(object, propertyName);
 
         registerDecorator({
             name: "IsMobile",
@@ -257,11 +256,7 @@ export function IsMobile(validationOptions?: ValidationOptions): PropertyDecorat
  */
 export function IsPlateNumber(validationOptions?: ValidationOptions): PropertyDecorator {
     return function (object: Object, propertyName: string) {
-        const types = Reflect.getMetadata("design:type", object, propertyName);
-        if (types) {
-            const originMap = getOriginMetadata(PARAM_TYPE_KEY, object);
-            originMap.set(propertyName, types.name);
-        }
+        setExpose(object, propertyName);
 
         registerDecorator({
             name: "IsPlateNumber",
@@ -290,11 +285,7 @@ export function IsPlateNumber(validationOptions?: ValidationOptions): PropertyDe
  */
 export function IsNotEmpty(validationOptions?: ValidationOptions): PropertyDecorator {
     return function (object: Object, propertyName: string) {
-        const types = Reflect.getMetadata("design:type", object, propertyName);
-        if (types) {
-            const originMap = getOriginMetadata(PARAM_TYPE_KEY, object);
-            originMap.set(propertyName, types.name);
-        }
+        setExpose(object, propertyName);
 
         registerDecorator({
             name: "IsNotEmpty",
@@ -323,11 +314,7 @@ export function IsNotEmpty(validationOptions?: ValidationOptions): PropertyDecor
  */
 export function Equals(comparison: any, validationOptions?: ValidationOptions): PropertyDecorator {
     return function (object: Object, propertyName: string) {
-        const types = Reflect.getMetadata("design:type", object, propertyName);
-        if (types) {
-            const originMap = getOriginMetadata(PARAM_TYPE_KEY, object);
-            originMap.set(propertyName, types.name);
-        }
+        setExpose(object, propertyName);
 
         registerDecorator({
             name: "vEquals",
@@ -356,11 +343,7 @@ export function Equals(comparison: any, validationOptions?: ValidationOptions): 
  */
 export function NotEquals(comparison: any, validationOptions?: ValidationOptions): PropertyDecorator {
     return function (object: Object, propertyName: string) {
-        const types = Reflect.getMetadata("design:type", object, propertyName);
-        if (types) {
-            const originMap = getOriginMetadata(PARAM_TYPE_KEY, object);
-            originMap.set(propertyName, types.name);
-        }
+        setExpose(object, propertyName);
 
         registerDecorator({
             name: "vNotEquals",
@@ -389,11 +372,7 @@ export function NotEquals(comparison: any, validationOptions?: ValidationOptions
  */
 export function Contains(seed: string, validationOptions?: ValidationOptions): PropertyDecorator {
     return function (object: Object, propertyName: string) {
-        const types = Reflect.getMetadata("design:type", object, propertyName);
-        if (types) {
-            const originMap = getOriginMetadata(PARAM_TYPE_KEY, object);
-            originMap.set(propertyName, types.name);
-        }
+        setExpose(object, propertyName);
 
         registerDecorator({
             name: "vContains",
@@ -423,11 +402,7 @@ export function Contains(seed: string, validationOptions?: ValidationOptions): P
  */
 export function IsIn(possibleValues: any[], validationOptions?: ValidationOptions): PropertyDecorator {
     return function (object: Object, propertyName: string) {
-        const types = Reflect.getMetadata("design:type", object, propertyName);
-        if (types) {
-            const originMap = getOriginMetadata(PARAM_TYPE_KEY, object);
-            originMap.set(propertyName, types.name);
-        }
+        setExpose(object, propertyName);
 
         registerDecorator({
             name: "vIsIn",
@@ -456,11 +431,7 @@ export function IsIn(possibleValues: any[], validationOptions?: ValidationOption
  */
 export function IsNotIn(possibleValues: any[], validationOptions?: ValidationOptions): PropertyDecorator {
     return function (object: Object, propertyName: string) {
-        const types = Reflect.getMetadata("design:type", object, propertyName);
-        if (types) {
-            const originMap = getOriginMetadata(PARAM_TYPE_KEY, object);
-            originMap.set(propertyName, types.name);
-        }
+        setExpose(object, propertyName);
 
         registerDecorator({
             name: "vIsNotIn",
@@ -488,11 +459,7 @@ export function IsNotIn(possibleValues: any[], validationOptions?: ValidationOpt
  */
 export function IsDate(validationOptions?: ValidationOptions): PropertyDecorator {
     return function (object: Object, propertyName: string) {
-        const types = Reflect.getMetadata("design:type", object, propertyName);
-        if (types) {
-            const originMap = getOriginMetadata(PARAM_TYPE_KEY, object);
-            originMap.set(propertyName, types.name);
-        }
+        setExpose(object, propertyName);
 
         registerDecorator({
             name: "vIsDate",
@@ -521,11 +488,7 @@ export function IsDate(validationOptions?: ValidationOptions): PropertyDecorator
  */
 export function Min(min: number, validationOptions?: ValidationOptions): PropertyDecorator {
     return function (object: Object, propertyName: string) {
-        const types = Reflect.getMetadata("design:type", object, propertyName);
-        if (types) {
-            const originMap = getOriginMetadata(PARAM_TYPE_KEY, object);
-            originMap.set(propertyName, types.name);
-        }
+        setExpose(object, propertyName);
 
         registerDecorator({
             name: "vMin",
@@ -554,11 +517,7 @@ export function Min(min: number, validationOptions?: ValidationOptions): Propert
  */
 export function Max(max: number, validationOptions?: ValidationOptions): PropertyDecorator {
     return function (object: Object, propertyName: string) {
-        const types = Reflect.getMetadata("design:type", object, propertyName);
-        if (types) {
-            const originMap = getOriginMetadata(PARAM_TYPE_KEY, object);
-            originMap.set(propertyName, types.name);
-        }
+        setExpose(object, propertyName);
 
         registerDecorator({
             name: "vMax",
@@ -588,14 +547,7 @@ export function Max(max: number, validationOptions?: ValidationOptions): Propert
  */
 export function Length(min: number, max?: number, validationOptions?: ValidationOptions): PropertyDecorator {
     return function (object: Object, propertyName: string) {
-        const types = Reflect.getMetadata("design:type", object, propertyName);
-        if (types) {
-            if (types.name !== "String") {
-                throw Error('The Length decorator is only used for string type parameters.');
-            }
-            const originMap = getOriginMetadata(PARAM_TYPE_KEY, object);
-            originMap.set(propertyName, types.name);
-        }
+        setExpose(object, propertyName);
 
         registerDecorator({
             name: "vLength",
@@ -624,11 +576,7 @@ export function Length(min: number, max?: number, validationOptions?: Validation
  */
 export function IsEmail(options?: ValidatorJS.IsEmailOptions, validationOptions?: ValidationOptions): PropertyDecorator {
     return function (object: Object, propertyName: string) {
-        const types = Reflect.getMetadata("design:type", object, propertyName);
-        if (types) {
-            const originMap = getOriginMetadata(PARAM_TYPE_KEY, object);
-            originMap.set(propertyName, types.name);
-        }
+        setExpose(object, propertyName);
 
         registerDecorator({
             name: "vIsEmail",
@@ -657,11 +605,7 @@ export function IsEmail(options?: ValidatorJS.IsEmailOptions, validationOptions?
  */
 export function IsIP(version?: number, validationOptions?: ValidationOptions): PropertyDecorator {
     return function (object: Object, propertyName: string) {
-        const types = Reflect.getMetadata("design:type", object, propertyName);
-        if (types) {
-            const originMap = getOriginMetadata(PARAM_TYPE_KEY, object);
-            originMap.set(propertyName, types.name);
-        }
+        setExpose(object, propertyName);
 
         registerDecorator({
             name: "vIsIP",
@@ -692,11 +636,7 @@ export function IsIP(version?: number, validationOptions?: ValidationOptions): P
  */
 export function IsPhoneNumber(region: string, validationOptions?: ValidationOptions): PropertyDecorator {
     return function (object: Object, propertyName: string) {
-        const types = Reflect.getMetadata("design:type", object, propertyName);
-        if (types) {
-            const originMap = getOriginMetadata(PARAM_TYPE_KEY, object);
-            originMap.set(propertyName, types.name);
-        }
+        setExpose(object, propertyName);
 
         registerDecorator({
             name: "vIsPhoneNumber",
@@ -725,11 +665,7 @@ export function IsPhoneNumber(region: string, validationOptions?: ValidationOpti
  */
 export function IsUrl(options?: ValidatorJS.IsURLOptions, validationOptions?: ValidationOptions): PropertyDecorator {
     return function (object: Object, propertyName: string) {
-        const types = Reflect.getMetadata("design:type", object, propertyName);
-        if (types) {
-            const originMap = getOriginMetadata(PARAM_TYPE_KEY, object);
-            originMap.set(propertyName, types.name);
-        }
+        setExpose(object, propertyName);
 
         registerDecorator({
             name: "vIsUrl",
@@ -758,11 +694,7 @@ export function IsUrl(options?: ValidatorJS.IsURLOptions, validationOptions?: Va
  */
 export function IsHash(algorithm: ValidatorJS.HashAlgorithm, validationOptions?: ValidationOptions): PropertyDecorator {
     return function (object: Object, propertyName: string) {
-        const types = Reflect.getMetadata("design:type", object, propertyName);
-        if (types) {
-            const originMap = getOriginMetadata(PARAM_TYPE_KEY, object);
-            originMap.set(propertyName, types.name);
-        }
+        setExpose(object, propertyName);
 
         registerDecorator({
             name: "vIsHash",
