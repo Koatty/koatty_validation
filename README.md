@@ -1,5 +1,5 @@
 # think_validtion
-Validtion Util for Koatty and ThinkORM.
+Validtion Util for Koatty and ThinkORM. Based on class-validator, extended parameter type checking and restricted attribute functions.
 
 
 # User Decorators

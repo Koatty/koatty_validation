@@ -1,6 +1,6 @@
 {
     "name": "think_validtion",
-    "version": "1.0.1",
+    "version": "1.1.0",
     "description": "Validtion Util for Koatty and ThinkORM.",
     "scripts": {
         "build": "trash ./dist && tsc",
@@ -42,7 +42,6 @@
         "typescript": "^3.7.4"
     },
     "dependencies": {
-        "class-transformer": "^0.2.3",
         "class-validator": "^0.11.0",
         "reflect-metadata": "^0.1.13",
         "think_lib": "^2.2.13",

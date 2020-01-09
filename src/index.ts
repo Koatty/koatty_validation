@@ -2,179 +2,135 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-01-07 19:22:31
+ * @ version: 2020-01-09 17:26:25
  */
-
+// tslint:disable-next-line: no-import-side-effect
+import "reflect-metadata";
 import helper from "think_lib";
-import { plainToClass } from "class-transformer";
-import { validate, registerDecorator, ValidationArguments, ValidationOptions, Validator } from "class-validator";
+import { ValidatorCls, ValidRules, ClassValidator, ValidatorFuncs } from "./ValidateUtil";
+import { cnname, idnumber, zipcode, mobile, platenumber, getOriginMetadata, recursiveGetMetadata, defineNewProperty, PARAM_TYPE_KEY, PARAM_RULE_KEY } from "./Lib";
+import { registerDecorator, ValidationArguments, ValidationOptions } from "class-validator";
+
+// export checkParamsType
+export { checkParamsType } from "./Lib";
+export { ClassValidator, FunctionValidator } from "./ValidateUtil";
 // export decorators of class-validator
-export {
-    IsDefined, Equals, NotEquals, Contains, IsIn, IsNotIn, IsDate,
-    Min, Max, Length, IsEmail, IsIP, IsPhoneNumber, IsUrl, IsHash
-} from "class-validator";
-const validatorCls = new Validator();
+export { IsDefined } from "class-validator";
 
 /**
- * Validator Functions
- */
-export const FunctionValidator: any = {
-    Equals: validatorCls.equals,
-    NotEquals: validatorCls.notEquals,
-    Contains: validatorCls.contains,
-    IsIn: validatorCls.isIn,
-    IsNotIn: validatorCls.isNotIn,
-    IsDate: validatorCls.isDate,
-    Min: validatorCls.min,
-    Max: validatorCls.max,
-    Length: validatorCls.length,
-    IsEmail: validatorCls.isEmail,
-    IsIP: validatorCls.isIP,
-    IsPhoneNumber: validatorCls.isPhoneNumber,
-    IsUrl: validatorCls.isURL,
-    IsHash: validatorCls.isHash,
-    IsCnName: iscnname,
-    IsIdNumber: isidnumber,
-    IsZipCode: iszipcode,
-    IsMobile: ismobile,
-    IsPlateNumber: isplatenumber,
-    IsNotEmpty(value: any) {
-        return !helper.isEmpty(value);
-    }
-};
-
-/**
+ * Validtion paramer's type and values from DTO class.
  *
- *
- * @class ValidateUtil
+ * @export
+ * @returns {MethodDecorator}
  */
-class ValidateUtil {
-    private static instance: ValidateUtil;
+export function Validated(): MethodDecorator {
+    return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
+        // 获取成员参数类型
+        const paramtypes = Reflect.getMetadata("design:paramtypes", target, propertyKey);
+        const { value, configurable, enumerable } = descriptor;
+        descriptor = {
+            configurable,
+            enumerable,
+            writable: true,
+            value: async function valid(...props: any[]) {
+                const ps: any[] = [];
+                // tslint:disable-next-line: no-unused-expression
+                props.map && props.map((value: any, index: number) => {
+                    if (helper.isObject(value) && helper.isClass(paramtypes[index])) {
+                        ps.push(ClassValidator.valid(paramtypes[index], value));
+                    }
+                });
+                if (ps.length > 0) {
+                    await Promise.all(ps);
+                }
+                // tslint:disable-next-line: no-invalid-this
+                return value.apply(this, props);
+            }
+        };
+        return descriptor;
+    };
 
-    private constructor() {
-    }
-
-    /**
-     * 
-     *
-     * @static
-     * @returns
-     * @memberof ValidateUtil
-     */
-    static getInstance() {
-        return this.instance || (this.instance = new ValidateUtil());
-    }
-
-    /**
-     *
-     *
-     * @param {*} Clazz
-     * @param {*} data
-     * @returns {Promise<any>}
-     * @memberof ValidateUtil
-     */
-    async valid(Clazz: any, data: any): Promise<any> {
-        const obj = plainToClass(Clazz, data);
-        const errors = await validate(obj, { skipMissingProperties: true });
-        if (errors.length > 0) {
-            throw new Error(Object.values(errors[0].constraints)[0]);
-        }
-        return obj;
-    }
 }
 
 /**
- * ClassValidator for manual
- */
-export const ClassValidator = ValidateUtil.getInstance();
-
-/**
- * Checks if value is a chinese name.
+ * Validtion paramer's type and values.
  *
- * @param {string} value
- * @returns {boolean}
+ * @export
+ * @param {(ValidRules | ValidRules[] | Function)} rule
+ * @param {string} [message]
+ * @returns {ParameterDecorator}
  */
-function iscnname(value: string): boolean {
-    const reg = /^([a-zA-Z0-9\u4e00-\u9fa5\·]{1,10})$/;
-    return reg.test(value);
-}
-
-/**
- * Checks if value is a idcard number.
- *
- * @param {string} value
- * @returns
- */
-function isidnumber(value: string): boolean {
-    if (/^\d{15}$/.test(value)) {
-        return true;
-    }
-    if ((/^\d{17}[0-9X]$/).test(value)) {
-        const vs = '1,0,x,9,8,7,6,5,4,3,2'.split(',');
-        const ps: any[] = '7,9,10,5,8,4,2,1,6,3,7,9,10,5,8,4,2'.split(',');
-        const ss: any[] = value.toLowerCase().split('');
-        let r = 0;
-        for (let i = 0; i < 17; i++) {
-            r += ps[i] * ss[i];
-        }
-        const isOk = (vs[r % 11] === ss[17]);
-        return isOk;
-    }
-    return false;
-}
-
-/**
- * Checks if value is a mobile phone number.
- *
- * @param {string} value
- * @returns {boolean}
- */
-function ismobile(value: string): boolean {
-    const reg = /^(13|14|15|16|17|18|19)\d{9}$/;
-    return reg.test(value);
-}
-
-/**
- * Checks if value is a zipcode.
- *
- * @param {string} value
- * @returns {boolean}
- */
-function iszipcode(value: string): boolean {
-    const reg = /^\d{6}$/;
-    return reg.test(value);
-}
-
-/**
- * Checks if value is a platenumber.
- *
- * @param {string} value
- * @returns {boolean}
- */
-function isplatenumber(value: string): boolean {
-    // let reg = new RegExp('^(([\u4e00-\u9fa5][a-zA-Z]|[\u4e00-\u9fa5]{2}\d{2}|[\u4e00-\u9fa5]{2}[a-zA-Z])[-]?|([wW][Jj][\u4e00-\u9fa5]{1}[-]?)|([a-zA-Z]{2}))([A-Za-z0-9]{5}|[DdFf][A-HJ-NP-Za-hj-np-z0-9][0-9]{4}|[0-9]{5}[DdFf])$');
-    // let xreg = /^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领A-Z]{1}[A-Z]{1}(([0-9]{5}[DF]$)|([DF][A-HJ-NP-Z0-9][0-9]{4}$))/;
-    const xreg = /^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领]{1}[A-Z]{1}(([0-9]{5}[DF]$)|([DF][A-HJ-NP-Z0-9][0-9]{4}$))/;
-    // let creg = /^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领A-Z]{1}[A-Z]{1}[A-HJ-NP-Z0-9]{4}[A-HJ-NP-Z0-9挂学警港澳]{1}$/;
-    const creg = /^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领]{1}[A-Z]{1}[A-HJ-NP-Z0-9]{4}[A-HJ-NP-Z0-9挂学警港澳]{1}$/;
-    if (value.length === 7) {
-        return creg.test(value);
+export function Valid(rule: ValidRules | ValidRules[] | Function, message?: string): ParameterDecorator {
+    let rules: any = [];
+    if (helper.isString(rule)) {
+        rules = (<string>rule).split(",");
     } else {
-        //新能源车牌
-        return xreg.test(value);
+        rules = rule;
     }
+    return (target: any, propertyKey: string, descriptor: any) => {
+        // 获取成员参数类型
+        const paramtypes = Reflect.getMetadata("design:paramtypes", target, propertyKey);
+
+        const originMap = getOriginMetadata(PARAM_RULE_KEY, target, propertyKey);
+        originMap.set(descriptor, {
+            type: paramtypes[descriptor] && paramtypes[descriptor].name ? paramtypes[descriptor].name : "",
+            rule: rules,
+            message
+        });
+    };
 }
 
+/**
+ *
+ *
+ * @export
+ * @param {*} target
+ * @param {string} propertyKey
+ */
+export function validParamter(target: any, propertyKey: string) {
+    const vaildMetaDatas = recursiveGetMetadata(PARAM_RULE_KEY, target, propertyKey);
+    defineNewProperty(target, propertyKey, function (props: any[]) {
+        // tslint:disable-next-line: forin
+        for (const n in vaildMetaDatas) {
+            if (vaildMetaDatas[n].type && vaildMetaDatas[n].rule) {
+                ValidatorFuncs(n, props[n], vaildMetaDatas[n].type, vaildMetaDatas[n].rule, vaildMetaDatas[n].message);
+            }
+        }
+        return props;
+    });
+}
+
+/**
+ * Marks property as included in the process of transformation.
+ *
+ * @export
+ * @returns {PropertyDecorator}
+ */
+export function Expose(): PropertyDecorator {
+    return function (object: Object, propertyName: string) {
+        const types = Reflect.getMetadata("design:type", object, propertyName);
+        if (types) {
+            const originMap = getOriginMetadata(PARAM_TYPE_KEY, object);
+            originMap.set(propertyName, types.name);
+        }
+    };
+}
 /**
  * Checks if value is a chinese name.
  *
  * @export
  * @param {string} property
  * @param {ValidationOptions} [validationOptions]
- * @returns
+ * @returns {PropertyDecorator}
  */
-export function IsCnName(validationOptions?: ValidationOptions) {
+export function IsCnName(validationOptions?: ValidationOptions): PropertyDecorator {
     return function (object: Object, propertyName: string) {
+        const types = Reflect.getMetadata("design:type", object, propertyName);
+        if (types) {
+            const originMap = getOriginMetadata(PARAM_TYPE_KEY, object);
+            originMap.set(propertyName, types.name);
+        }
+
         registerDecorator({
             name: "IsCnName",
             target: object.constructor,
@@ -182,10 +138,10 @@ export function IsCnName(validationOptions?: ValidationOptions) {
             options: validationOptions,
             validator: {
                 validate(value: any, args: ValidationArguments) {
-                    return iscnname(value);
+                    return cnname(value);
                 },
-                defaultMessage(args: ValidationArguments) { // here you can provide default error message if validation failed
-                    return "The ($property) must be a chinese name!";
+                defaultMessage(args: ValidationArguments) {
+                    return "The ($property) must be an chinese name!";
                 }
             }
         });
@@ -198,10 +154,16 @@ export function IsCnName(validationOptions?: ValidationOptions) {
  * @export
  * @param {string} property
  * @param {ValidationOptions} [validationOptions]
- * @returns
+ * @returns {PropertyDecorator}
  */
-export function IsIdNumber(validationOptions?: ValidationOptions) {
+export function IsIdNumber(validationOptions?: ValidationOptions): PropertyDecorator {
     return function (object: Object, propertyName: string) {
+        const types = Reflect.getMetadata("design:type", object, propertyName);
+        if (types) {
+            const originMap = getOriginMetadata(PARAM_TYPE_KEY, object);
+            originMap.set(propertyName, types.name);
+        }
+
         registerDecorator({
             name: "IsIdNumber",
             target: object.constructor,
@@ -209,10 +171,10 @@ export function IsIdNumber(validationOptions?: ValidationOptions) {
             options: validationOptions,
             validator: {
                 validate(value: any, args: ValidationArguments) {
-                    return isidnumber(value);
+                    return idnumber(value);
                 },
-                defaultMessage(args: ValidationArguments) { // here you can provide default error message if validation failed
-                    return "The ($property) must be a idcard number!";
+                defaultMessage(args: ValidationArguments) {
+                    return "The ($property) must be an idcard number!";
                 }
             }
         });
@@ -225,10 +187,16 @@ export function IsIdNumber(validationOptions?: ValidationOptions) {
  * @export
  * @param {string} property
  * @param {ValidationOptions} [validationOptions]
- * @returns
+ * @returns {PropertyDecorator}
  */
-export function IsZipCode(validationOptions?: ValidationOptions) {
+export function IsZipCode(validationOptions?: ValidationOptions): PropertyDecorator {
     return function (object: Object, propertyName: string) {
+        const types = Reflect.getMetadata("design:type", object, propertyName);
+        if (types) {
+            const originMap = getOriginMetadata(PARAM_TYPE_KEY, object);
+            originMap.set(propertyName, types.name);
+        }
+
         registerDecorator({
             name: "IsZipCode",
             target: object.constructor,
@@ -236,10 +204,10 @@ export function IsZipCode(validationOptions?: ValidationOptions) {
             options: validationOptions,
             validator: {
                 validate(value: any, args: ValidationArguments) {
-                    return iszipcode(value);
+                    return zipcode(value);
                 },
-                defaultMessage(args: ValidationArguments) { // here you can provide default error message if validation failed
-                    return "The ($property) must be a zip code!";
+                defaultMessage(args: ValidationArguments) {
+                    return "The ($property) must be an zip code!";
                 }
             }
         });
@@ -252,10 +220,16 @@ export function IsZipCode(validationOptions?: ValidationOptions) {
  * @export
  * @param {string} property
  * @param {ValidationOptions} [validationOptions]
- * @returns
+ * @returns {PropertyDecorator}
  */
-export function IsMobile(validationOptions?: ValidationOptions) {
+export function IsMobile(validationOptions?: ValidationOptions): PropertyDecorator {
     return function (object: Object, propertyName: string) {
+        const types = Reflect.getMetadata("design:type", object, propertyName);
+        if (types) {
+            const originMap = getOriginMetadata(PARAM_TYPE_KEY, object);
+            originMap.set(propertyName, types.name);
+        }
+
         registerDecorator({
             name: "IsMobile",
             target: object.constructor,
@@ -263,10 +237,10 @@ export function IsMobile(validationOptions?: ValidationOptions) {
             options: validationOptions,
             validator: {
                 validate(value: any, args: ValidationArguments) {
-                    return ismobile(value);
+                    return mobile(value);
                 },
-                defaultMessage(args: ValidationArguments) { // here you can provide default error message if validation failed
-                    return "The ($property) must be a mobile number!";
+                defaultMessage(args: ValidationArguments) {
+                    return "The ($property) must be an mobile number!";
                 }
             }
         });
@@ -279,10 +253,16 @@ export function IsMobile(validationOptions?: ValidationOptions) {
  * @export
  * @param {string} property
  * @param {ValidationOptions} [validationOptions]
- * @returns
+ * @returns {PropertyDecorator}
  */
-export function IsPlateNumber(validationOptions?: ValidationOptions) {
+export function IsPlateNumber(validationOptions?: ValidationOptions): PropertyDecorator {
     return function (object: Object, propertyName: string) {
+        const types = Reflect.getMetadata("design:type", object, propertyName);
+        if (types) {
+            const originMap = getOriginMetadata(PARAM_TYPE_KEY, object);
+            originMap.set(propertyName, types.name);
+        }
+
         registerDecorator({
             name: "IsPlateNumber",
             target: object.constructor,
@@ -290,10 +270,10 @@ export function IsPlateNumber(validationOptions?: ValidationOptions) {
             options: validationOptions,
             validator: {
                 validate(value: any, args: ValidationArguments) {
-                    return isplatenumber(value);
+                    return platenumber(value);
                 },
-                defaultMessage(args: ValidationArguments) { // here you can provide default error message if validation failed
-                    return "The ($property) must be a plate number!";
+                defaultMessage(args: ValidationArguments) {
+                    return "The ($property) must be an plate number!";
                 }
             }
         });
@@ -306,10 +286,16 @@ export function IsPlateNumber(validationOptions?: ValidationOptions) {
  *
  * @export
  * @param {ValidationOptions} [validationOptions]
- * @returns
+ * @returns {PropertyDecorator}
  */
-export function IsNotEmpty(validationOptions?: ValidationOptions) {
+export function IsNotEmpty(validationOptions?: ValidationOptions): PropertyDecorator {
     return function (object: Object, propertyName: string) {
+        const types = Reflect.getMetadata("design:type", object, propertyName);
+        if (types) {
+            const originMap = getOriginMetadata(PARAM_TYPE_KEY, object);
+            originMap.set(propertyName, types.name);
+        }
+
         registerDecorator({
             name: "IsNotEmpty",
             target: object.constructor,
@@ -319,8 +305,476 @@ export function IsNotEmpty(validationOptions?: ValidationOptions) {
                 validate(value: any, args: ValidationArguments) {
                     return !helper.isEmpty(value);
                 },
-                defaultMessage(args: ValidationArguments) { // here you can provide default error message if validation failed
+                defaultMessage(args: ValidationArguments) {
                     return "The ($property)'s value must be not empty!";
+                }
+            }
+        });
+    };
+}
+
+/**
+ * Checks if value matches ("===") the comparison.
+ *
+ * @export
+ * @param {*} comparison
+ * @param {ValidationOptions} [validationOptions]
+ * @returns {PropertyDecorator}
+ */
+export function Equals(comparison: any, validationOptions?: ValidationOptions): PropertyDecorator {
+    return function (object: Object, propertyName: string) {
+        const types = Reflect.getMetadata("design:type", object, propertyName);
+        if (types) {
+            const originMap = getOriginMetadata(PARAM_TYPE_KEY, object);
+            originMap.set(propertyName, types.name);
+        }
+
+        registerDecorator({
+            name: "vEquals",
+            target: object.constructor,
+            propertyName,
+            options: validationOptions,
+            validator: {
+                validate(value: any, args: ValidationArguments) {
+                    return ValidatorCls.equals(value, comparison);
+                },
+                defaultMessage(args: ValidationArguments) {
+                    return `The ($property) must be equals ${comparison}!`;
+                }
+            }
+        });
+    };
+}
+
+/**
+ * Checks if value does not match ("!==") the comparison.
+ *
+ * @export
+ * @param {*} comparison
+ * @param {ValidationOptions} [validationOptions]
+ * @returns {PropertyDecorator}
+ */
+export function NotEquals(comparison: any, validationOptions?: ValidationOptions): PropertyDecorator {
+    return function (object: Object, propertyName: string) {
+        const types = Reflect.getMetadata("design:type", object, propertyName);
+        if (types) {
+            const originMap = getOriginMetadata(PARAM_TYPE_KEY, object);
+            originMap.set(propertyName, types.name);
+        }
+
+        registerDecorator({
+            name: "vNotEquals",
+            target: object.constructor,
+            propertyName,
+            options: validationOptions,
+            validator: {
+                validate(value: any, args: ValidationArguments) {
+                    return ValidatorCls.notEquals(value, comparison);
+                },
+                defaultMessage(args: ValidationArguments) {
+                    return `The ($property) must be not equals ${comparison}!`;
+                }
+            }
+        });
+    };
+}
+
+/**
+ * Checks if the string contains the seed.
+ *
+ * @export
+ * @param {string} seed
+ * @param {ValidationOptions} [validationOptions]
+ * @returns {PropertyDecorator}
+ */
+export function Contains(seed: string, validationOptions?: ValidationOptions): PropertyDecorator {
+    return function (object: Object, propertyName: string) {
+        const types = Reflect.getMetadata("design:type", object, propertyName);
+        if (types) {
+            const originMap = getOriginMetadata(PARAM_TYPE_KEY, object);
+            originMap.set(propertyName, types.name);
+        }
+
+        registerDecorator({
+            name: "vContains",
+            target: object.constructor,
+            propertyName,
+            options: validationOptions,
+            validator: {
+                validate(value: any, args: ValidationArguments) {
+                    return ValidatorCls.contains(value, seed);
+                    // return typeof value === "string" && (value.indexOf(seed) > -1);
+                },
+                defaultMessage(args: ValidationArguments) {
+                    return `The ($property) must be contains ${seed}!`;
+                }
+            }
+        });
+    };
+}
+
+/**
+ * Checks if given value is in a array of allowed values.
+ *
+ * @export
+ * @param {any[]} possibleValues
+ * @param {ValidationOptions} [validationOptions]
+ * @returns {PropertyDecorator}
+ */
+export function IsIn(possibleValues: any[], validationOptions?: ValidationOptions): PropertyDecorator {
+    return function (object: Object, propertyName: string) {
+        const types = Reflect.getMetadata("design:type", object, propertyName);
+        if (types) {
+            const originMap = getOriginMetadata(PARAM_TYPE_KEY, object);
+            originMap.set(propertyName, types.name);
+        }
+
+        registerDecorator({
+            name: "vIsIn",
+            target: object.constructor,
+            propertyName,
+            options: validationOptions,
+            validator: {
+                validate(value: any, args: ValidationArguments) {
+                    return ValidatorCls.isIn(value, possibleValues);
+                },
+                defaultMessage(args: ValidationArguments) {
+                    return `The ($property) must be in possibleValues!`;
+                }
+            }
+        });
+    };
+}
+
+/**
+ * Checks if given value not in a array of allowed values.
+ *
+ * @export
+ * @param {any[]} possibleValues
+ * @param {ValidationOptions} [validationOptions]
+ * @returns {PropertyDecorator}
+ */
+export function IsNotIn(possibleValues: any[], validationOptions?: ValidationOptions): PropertyDecorator {
+    return function (object: Object, propertyName: string) {
+        const types = Reflect.getMetadata("design:type", object, propertyName);
+        if (types) {
+            const originMap = getOriginMetadata(PARAM_TYPE_KEY, object);
+            originMap.set(propertyName, types.name);
+        }
+
+        registerDecorator({
+            name: "vIsNotIn",
+            target: object.constructor,
+            propertyName,
+            options: validationOptions,
+            validator: {
+                validate(value: any, args: ValidationArguments) {
+                    return ValidatorCls.isNotIn(value, possibleValues);
+                },
+                defaultMessage(args: ValidationArguments) {
+                    return `The ($property) must be not in possibleValues!`;
+                }
+            }
+        });
+    };
+}
+
+/**
+ * Checks if a given value is a real date.
+ *
+ * @export
+ * @param {ValidationOptions} [validationOptions]
+ * @returns {PropertyDecorator}
+ */
+export function IsDate(validationOptions?: ValidationOptions): PropertyDecorator {
+    return function (object: Object, propertyName: string) {
+        const types = Reflect.getMetadata("design:type", object, propertyName);
+        if (types) {
+            const originMap = getOriginMetadata(PARAM_TYPE_KEY, object);
+            originMap.set(propertyName, types.name);
+        }
+
+        registerDecorator({
+            name: "vIsDate",
+            target: object.constructor,
+            propertyName,
+            options: validationOptions,
+            validator: {
+                validate(value: any, args: ValidationArguments) {
+                    return ValidatorCls.isDate(value);
+                },
+                defaultMessage(args: ValidationArguments) {
+                    return `The ($property) must be a real date!`;
+                }
+            }
+        });
+    };
+}
+
+/**
+ * Checks if the first number is greater than or equal to the min value.
+ *
+ * @export
+ * @param {number} min
+ * @param {ValidationOptions} [validationOptions]
+ * @returns {PropertyDecorator}
+ */
+export function Min(min: number, validationOptions?: ValidationOptions): PropertyDecorator {
+    return function (object: Object, propertyName: string) {
+        const types = Reflect.getMetadata("design:type", object, propertyName);
+        if (types) {
+            const originMap = getOriginMetadata(PARAM_TYPE_KEY, object);
+            originMap.set(propertyName, types.name);
+        }
+
+        registerDecorator({
+            name: "vMin",
+            target: object.constructor,
+            propertyName,
+            options: validationOptions,
+            validator: {
+                validate(value: any, args: ValidationArguments) {
+                    return ValidatorCls.min(value, min);
+                },
+                defaultMessage(args: ValidationArguments) {
+                    return `The ($property) must be greater than or equal to the min value!`;
+                }
+            }
+        });
+    };
+}
+
+/**
+ * Checks if the first number is less than or equal to the max value.
+ *
+ * @export
+ * @param {number} max
+ * @param {ValidationOptions} [validationOptions]
+ * @returns {PropertyDecorator}
+ */
+export function Max(max: number, validationOptions?: ValidationOptions): PropertyDecorator {
+    return function (object: Object, propertyName: string) {
+        const types = Reflect.getMetadata("design:type", object, propertyName);
+        if (types) {
+            const originMap = getOriginMetadata(PARAM_TYPE_KEY, object);
+            originMap.set(propertyName, types.name);
+        }
+
+        registerDecorator({
+            name: "vMax",
+            target: object.constructor,
+            propertyName,
+            options: validationOptions,
+            validator: {
+                validate(value: any, args: ValidationArguments) {
+                    return ValidatorCls.max(value, max);
+                },
+                defaultMessage(args: ValidationArguments) {
+                    return `The ($property) must be less than or equal to the max value!`;
+                }
+            }
+        });
+    };
+}
+
+/**
+ * Checks if the string's length falls in a range. Note: this function takes into account surrogate pairs. If given value is not a string, then it returns false.
+ *
+ * @export
+ * @param {number} min
+ * @param {number} [max]
+ * @param {ValidationOptions} [validationOptions]
+ * @returns {PropertyDecorator}
+ */
+export function Length(min: number, max?: number, validationOptions?: ValidationOptions): PropertyDecorator {
+    return function (object: Object, propertyName: string) {
+        const types = Reflect.getMetadata("design:type", object, propertyName);
+        if (types) {
+            if (types.name !== "String") {
+                throw Error('The Length decorator is only used for string type parameters.');
+            }
+            const originMap = getOriginMetadata(PARAM_TYPE_KEY, object);
+            originMap.set(propertyName, types.name);
+        }
+
+        registerDecorator({
+            name: "vLength",
+            target: object.constructor,
+            propertyName,
+            options: validationOptions,
+            validator: {
+                validate(value: any, args: ValidationArguments) {
+                    return ValidatorCls.length(value, min, max);
+                },
+                defaultMessage(args: ValidationArguments) {
+                    return `The ($property) string's length must be falls in a range!`;
+                }
+            }
+        });
+    };
+}
+
+/**
+ * Checks if the string is an email. If given value is not a string, then it returns false.
+ *
+ * @export
+ * @param {ValidatorJS.IsEmailOptions} [options]
+ * @param {ValidationOptions} [validationOptions]
+ * @returns {PropertyDecorator}
+ */
+export function IsEmail(options?: ValidatorJS.IsEmailOptions, validationOptions?: ValidationOptions): PropertyDecorator {
+    return function (object: Object, propertyName: string) {
+        const types = Reflect.getMetadata("design:type", object, propertyName);
+        if (types) {
+            const originMap = getOriginMetadata(PARAM_TYPE_KEY, object);
+            originMap.set(propertyName, types.name);
+        }
+
+        registerDecorator({
+            name: "vIsEmail",
+            target: object.constructor,
+            propertyName,
+            options: validationOptions,
+            validator: {
+                validate(value: any, args: ValidationArguments) {
+                    return ValidatorCls.isEmail(value);
+                },
+                defaultMessage(args: ValidationArguments) {
+                    return `The ($property) string must be is an email!`;
+                }
+            }
+        });
+    };
+}
+
+/**
+ * Checks if the string is an IP (version 4 or 6). If given value is not a string, then it returns false.
+ *
+ * @export
+ * @param {number} [version]
+ * @param {ValidationOptions} [validationOptions]
+ * @returns {PropertyDecorator}
+ */
+export function IsIP(version?: number, validationOptions?: ValidationOptions): PropertyDecorator {
+    return function (object: Object, propertyName: string) {
+        const types = Reflect.getMetadata("design:type", object, propertyName);
+        if (types) {
+            const originMap = getOriginMetadata(PARAM_TYPE_KEY, object);
+            originMap.set(propertyName, types.name);
+        }
+
+        registerDecorator({
+            name: "vIsIP",
+            target: object.constructor,
+            propertyName,
+            options: validationOptions,
+            validator: {
+                validate(value: any, args: ValidationArguments) {
+                    return ValidatorCls.isIP(value, version);
+                },
+                defaultMessage(args: ValidationArguments) {
+                    return `The ($property) string must be is an IP!`;
+                }
+            }
+        });
+    };
+}
+
+/**
+ * Checks if the string is a valid phone number.
+ *
+ * @export
+ * @param {string} {string} region 2 characters uppercase country code (e.g. DE, US, CH).
+ * If users must enter the intl. prefix (e.g. +41), then you may pass "ZZ" or null as region.
+ * See [google-libphonenumber, metadata.js:countryCodeToRegionCodeMap on github]{@link https://github.com/ruimarinho/google-libphonenumber/blob/1e46138878cff479aafe2ce62175c6c49cb58720/src/metadata.js#L33}
+ * @param {ValidationOptions} [validationOptions]
+ * @returns {PropertyDecorator}
+ */
+export function IsPhoneNumber(region: string, validationOptions?: ValidationOptions): PropertyDecorator {
+    return function (object: Object, propertyName: string) {
+        const types = Reflect.getMetadata("design:type", object, propertyName);
+        if (types) {
+            const originMap = getOriginMetadata(PARAM_TYPE_KEY, object);
+            originMap.set(propertyName, types.name);
+        }
+
+        registerDecorator({
+            name: "vIsPhoneNumber",
+            target: object.constructor,
+            propertyName,
+            options: validationOptions,
+            validator: {
+                validate(value: any, args: ValidationArguments) {
+                    return ValidatorCls.isPhoneNumber(value, region);
+                },
+                defaultMessage(args: ValidationArguments) {
+                    return `The ($property) string must be is a valid phone number!`;
+                }
+            }
+        });
+    };
+}
+
+/**
+ * Checks if the string is an url.
+ *
+ * @export
+ * @param {ValidatorJS.IsURLOptions} [options]
+ * @param {ValidationOptions} [validationOptions]
+ * @returns {PropertyDecorator}
+ */
+export function IsUrl(options?: ValidatorJS.IsURLOptions, validationOptions?: ValidationOptions): PropertyDecorator {
+    return function (object: Object, propertyName: string) {
+        const types = Reflect.getMetadata("design:type", object, propertyName);
+        if (types) {
+            const originMap = getOriginMetadata(PARAM_TYPE_KEY, object);
+            originMap.set(propertyName, types.name);
+        }
+
+        registerDecorator({
+            name: "vIsUrl",
+            target: object.constructor,
+            propertyName,
+            options: validationOptions,
+            validator: {
+                validate(value: any, args: ValidationArguments) {
+                    return ValidatorCls.isURL(value, options);
+                },
+                defaultMessage(args: ValidationArguments) {
+                    return `The ($property) string must be is an url!`;
+                }
+            }
+        });
+    };
+}
+
+/**
+ * check if the string is a hash of type algorithm. Algorithm is one of ['md4', 'md5', 'sha1', 'sha256', 'sha384', 'sha512', 'ripemd128', 'ripemd160', 'tiger128', 'tiger160', 'tiger192', 'crc32', 'crc32b']
+ *
+ * @export
+ * @param {ValidatorJS.HashAlgorithm} algorithm
+ * @param {ValidationOptions} [validationOptions]
+ * @returns {PropertyDecorator}
+ */
+export function IsHash(algorithm: ValidatorJS.HashAlgorithm, validationOptions?: ValidationOptions): PropertyDecorator {
+    return function (object: Object, propertyName: string) {
+        const types = Reflect.getMetadata("design:type", object, propertyName);
+        if (types) {
+            const originMap = getOriginMetadata(PARAM_TYPE_KEY, object);
+            originMap.set(propertyName, types.name);
+        }
+
+        registerDecorator({
+            name: "vIsHash",
+            target: object.constructor,
+            propertyName,
+            options: validationOptions,
+            validator: {
+                validate(value: any, args: ValidationArguments) {
+                    return ValidatorCls.isHash(value, algorithm);
+                },
+                defaultMessage(args: ValidationArguments) {
+                    return `The ($property) string must be is an ${algorithm} Hash string!`;
                 }
             }
         });
