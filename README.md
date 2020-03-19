@@ -30,7 +30,6 @@ Validtion Util for Koatty and ThinkORM. Based on class-validator, extended param
 
 ## FunctionValidator
 
-* FunctionValidator.IsDefined
 * FunctionValidator.IsCnName
 * FunctionValidator.IsIdNumber
 * FunctionValidator.IsZipCode
@@ -62,6 +61,9 @@ if (!FunctionValidator.IsNotEmpty(data)) {
 
 ```js
 class SchemaClass {
+    @IsDefined
+    id: number;
+    
     @IsNotEmpty
     name: string;
 }

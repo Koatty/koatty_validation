@@ -1,9 +1,9 @@
 {
     "name": "think_validtion",
-    "version": "1.2.3",
+    "version": "1.5.0",
     "description": "Validtion Util for Koatty and ThinkORM.",
     "scripts": {
-        "build": "trash ./dist && tsc",
+        "build": "del-cli --force dist && tsc",
         "prepublishOnly": "npm test && npm run build",
         "test": "tslint 'src/**/*.ts'"
     },
@@ -32,21 +32,21 @@
     "devDependencies": {
         "@types/lodash": "^4.x.x",
         "@types/node": "^12.x.x",
-        "@typescript-eslint/eslint-plugin": "^2.13.0",
-        "@typescript-eslint/parser": "^2.13.0",
+        "@typescript-eslint/eslint-plugin": "^2.23.0",
+        "@typescript-eslint/parser": "^2.23.0",
+        "del-cli": "^3.0.0",
         "eslint": "^6.8.0",
-        "trash-cli": "^3.0.0",
-        "ts-node": "^8.5.4",
-        "tslint": "^5.20.1",
+        "ts-node": "^8.6.2",
+        "tslint": "^6.1.0",
         "tslint-config-alloy": "^0.2.1",
-        "typescript": "^3.7.4"
+        "typescript": "^3.8.3"
     },
     "dependencies": {
         "class-validator": "^0.11.0",
         "reflect-metadata": "^0.1.13",
         "think_lib": "^2.2.13",
-        "think_logger": "^2.2.0",
-        "tslib": "^1.10.0"
+        "think_logger": "^2.2.4",
+        "tslib": "^1.11.1"
     },
     "maintainers": [
         {

@@ -2,12 +2,20 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-01-09 17:58:32
+ * @ version: 2020-03-19 20:42:09
  */
 import helper from "think_lib";
 import * as util from "util";
 export const PARAM_TYPE_KEY = 'PARAM_TYPE_KEY';
 export const PARAM_RULE_KEY = 'PARAM_RULE_KEY';
+export const ENABLE_VALIDATED = "ENABLE_VALIDATED";
+
+export const paramterTypes: any = {
+    "Number": 1, "number": 1, "String": 1,
+    "string": 1, "Boolean": 1, "boolean": 1,
+    "Array": 1, "array": 1, "Tuple": 1, "tuple": 1,
+    "Object": 1, "object": 1, "Enum": 1, "enum": 1
+};
 
 const functionPrototype = Object.getPrototypeOf(Function);
 // get property of an object
@@ -147,36 +155,86 @@ export function getOriginMetadata(metadataKey: string | symbol, target: any, pro
 }
 
 /**
+ * Convert paramer's type to defined.
+ *
+ * @param {*} param
+ * @param {string} type
+ * @returns
+ */
+export const convertParamsType = (param: any, type: string) => {
+    switch (type) {
+        case "Number":
+        case "number":
+            if (helper.isNaN(param)) {
+                return NaN;
+            }
+            if (helper.isNumberString(param)) {
+                return helper.toNumber(param);
+            }
+            if (helper.isNumber(param)) {
+                return param;
+            }
+            return NaN;
+        case "Boolean":
+        case "boolean":
+            return !!param;
+        case "Array":
+        case "array":
+        case "Tuple":
+        case "tuple":
+            if (helper.isArray(param)) {
+                return param;
+            }
+            return helper.toArray(param);
+        case "String":
+        case "string":
+            if (helper.isString(param)) {
+                return param;
+            }
+            return helper.toString(param);
+        // case "object":
+        // case "enum":
+        default: //any
+            return param;
+    }
+};
+
+/**
  * Check the base types.
  *
  * @param {*} value
  * @param {string} type
- * @returns {boolean}
+ * @returns {*}
  */
-export const checkParamsType = function (value: any, type: string): boolean {
+export const checkParamsType = function (value: any, type: string): any {
     switch (type) {
         case "Number":
+        case "number":
             if (!helper.isNumber(value) || helper.isNaN(value)) {
                 return false;
             }
             return true;
         case "Boolean":
+        case "boolean":
             if (!helper.isBoolean(value)) {
                 return false;
             }
             return true;
         case "Array":
+        case "array":
         case "Tuple":
             if (!helper.isArray(value)) {
                 return false;
             }
             return true;
         case "String":
+        case "string":
             if (!helper.isString(value)) {
                 return false;
             }
             return true;
         case "Object":
+        case "object":
         case "Enum":
             if (helper.isUndefined(value)) {
                 return false;
@@ -187,30 +245,36 @@ export const checkParamsType = function (value: any, type: string): boolean {
     }
 };
 
+
 /**
  *
  *
+ * @export
  * @param {*} clazz
  * @param {*} data
- * @param {options} options
- * @param {*} ClassTransformOptions
+ * @param {boolean} [convert=false]
  * @returns
  */
-export function plainToClass(clazz: any, data: any) {
+export function plainToClass(clazz: any, data: any, convert = false) {
+    const originMap = getOriginMetadata(PARAM_TYPE_KEY, clazz);
     if (helper.isClass(clazz)) {
-        const originMap = getOriginMetadata(PARAM_TYPE_KEY, clazz);
         const cls = Reflect.construct(clazz, []);
-        // tslint:disable-next-line: forin
-        for (const n in data) {
-            const type = originMap.get(n);
-            if (type) {
-                if (!checkParamsType(data[n], type)) {
-                    const err: any = new Error(`TypeError: invalid arguments '${n}'.`);
-                    err.code = 400;
-                    err.status = 400;
-                    throw err;
+        if (!helper.isObject(data)) {
+            data = {};
+        }
+        for (const [key, value] of originMap) {
+            if (key && Object.prototype.hasOwnProperty.call(data, key)) {
+                if (convert) {
+                    cls[key] = convertParamsType(data[key], value);
+                } else {
+                    cls[key] = data[key];
+                    if (!checkParamsType(cls[key], value)) {
+                        const err: any = new Error(`TypeError: invalid arguments '${key}'.`);
+                        err.code = 400;
+                        err.status = 400;
+                        throw err;
+                    }
                 }
-                cls[n] = data[n];
             }
         }
         return cls;
