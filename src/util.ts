@@ -2,12 +2,35 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-03-20 06:51:52
+ * @ version: 2020-04-22 20:22:45
  */
 import helper from "think_lib";
 import { plainToClass, checkParamsType, cnname, idnumber, zipcode, mobile, platenumber, recursiveGetMetadata, PARAM_RULE_KEY, defineNewProperty, getOriginMetadata, PARAM_TYPE_KEY, convertParamsType, ENABLE_VALIDATED } from "./lib";
 import { validate, Validator, registerDecorator, ValidationArguments, ValidationOptions, ValidationError } from "class-validator";
 export const ValidatorCls = new Validator();
+
+// options for isEmail
+interface IsEmailOptions {
+    allow_display_name?: boolean;
+    require_display_name?: boolean;
+    allow_utf8_local_part?: boolean;
+    require_tld?: boolean;
+}
+
+// options for isURL
+interface IsURLOptions {
+    protocols?: string[];
+    require_tld?: boolean;
+    require_protocol?: boolean;
+    require_host?: boolean;
+    require_valid_protocol?: boolean;
+    allow_underscores?: boolean;
+    host_whitelist?: (string | RegExp)[];
+    host_blacklist?: (string | RegExp)[];
+    allow_trailing_dot?: boolean;
+    allow_protocol_relative_urls?: boolean;
+    disallow_auth?: boolean;
+}
 
 class ValidateClass {
     private static instance: ValidateClass;
@@ -234,8 +257,7 @@ export const FunctionValidator: any = {
  * @export
  * @type {number}
  */
-export type ValidRules = "IsNotEmpty" | "Equals" | "NotEquals" | "Contains" | "Min" | "Max" | "Length" | "IsIn" | "IsNotIn" | "IsDate" |
-    "IsEmail" | "IsIP" | "IsPhoneNumber" | "IsUrl" | "IsHash" | "IsCnName" | "IsIdNumber" | "IsZipCode" | "IsMobile" | "IsPlateNumber";
+export type ValidRules = "IsNotEmpty" | "IsDate" | "IsEmail" | "IsIP" | "IsPhoneNumber" | "IsUrl" | "IsHash" | "IsCnName" | "IsIdNumber" | "IsZipCode" | "IsMobile" | "IsPlateNumber";
 
 
 /**
@@ -794,11 +816,11 @@ export function Length(min: number, max?: number, validationOptions?: Validation
  * Checks if the string is an email. If given value is not a string, then it returns false.
  *
  * @export
- * @param {ValidatorJS.IsEmailOptions} [options]
+ * @param {IsEmailOptions} [options]
  * @param {ValidationOptions} [validationOptions]
  * @returns {PropertyDecorator}
  */
-export function IsEmail(options?: ValidatorJS.IsEmailOptions, validationOptions?: ValidationOptions): PropertyDecorator {
+export function IsEmail(options?: IsEmailOptions, validationOptions?: ValidationOptions): PropertyDecorator {
     return function (object: Object, propertyName: string) {
         setExpose(object, propertyName);
 
@@ -883,11 +905,11 @@ export function IsPhoneNumber(region: string, validationOptions?: ValidationOpti
  * Checks if the string is an url.
  *
  * @export
- * @param {ValidatorJS.IsURLOptions} [options]
+ * @param {IsURLOptions} [options]
  * @param {ValidationOptions} [validationOptions]
  * @returns {PropertyDecorator}
  */
-export function IsUrl(options?: ValidatorJS.IsURLOptions, validationOptions?: ValidationOptions): PropertyDecorator {
+export function IsUrl(options?: IsURLOptions, validationOptions?: ValidationOptions): PropertyDecorator {
     return function (object: Object, propertyName: string) {
         setExpose(object, propertyName);
 
@@ -912,11 +934,11 @@ export function IsUrl(options?: ValidatorJS.IsURLOptions, validationOptions?: Va
  * check if the string is a hash of type algorithm. Algorithm is one of ['md4', 'md5', 'sha1', 'sha256', 'sha384', 'sha512', 'ripemd128', 'ripemd160', 'tiger128', 'tiger160', 'tiger192', 'crc32', 'crc32b']
  *
  * @export
- * @param {ValidatorJS.HashAlgorithm} algorithm
+ * @param {HashAlgorithm} algorithm
  * @param {ValidationOptions} [validationOptions]
  * @returns {PropertyDecorator}
  */
-export function IsHash(algorithm: ValidatorJS.HashAlgorithm, validationOptions?: ValidationOptions): PropertyDecorator {
+export function IsHash(algorithm: HashAlgorithm, validationOptions?: ValidationOptions): PropertyDecorator {
     return function (object: Object, propertyName: string) {
         setExpose(object, propertyName);
 

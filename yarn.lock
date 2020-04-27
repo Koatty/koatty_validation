@@ -974,6 +974,11 @@ ms@^2.1.1:
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.2.tgz#d09d1f357b443f493382a8eb3ccd183872ae6009"
   integrity sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==
 
+murmurhash@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/murmurhash/-/murmurhash-0.0.2.tgz#6f07bd8a1105e709c26fc89420cb5930c24585fe"
+  integrity sha1-bwe9ihEF5wnCb8iUIMtZMMJFhf4=
+
 mute-stream@0.0.8:
   version "0.0.8"
   resolved "https://registry.yarnpkg.com/mute-stream/-/mute-stream-0.0.8.tgz#1630c42b2251ff81e2a283de96a5497ea92e5e0d"
@@ -1390,16 +1395,17 @@ text-table@^0.2.0:
   resolved "https://registry.yarnpkg.com/text-table/-/text-table-0.2.0.tgz#7f5ee823ae805207c00af2df4a84ec3fcfa570b4"
   integrity sha1-f17oI66AUgfACvLfSoTsP8+lcLQ=
 
-think_lib@^2.2.13, think_lib@^2.x.x:
-  version "2.2.13"
-  resolved "https://registry.yarnpkg.com/think_lib/-/think_lib-2.2.13.tgz#d35198a9171267c7b0b9ca1f4579b75f795494e6"
-  integrity sha512-6H0ywSrGCtaJnfr4/3OdJBnFHIPZ89zcnB1zIhyWGqou6kwNmzSEapHsrbybAEidzY9h7IpWFHVq98CCXBn9Yw==
+think_lib@^2.x.x:
+  version "2.4.7"
+  resolved "https://registry.yarnpkg.com/think_lib/-/think_lib-2.4.7.tgz#d0a7da8644f07441a5f72101b9d96390fbe7e0a5"
+  integrity sha512-R90PVcMHINKIQ2ZREFOLfk/0M2A8pF2n3RW3NzNtaTyKVlNy3pJMvrAp0A1LNYatO3AqFkVATO17LpQxE4zN3Q==
   dependencies:
     co "^4.6.0"
     lodash "^4.17.15"
     moment "^2.24.0"
+    murmurhash "^0.0.2"
 
-think_logger@^2.2.4:
+think_logger@^2.x.x:
   version "2.2.4"
   resolved "https://registry.yarnpkg.com/think_logger/-/think_logger-2.2.4.tgz#58688602d8a65ff4c5afdf40f383bcb7889f63f1"
   integrity sha512-2jwU8AmRwv/FTEYFC/nmd5QP3id7woXEubbFJgZv++V6WX5rPmVeN2tqWSiypMECySXQLMksO8VCxxmI4cSe/Q==

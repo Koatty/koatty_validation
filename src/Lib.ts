@@ -2,10 +2,12 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-03-19 20:42:09
+ * @ version: 2020-03-20 11:34:38
  */
+// tslint:disable-next-line: no-import-side-effect
+import "reflect-metadata";
 import helper from "think_lib";
-import * as util from "util";
+import logger from "think_logger";
 export const PARAM_TYPE_KEY = 'PARAM_TYPE_KEY';
 export const PARAM_RULE_KEY = 'PARAM_RULE_KEY';
 export const ENABLE_VALIDATED = "ENABLE_VALIDATED";
@@ -256,30 +258,41 @@ export const checkParamsType = function (value: any, type: string): any {
  * @returns
  */
 export function plainToClass(clazz: any, data: any, convert = false) {
-    const originMap = getOriginMetadata(PARAM_TYPE_KEY, clazz);
-    if (helper.isClass(clazz)) {
-        const cls = Reflect.construct(clazz, []);
-        if (!helper.isObject(data)) {
-            data = {};
-        }
-        for (const [key, value] of originMap) {
-            if (key && Object.prototype.hasOwnProperty.call(data, key)) {
-                if (convert) {
-                    cls[key] = convertParamsType(data[key], value);
-                } else {
-                    cls[key] = data[key];
-                    if (!checkParamsType(cls[key], value)) {
-                        const err: any = new Error(`TypeError: invalid arguments '${key}'.`);
-                        err.code = 400;
-                        err.status = 400;
-                        throw err;
+    try {
+        if (helper.isClass(clazz)) {
+            let cls;
+            if (data instanceof clazz) {
+                cls = data;
+            } else {
+                if (!helper.isObject(data)) {
+                    data = {};
+                }
+                cls = Reflect.construct(clazz, []);
+            }
+
+            const originMap = getOriginMetadata(PARAM_TYPE_KEY, clazz);
+            for (const [key, value] of originMap) {
+                if (key && Object.prototype.hasOwnProperty.call(data, key)) {
+                    if (convert) {
+                        cls[key] = convertParamsType(data[key], value);
+                    } else {
+                        cls[key] = data[key];
+                        if (!checkParamsType(cls[key], value)) {
+                            const err: any = new Error(`TypeError: invalid arguments '${key}'.`);
+                            err.code = 400;
+                            err.status = 400;
+                            throw err;
+                        }
                     }
                 }
             }
+            return cls;
         }
-        return cls;
+        return data;
+    } catch (err) {
+        logger.error(err);
+        return data;
     }
-    return data;
 }
 
 /**
