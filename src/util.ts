@@ -2,12 +2,12 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-04-22 20:22:45
+ * @ version: 2020-05-10 10:45:21
  */
 import helper from "think_lib";
 import { plainToClass, checkParamsType, cnname, idnumber, zipcode, mobile, platenumber, recursiveGetMetadata, PARAM_RULE_KEY, defineNewProperty, getOriginMetadata, PARAM_TYPE_KEY, convertParamsType, ENABLE_VALIDATED } from "./lib";
-import { validate, Validator, registerDecorator, ValidationArguments, ValidationOptions, ValidationError } from "class-validator";
-export const ValidatorCls = new Validator();
+import { validate, Validator, registerDecorator, ValidationArguments, ValidationOptions, ValidationError, equals, notEquals, contains, isIn, isNotIn, isDate, length, isEmail, isIP, isPhoneNumber, isURL, isHash, IsIpVersion } from "class-validator";
+// export const ValidatorCls = new Validator();
 
 // options for isEmail
 interface IsEmailOptions {
@@ -116,87 +116,87 @@ export const FunctionValidator: any = {
      * Checks if value matches ("===") the comparison.
      */
     Equals: (value: unknown, comparison: unknown) => {
-        return ValidatorCls.equals(value, comparison);
+        return equals(value, comparison);
     },
     /**
      * Checks if value does not match ("!==") the comparison.
      */
     NotEquals: (value: unknown, comparison: unknown) => {
-        return ValidatorCls.notEquals(value, comparison);
+        return notEquals(value, comparison);
     },
     /**
      * Checks if the string contains the seed. If given value is not a string, then it returns false.
      */
     Contains: (value: unknown, seed: string) => {
-        return ValidatorCls.contains(value, seed);
+        return contains(value, seed);
     },
     /**
      * Checks if given value is in a array of allowed values.
      */
     IsIn: (value: unknown, possibleValues: unknown[]) => {
-        return ValidatorCls.isIn(value, possibleValues);
+        return isIn(value, possibleValues);
     },
     /**
      * Checks if given value not in a array of allowed values.
      */
     IsNotIn: (value: unknown, possibleValues: unknown[]) => {
-        return ValidatorCls.isNotIn(value, possibleValues);
+        return isNotIn(value, possibleValues);
     },
     /**
      * Checks if a given value is a real date.
      */
     IsDate: (value: unknown) => {
-        return ValidatorCls.isDate(value);
+        return isDate(value);
     },
     /**
      * Checks if the first number is greater than or equal to the second.
      */
     Min: (num: unknown, min: number) => {
-        return ValidatorCls.min(num, min);
+        return helper.toNumber(num) >= min;
     },
     /**
      * Checks if the first number is less than or equal to the second.
      */
     Max: (num: unknown, max: number) => {
-        return ValidatorCls.max(num, max);
+        return helper.toNumber(num) <= max;
     },
     /**
      * Checks if the string's length falls in a range. Note: this function takes into account surrogate pairs. If given value is not a string, then it returns false.
      */
     Length: (value: unknown, min: number, max?: number) => {
-        return ValidatorCls.length(value, min, max);
+        return length(value, min, max);
     },
     /**
      * Checks if the string is an email. If given value is not a string, then it returns false.
      */
     IsEmail: (value: unknown, options?: IsEmailOptions) => {
-        return ValidatorCls.isEmail(value, options);
+        return isEmail(value, options);
     },
     /**
      * Checks if the string is an IP (version 4 or 6). If given value is not a string, then it returns false.
      */
-    IsIP: (value: unknown, version?: number) => {
-        return ValidatorCls.isIP(value, version);
+    IsIP: (value: unknown, version?: any) => {
+        return isIP(value, version);
     },
     /**
      * Checks if the string is a valid phone number.
      * @param value — the potential phone number string to test
      * @param region 2 characters uppercase country code (e.g. DE, US, CH). If users must enter the intl. prefix (e.g. +41), then you may pass "ZZ" or null as region. See [google-libphonenumber, metadata.js:countryCodeToRegionCodeMap on github]{@link https://github.com/ruimarinho/google-libphonenumber/blob/1e46138878cff479aafe2ce62175c6c49cb58720/src/metadata.js#L33}
      */
-    IsPhoneNumber: (value: unknown, region: string) => {
-        return ValidatorCls.isPhoneNumber(value, region);
+    IsPhoneNumber: (value: string, region: string) => {
+        return isPhoneNumber(value, region);
     },
     /**
      * Checks if the string is an url. If given value is not a string, then it returns false.
      */
-    IsUrl: (value: unknown, options?: IsURLOptions) => {
-        return ValidatorCls.isURL(value, options);
+    IsUrl: (value: string, options?: IsURLOptions) => {
+        return isURL(value, options);
     },
     /**
      * check if the string is a hash of type algorithm. Algorithm is one of ['md4', 'md5', 'sha1', 'sha256', 'sha384', 'sha512', 'ripemd128', 'ripemd160', 'tiger128', 'tiger160', 'tiger192', 'crc32', 'crc32b']
      */
     IsHash: (value: unknown, algorithm: HashAlgorithm) => {
-        return ValidatorCls.isHash(value, algorithm);
+        return isHash(value, algorithm);
     },
     /**
      * Checks if value is a chinese name.
@@ -569,7 +569,7 @@ export function Equals(comparison: any, validationOptions?: ValidationOptions): 
             options: validationOptions,
             validator: {
                 validate(value: any, args: ValidationArguments) {
-                    return ValidatorCls.equals(value, comparison);
+                    return equals(value, comparison);
                 },
                 defaultMessage(args: ValidationArguments) {
                     return `invalid parameter, ($property) must be equals ${comparison}.`;
@@ -598,7 +598,7 @@ export function NotEquals(comparison: any, validationOptions?: ValidationOptions
             options: validationOptions,
             validator: {
                 validate(value: any, args: ValidationArguments) {
-                    return ValidatorCls.notEquals(value, comparison);
+                    return notEquals(value, comparison);
                 },
                 defaultMessage(args: ValidationArguments) {
                     return `invalid parameter, ($property) must be not equals ${comparison}.`;
@@ -627,7 +627,7 @@ export function Contains(seed: string, validationOptions?: ValidationOptions): P
             options: validationOptions,
             validator: {
                 validate(value: any, args: ValidationArguments) {
-                    return ValidatorCls.contains(value, seed);
+                    return contains(value, seed);
                     // return typeof value === "string" && (value.indexOf(seed) > -1);
                 },
                 defaultMessage(args: ValidationArguments) {
@@ -657,7 +657,7 @@ export function IsIn(possibleValues: any[], validationOptions?: ValidationOption
             options: validationOptions,
             validator: {
                 validate(value: any, args: ValidationArguments) {
-                    return ValidatorCls.isIn(value, possibleValues);
+                    return isIn(value, possibleValues);
                 },
                 defaultMessage(args: ValidationArguments) {
                     return `invalid parameter ($property).`;
@@ -686,7 +686,7 @@ export function IsNotIn(possibleValues: any[], validationOptions?: ValidationOpt
             options: validationOptions,
             validator: {
                 validate(value: any, args: ValidationArguments) {
-                    return ValidatorCls.isNotIn(value, possibleValues);
+                    return isNotIn(value, possibleValues);
                 },
                 defaultMessage(args: ValidationArguments) {
                     return `invalid parameter ($property).`;
@@ -714,7 +714,7 @@ export function IsDate(validationOptions?: ValidationOptions): PropertyDecorator
             options: validationOptions,
             validator: {
                 validate(value: any, args: ValidationArguments) {
-                    return ValidatorCls.isDate(value);
+                    return isDate(value);
                 },
                 defaultMessage(args: ValidationArguments) {
                     return `invalid parameter ($property).`;
@@ -743,7 +743,7 @@ export function Min(min: number, validationOptions?: ValidationOptions): Propert
             options: validationOptions,
             validator: {
                 validate(value: any, args: ValidationArguments) {
-                    return ValidatorCls.min(value, min);
+                    return helper.toNumber(value) >= min;
                 },
                 defaultMessage(args: ValidationArguments) {
                     return `invalid parameter ($property).`;
@@ -772,7 +772,7 @@ export function Max(max: number, validationOptions?: ValidationOptions): Propert
             options: validationOptions,
             validator: {
                 validate(value: any, args: ValidationArguments) {
-                    return ValidatorCls.max(value, max);
+                    return helper.toNumber(value) <= max;
                 },
                 defaultMessage(args: ValidationArguments) {
                     return `invalid parameter ($property).`;
@@ -802,7 +802,7 @@ export function Length(min: number, max?: number, validationOptions?: Validation
             options: validationOptions,
             validator: {
                 validate(value: any, args: ValidationArguments) {
-                    return ValidatorCls.length(value, min, max);
+                    return length(value, min, max);
                 },
                 defaultMessage(args: ValidationArguments) {
                     return `invalid parameter ($property).`;
@@ -831,7 +831,7 @@ export function IsEmail(options?: IsEmailOptions, validationOptions?: Validation
             options: validationOptions,
             validator: {
                 validate(value: any, args: ValidationArguments) {
-                    return ValidatorCls.isEmail(value);
+                    return isEmail(value);
                 },
                 defaultMessage(args: ValidationArguments) {
                     return `invalid parameter ($property).`;
@@ -849,7 +849,7 @@ export function IsEmail(options?: IsEmailOptions, validationOptions?: Validation
  * @param {ValidationOptions} [validationOptions]
  * @returns {PropertyDecorator}
  */
-export function IsIP(version?: number, validationOptions?: ValidationOptions): PropertyDecorator {
+export function IsIP(version?: IsIpVersion, validationOptions?: ValidationOptions): PropertyDecorator {
     return function (object: Object, propertyName: string) {
         setExpose(object, propertyName);
 
@@ -860,7 +860,7 @@ export function IsIP(version?: number, validationOptions?: ValidationOptions): P
             options: validationOptions,
             validator: {
                 validate(value: any, args: ValidationArguments) {
-                    return ValidatorCls.isIP(value, version);
+                    return isIP(value, version);
                 },
                 defaultMessage(args: ValidationArguments) {
                     return `invalid parameter ($property).`;
@@ -891,7 +891,7 @@ export function IsPhoneNumber(region: string, validationOptions?: ValidationOpti
             options: validationOptions,
             validator: {
                 validate(value: any, args: ValidationArguments) {
-                    return ValidatorCls.isPhoneNumber(value, region);
+                    return isPhoneNumber(value, region);
                 },
                 defaultMessage(args: ValidationArguments) {
                     return `invalid parameter ($property).`;
@@ -920,7 +920,7 @@ export function IsUrl(options?: IsURLOptions, validationOptions?: ValidationOpti
             options: validationOptions,
             validator: {
                 validate(value: any, args: ValidationArguments) {
-                    return ValidatorCls.isURL(value, options);
+                    return isURL(value, options);
                 },
                 defaultMessage(args: ValidationArguments) {
                     return `invalid parameter ($property).`;
@@ -949,7 +949,7 @@ export function IsHash(algorithm: HashAlgorithm, validationOptions?: ValidationO
             options: validationOptions,
             validator: {
                 validate(value: any, args: ValidationArguments) {
-                    return ValidatorCls.isHash(value, algorithm);
+                    return isHash(value, algorithm);
                 },
                 defaultMessage(args: ValidationArguments) {
                     return `invalid parameter, ($property) must be is an ${algorithm} Hash string.`;
