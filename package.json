@@ -1,5 +1,5 @@
 {
-    "name": "think_validtion",
+    "name": "koatty_validtion",
     "version": "1.7.0",
     "description": "Validtion Util for Koatty and ThinkORM.",
     "scripts": {
@@ -10,7 +10,7 @@
     "main": "./dist/index.js",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/thinkkoa/think_validtion.git"
+        "url": "git+https://github.com/thinkkoa/koatty_validtion.git"
     },
     "keywords": [
         "validtion",
@@ -26,9 +26,9 @@
     },
     "license": "MIT",
     "bugs": {
-        "url": "https://github.com/thinkkoa/think_validtion/issues"
+        "url": "https://github.com/thinkkoa/koatty_validtion/issues"
     },
-    "homepage": "https://github.com/thinkkoa/think_validtion",
+    "homepage": "https://github.com/thinkkoa/koatty_validtion",
     "devDependencies": {
         "@types/lodash": "^4.x.x",
         "@types/node": "^12.x.x",
