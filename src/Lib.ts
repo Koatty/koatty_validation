@@ -8,8 +8,13 @@
 import "reflect-metadata";
 import helper from "think_lib";
 import logger from "think_logger";
+import { IOCContainer } from 'koatty_container';
+import { ValidatorFuncs, ClassValidator } from './util';
+
+
 export const PARAM_TYPE_KEY = 'PARAM_TYPE_KEY';
 export const PARAM_RULE_KEY = 'PARAM_RULE_KEY';
+export const PARAM_CHECK_KEY = 'PARAM_CHECK_KEY';
 export const ENABLE_VALIDATED = "ENABLE_VALIDATED";
 
 export const paramterTypes: any = {
@@ -370,4 +375,48 @@ export function platenumber(value: string): boolean {
         //新能源车牌
         return xreg.test(value);
     }
+}
+
+
+interface ParamOptions {
+    index: number;
+    isDto: boolean;
+    type: string;
+    validRules: any[];
+    dtoCheck: boolean;
+}
+
+/**
+ * Check parameters against predefined rules
+ *
+ * @export
+ * @param {*} param
+ * @param {number} index
+ * @param {ParamOptions} [paramOptions={
+ *     validRules: [],
+ *     dtoCheck: false
+ * }]
+ */
+export async function checkParams(value: any, paramOptions: ParamOptions) {
+    if (paramOptions.isDto) {
+        // DTO class
+        const clazz = IOCContainer.getClass(paramOptions.type, "COMPONENT");
+        if (clazz) {
+            if (paramOptions.dtoCheck) {
+                value = await ClassValidator.valid(clazz, value, true);
+            } else {
+                value = plainToClass(clazz, value, true);
+            }
+        }
+    } else {
+        value = convertParamsType(value, paramOptions.type);
+        //@Valid()
+        if (paramOptions.validRules[paramOptions.index]) {
+            const { type, rule, message } = paramOptions.validRules[paramOptions.index];
+            if (type && rule) {
+                ValidatorFuncs(`${paramOptions.index}`, value, type, rule, message, false);
+            }
+        }
+    }
+    return value;
 }
