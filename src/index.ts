@@ -7,7 +7,7 @@
 import * as helper from "think_lib";
 import { ValidRules } from './util';
 import { PARAM_RULE_KEY, PARAM_CHECK_KEY } from './lib';
-import { IOCContainer } from 'think_container';
+import { IOCContainer } from 'koatty_container';
 
 // export for manual verification
 export { checkParams, checkParamsType, convertParamsType, paramterTypes, plainToClass, PARAM_TYPE_KEY, PARAM_RULE_KEY, PARAM_CHECK_KEY } from "./lib";

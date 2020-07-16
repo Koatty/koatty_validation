@@ -1,4 +1,4 @@
-# think_validtion
+# koatty_validtion
 Validtion Util for Koatty and ThinkORM. Based on class-validator, extended parameter type checking and restricted attribute functions.
 
 
