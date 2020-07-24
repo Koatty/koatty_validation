@@ -17,12 +17,15 @@ export const PARAM_RULE_KEY = 'PARAM_RULE_KEY';
 export const PARAM_CHECK_KEY = 'PARAM_CHECK_KEY';
 export const ENABLE_VALIDATED = "ENABLE_VALIDATED";
 
-export const paramterTypes: any = {
-    "Number": 1, "number": 1, "String": 1,
-    "string": 1, "Boolean": 1, "boolean": 1,
-    "Array": 1, "array": 1, "Tuple": 1, "tuple": 1,
-    "Object": 1, "object": 1, "Enum": 1, "enum": 1
-};
+export enum paramterTypes {
+    "Number", "number",
+    "String", "string",
+    "Boolean", "boolean",
+    "Array", "array",
+    "Tuple", "tuple",
+    "Object", "object",
+    "Enum", "enum"
+}
 
 const functionPrototype = Object.getPrototypeOf(Function);
 // get property of an object
