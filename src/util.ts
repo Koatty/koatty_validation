@@ -6,8 +6,8 @@
  */
 import * as helper from "koatty_lib";
 import {
-    plainToClass, checkParamsType, cnname, idnumber, zipcode,
-    mobile, platenumber, getOriginMetadata, PARAM_TYPE_KEY
+    plainToClass, checkParamsType, cnName, idNumber, zipCode,
+    mobile, plateNumber, getOriginMetadata, PARAM_TYPE_KEY
 } from "./lib";
 import {
     validate, registerDecorator, ValidationArguments, ValidationOptions,
@@ -61,7 +61,7 @@ class ValidateClass {
      *
      * @param {*} Clazz
      * @param {*} data
-     * @param {boolean} [convert=false] auto convert paramers type
+     * @param {boolean} [convert=false] auto convert parameters type
      * @returns {Promise<any>}
      * @memberof ValidateClass
      */
@@ -218,7 +218,7 @@ export const FunctionValidator: any = {
         if (!helper.isString(value)) {
             return false;
         }
-        return cnname(value);
+        return cnName(value);
     },
     /**
      * Checks if value is a idcard number.
@@ -227,16 +227,16 @@ export const FunctionValidator: any = {
         if (!helper.isString(value)) {
             return false;
         }
-        return idnumber(value);
+        return idNumber(value);
     },
     /**
-     * Checks if value is a zipcode.
+     * Checks if value is a zipCode.
      */
     IsZipCode: (value: any) => {
         if (!helper.isString(value)) {
             return false;
         }
-        return zipcode(value);
+        return zipCode(value);
     },
     /**
      * Checks if value is a mobile phone number.
@@ -248,13 +248,13 @@ export const FunctionValidator: any = {
         return mobile(value);
     },
     /**
-     * Checks if value is a platenumber.
+     * Checks if value is a plateNumber.
      */
     IsPlateNumber: (value: any) => {
         if (!helper.isString(value)) {
             return false;
         }
-        return platenumber(value);
+        return plateNumber(value);
     },
     /**
      * Checks value is not empty, undefined, null, '', NaN, [], {} and any empty string(including spaces, 
@@ -330,15 +330,15 @@ export function ValidatorFuncs(name: string, value: any, type: string,
  * @param {string} propertyKey
  */
 // export function validParamter(target: any, propertyKey: string, metaDataTypes: any[]) {
-//     const vaildMetaDatas = recursiveGetMetadata(PARAM_RULE_KEY, target, propertyKey);
+//     const validMetaDatas = recursiveGetMetadata(PARAM_RULE_KEY, target, propertyKey);
 //     defineNewProperty(target, propertyKey, function (props: any[]) {
 //         //convert type
 //         props = props.map((v, k) => {
 //             if (helper.isString(metaDataTypes[k])) {
 //                 v = convertParamsType(v, metaDataTypes[k]);
 //                 //@Valid()
-//                 if (vaildMetaDatas[k] && vaildMetaDatas[k].type && vaildMetaDatas[k].rule) {
-//                     ValidatorFuncs(`${k}`, v, vaildMetaDatas[k].type, vaildMetaDatas[k].rule, vaildMetaDatas[k].message);
+//                 if (validMetaDatas[k] && validMetaDatas[k].type && validMetaDatas[k].rule) {
+//                     ValidatorFuncs(`${k}`, v, validMetaDatas[k].type, validMetaDatas[k].rule, validMetaDatas[k].message);
 //                 }
 //             } else if (helper.isClass(metaDataTypes[k])) {
 //                 v = plainToClass(metaDataTypes[k], v, true);
@@ -411,7 +411,7 @@ export function IsCnName(validationOptions?: ValidationOptions): PropertyDecorat
             options: validationOptions,
             validator: {
                 validate(value: any, args: ValidationArguments) {
-                    return cnname(value);
+                    return cnName(value);
                 },
                 defaultMessage(args: ValidationArguments) {
                     return "invalid parameter ($property).";
@@ -422,7 +422,7 @@ export function IsCnName(validationOptions?: ValidationOptions): PropertyDecorat
 }
 
 /**
- * Checks if value is a idcard number(chinese).
+ * Checks if value is a idCard number(chinese).
  *
  * @export
  * @param {string} property
@@ -440,7 +440,7 @@ export function IsIdNumber(validationOptions?: ValidationOptions): PropertyDecor
             options: validationOptions,
             validator: {
                 validate(value: any, args: ValidationArguments) {
-                    return idnumber(value);
+                    return idNumber(value);
                 },
                 defaultMessage(args: ValidationArguments) {
                     return "invalid parameter ($property).";
@@ -451,7 +451,7 @@ export function IsIdNumber(validationOptions?: ValidationOptions): PropertyDecor
 }
 
 /**
- * Checks if value is a zipcode(chinese).
+ * Checks if value is a zipCode(chinese).
  *
  * @export
  * @param {string} property
@@ -469,7 +469,7 @@ export function IsZipCode(validationOptions?: ValidationOptions): PropertyDecora
             options: validationOptions,
             validator: {
                 validate(value: any, args: ValidationArguments) {
-                    return zipcode(value);
+                    return zipCode(value);
                 },
                 defaultMessage(args: ValidationArguments) {
                     return "invalid parameter ($property).";
@@ -527,7 +527,7 @@ export function IsPlateNumber(validationOptions?: ValidationOptions): PropertyDe
             options: validationOptions,
             validator: {
                 validate(value: any, args: ValidationArguments) {
-                    return platenumber(value);
+                    return plateNumber(value);
                 },
                 defaultMessage(args: ValidationArguments) {
                     return "invalid parameter ($property).";

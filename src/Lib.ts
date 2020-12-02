@@ -309,18 +309,18 @@ export function plainToClass(clazz: any, data: any, convert = false) {
  * @param {string} value
  * @returns {boolean}
  */
-export function cnname(value: string): boolean {
+export function cnName(value: string): boolean {
     const reg = /^([a-zA-Z0-9\u4e00-\u9fa5\·]{1,10})$/;
     return reg.test(value);
 }
 
 /**
- * Checks if value is a idcard number.
+ * Checks if value is a idCard number.
  *
  * @param {string} value
  * @returns
  */
-export function idnumber(value: string): boolean {
+export function idNumber(value: string): boolean {
     if (/^\d{15}$/.test(value)) {
         return true;
     }
@@ -350,12 +350,12 @@ export function mobile(value: string): boolean {
 }
 
 /**
- * Checks if value is a zipcode.
+ * Checks if value is a zipCode.
  *
  * @param {string} value
  * @returns {boolean}
  */
-export function zipcode(value: string): boolean {
+export function zipCode(value: string): boolean {
     const reg = /^\d{6}$/;
     return reg.test(value);
 }
@@ -366,17 +366,17 @@ export function zipcode(value: string): boolean {
  * @param {string} value
  * @returns {boolean}
  */
-export function platenumber(value: string): boolean {
+export function plateNumber(value: string): boolean {
     // let reg = new RegExp('^(([\u4e00-\u9fa5][a-zA-Z]|[\u4e00-\u9fa5]{2}\d{2}|[\u4e00-\u9fa5]{2}[a-zA-Z])[-]?|([wW][Jj][\u4e00-\u9fa5]{1}[-]?)|([a-zA-Z]{2}))([A-Za-z0-9]{5}|[DdFf][A-HJ-NP-Za-hj-np-z0-9][0-9]{4}|[0-9]{5}[DdFf])$');
-    // let xreg = /^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领A-Z]{1}[A-Z]{1}(([0-9]{5}[DF]$)|([DF][A-HJ-NP-Z0-9][0-9]{4}$))/;
-    const xreg = /^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领]{1}[A-Z]{1}(([0-9]{5}[DF]$)|([DF][A-HJ-NP-Z0-9][0-9]{4}$))/;
-    // let creg = /^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领A-Z]{1}[A-Z]{1}[A-HJ-NP-Z0-9]{4}[A-HJ-NP-Z0-9挂学警港澳]{1}$/;
-    const creg = /^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领]{1}[A-Z]{1}[A-HJ-NP-Z0-9]{4}[A-HJ-NP-Z0-9挂学警港澳]{1}$/;
+    // let xReg = /^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领A-Z]{1}[A-Z]{1}(([0-9]{5}[DF]$)|([DF][A-HJ-NP-Z0-9][0-9]{4}$))/;
+    const xReg = /^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领]{1}[A-Z]{1}(([0-9]{5}[DF]$)|([DF][A-HJ-NP-Z0-9][0-9]{4}$))/;
+    // let cReg = /^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领A-Z]{1}[A-Z]{1}[A-HJ-NP-Z0-9]{4}[A-HJ-NP-Z0-9挂学警港澳]{1}$/;
+    const cReg = /^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领]{1}[A-Z]{1}[A-HJ-NP-Z0-9]{4}[A-HJ-NP-Z0-9挂学警港澳]{1}$/;
     if (value.length === 7) {
-        return creg.test(value);
+        return cReg.test(value);
     } else {
         //新能源车牌
-        return xreg.test(value);
+        return xReg.test(value);
     }
 }
 

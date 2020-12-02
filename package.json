@@ -1,6 +1,6 @@
 {
-    "name": "koatty_validtion",
-    "version": "1.9.1",
+    "name": "koatty_validation",
+    "version": "1.0.0",
     "description": "Validation Util for Koatty and ThinkORM.",
     "scripts": {
         "build": "del-cli --force dist && tsc",
@@ -10,12 +10,12 @@
     "main": "./dist/index.js",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/thinkkoa/koatty_validtion.git"
+        "url": "git+https://github.com/thinkkoa/koatty_validation.git"
     },
     "keywords": [
-        "validtion",
+        "validation",
         "koatty",
-        "thinkkoa"
+        "thinkKoa"
     ],
     "engines": {
         "node": ">10.0.0"
@@ -26,9 +26,9 @@
     },
     "license": "MIT",
     "bugs": {
-        "url": "https://github.com/thinkkoa/koatty_validtion/issues"
+        "url": "https://github.com/thinkkoa/koatty_validation/issues"
     },
-    "homepage": "https://github.com/thinkkoa/koatty_validtion",
+    "homepage": "https://github.com/thinkkoa/koatty_validation",
     "devDependencies": {
         "@types/node": "^12.x.x",
         "del-cli": "^3.0.1",
