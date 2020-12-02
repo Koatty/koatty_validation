@@ -4,7 +4,7 @@
  * @ license: MIT
  * @ version: 2020-03-20 11:31:09
  */
-import * as helper from "think_lib";
+import * as helper from "koatty_lib";
 import { ValidRules } from './util';
 import { PARAM_RULE_KEY, PARAM_CHECK_KEY } from './lib';
 import { IOCContainer } from 'koatty_container';
@@ -16,7 +16,7 @@ export * from "./util";
 // export { IsHash } from "class-validator";
 
 /**
- * Validtion paramer's type and values.
+ * Validation parameter's type and values.
  *
  * @export
  * @param {(ValidRules | ValidRules[] | Function)} rule
@@ -32,8 +32,8 @@ export function Valid(rule: ValidRules | ValidRules[] | Function, message?: stri
     }
     return (target: any, propertyKey: string, descriptor: any) => {
         // 获取成员参数类型
-        const paramtypes = Reflect.getMetadata("design:paramtypes", target, propertyKey);
-        const type = (paramtypes[descriptor] && paramtypes[descriptor].name) ? paramtypes[descriptor].name : "object";
+        const paramTypes = Reflect.getMetadata("design:paramtypes", target, propertyKey);
+        const type = (paramTypes[descriptor] && paramTypes[descriptor].name) ? paramTypes[descriptor].name : "object";
 
         IOCContainer.attachPropertyData(PARAM_RULE_KEY, {
             name: propertyKey,
@@ -46,7 +46,7 @@ export function Valid(rule: ValidRules | ValidRules[] | Function, message?: stri
 }
 
 /**
- * Validtion paramer's type and values from DTO class.
+ * Validation parameter's type and values from DTO class.
  *
  * @export
  * @returns {MethodDecorator}
@@ -59,7 +59,7 @@ export function Validated(): MethodDecorator {
         }, target, propertyKey);
 
         // 获取成员参数类型
-        // const paramtypes = Reflect.getMetadata("design:paramtypes", target, propertyKey) || [];
+        // const paramTypes = Reflect.getMetadata("design:paramtypes", target, propertyKey) || [];
 
         // const { value, configurable, enumerable } = descriptor;
         // descriptor = {
@@ -70,9 +70,9 @@ export function Validated(): MethodDecorator {
         //         const ps: any[] = [];
         //         // tslint:disable-next-line: no-unused-expression
         //         (props || []).map((value: any, index: number) => {
-        //             const type = (paramtypes[index] && paramtypes[index].name) ? paramtypes[index].name : "any";
+        //             const type = (paramTypes[index] && paramTypes[index].name) ? paramTypes[index].name : "any";
         //             if (!paramterTypes[type]) {
-        //                 ps.push(ClassValidator.valid(paramtypes[index], value, true));
+        //                 ps.push(ClassValidator.valid(paramTypes[index], value, true));
         //             } else {
         //                 ps.push(Promise.resolve(value));
         //             }

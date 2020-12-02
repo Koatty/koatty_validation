@@ -4,9 +4,16 @@
  * @ license: MIT
  * @ version: 2020-05-10 10:45:21
  */
-import helper from "think_lib";
-import { plainToClass, checkParamsType, cnname, idnumber, zipcode, mobile, platenumber, recursiveGetMetadata, PARAM_RULE_KEY, defineNewProperty, getOriginMetadata, PARAM_TYPE_KEY, convertParamsType, ENABLE_VALIDATED } from "./lib";
-import { validate, Validator, registerDecorator, ValidationArguments, ValidationOptions, ValidationError, equals, notEquals, contains, isIn, isNotIn, isDate, length, isEmail, isIP, isPhoneNumber, isURL, isHash, IsIpVersion } from "class-validator";
+import * as helper from "koatty_lib";
+import {
+    plainToClass, checkParamsType, cnname, idnumber, zipcode,
+    mobile, platenumber, getOriginMetadata, PARAM_TYPE_KEY
+} from "./lib";
+import {
+    validate, registerDecorator, ValidationArguments, ValidationOptions,
+    ValidationError, equals, notEquals, contains, isIn, isNotIn, isDate, length,
+    isEmail, isIP, isPhoneNumber, isURL, isHash, IsIpVersion
+} from "class-validator";
 // export const ValidatorCls = new Validator();
 
 // options for isEmail
@@ -107,7 +114,8 @@ interface IsURLOptions {
     allow_protocol_relative_urls?: boolean;
     disallow_auth?: boolean;
 }
-type HashAlgorithm = "md4" | "md5" | "sha1" | "sha256" | "sha384" | "sha512" | "ripemd128" | "ripemd160" | "tiger128" | "tiger160" | "tiger192" | "crc32" | "crc32b";
+type HashAlgorithm = "md4" | "md5" | "sha1" | "sha256" | "sha384" | "sha512"
+    | "ripemd128" | "ripemd160" | "tiger128" | "tiger160" | "tiger192" | "crc32" | "crc32b";
 /**
  * Validator Functions
  */
@@ -161,7 +169,8 @@ export const FunctionValidator: any = {
         return helper.toNumber(num) <= max;
     },
     /**
-     * Checks if the string's length falls in a range. Note: this function takes into account surrogate pairs. If given value is not a string, then it returns false.
+     * Checks if the string's length falls in a range. Note: this function takes into account surrogate pairs. 
+     * If given value is not a string, then it returns false.
      */
     Length: (value: unknown, min: number, max?: number) => {
         return length(value, min, max);
@@ -181,7 +190,10 @@ export const FunctionValidator: any = {
     /**
      * Checks if the string is a valid phone number.
      * @param value — the potential phone number string to test
-     * @param region 2 characters uppercase country code (e.g. DE, US, CH). If users must enter the intl. prefix (e.g. +41), then you may pass "ZZ" or null as region. See [google-libphonenumber, metadata.js:countryCodeToRegionCodeMap on github]{@link https://github.com/ruimarinho/google-libphonenumber/blob/1e46138878cff479aafe2ce62175c6c49cb58720/src/metadata.js#L33}
+     * @param region 2 characters uppercase country code (e.g. DE, US, CH). If users must enter the intl. 
+     * prefix (e.g. +41), then you may pass "ZZ" or null as region. 
+     * See [google-libphonenumber, metadata.js:countryCodeToRegionCodeMap on github]
+     * {@link https://github.com/ruimarinho/google-libphonenumber/blob/1e46138878cff479aafe2ce62175c6c49cb58720/src/metadata.js#L33}
      */
     IsPhoneNumber: (value: string, region: string) => {
         return isPhoneNumber(value, region);
@@ -193,7 +205,8 @@ export const FunctionValidator: any = {
         return isURL(value, options);
     },
     /**
-     * check if the string is a hash of type algorithm. Algorithm is one of ['md4', 'md5', 'sha1', 'sha256', 'sha384', 'sha512', 'ripemd128', 'ripemd160', 'tiger128', 'tiger160', 'tiger192', 'crc32', 'crc32b']
+     * check if the string is a hash of type algorithm. Algorithm is one of 
+     * ['md4', 'md5', 'sha1', 'sha256', 'sha384', 'sha512', 'ripemd128', 'ripemd160', 'tiger128', 'tiger160', 'tiger192', 'crc32', 'crc32b']
      */
     IsHash: (value: unknown, algorithm: HashAlgorithm) => {
         return isHash(value, algorithm);
@@ -244,7 +257,8 @@ export const FunctionValidator: any = {
         return platenumber(value);
     },
     /**
-     * Checks value is not empty, undefined, null, '', NaN, [], {} and any empty string(including spaces, tabs, formfeeds, etc.), returns false
+     * Checks value is not empty, undefined, null, '', NaN, [], {} and any empty string(including spaces, 
+     * tabs, formfeeds, etc.), returns false
      */
     IsNotEmpty: (value: any) => {
         return !helper.isEmpty(value);
@@ -257,7 +271,8 @@ export const FunctionValidator: any = {
  * @export
  * @type {number}
  */
-export type ValidRules = "IsNotEmpty" | "IsDate" | "IsEmail" | "IsIP" | "IsPhoneNumber" | "IsUrl" | "IsHash" | "IsCnName" | "IsIdNumber" | "IsZipCode" | "IsMobile" | "IsPlateNumber";
+export type ValidRules = "IsNotEmpty" | "IsDate" | "IsEmail" | "IsIP" |
+    "IsPhoneNumber" | "IsUrl" | "IsHash" | "IsCnName" | "IsIdNumber" | "IsZipCode" | "IsMobile" | "IsPlateNumber";
 
 
 /**
@@ -272,7 +287,8 @@ export type ValidRules = "IsNotEmpty" | "IsDate" | "IsEmail" | "IsIP" | "IsPhone
  * @param {boolean} [checkType=true]
  * @returns
  */
-export function ValidatorFuncs(name: string, value: any, type: string, rule: ValidRules | ValidRules[] | Function, message?: string, checkType = true) {
+export function ValidatorFuncs(name: string, value: any, type: string,
+    rule: ValidRules | ValidRules[] | Function, message?: string, checkType = true) {
     // check type
     if (checkType && !checkParamsType(value, type)) {
         const err: any = new Error(`TypeError: invalid arguments '${name}'.`);
@@ -783,7 +799,8 @@ export function Max(max: number, validationOptions?: ValidationOptions): Propert
 }
 
 /**
- * Checks if the string's length falls in a range. Note: this function takes into account surrogate pairs. If given value is not a string, then it returns false.
+ * Checks if the string's length falls in a range. Note: this function takes into account surrogate pairs. 
+ * If given value is not a string, then it returns false.
  *
  * @export
  * @param {number} min
@@ -876,7 +893,8 @@ export function IsIP(version?: IsIpVersion, validationOptions?: ValidationOption
  * @export
  * @param {string} {string} region 2 characters uppercase country code (e.g. DE, US, CH).
  * If users must enter the intl. prefix (e.g. +41), then you may pass "ZZ" or null as region.
- * See [google-libphonenumber, metadata.js:countryCodeToRegionCodeMap on github]{@link https://github.com/ruimarinho/google-libphonenumber/blob/1e46138878cff479aafe2ce62175c6c49cb58720/src/metadata.js#L33}
+ * See [google-libphonenumber, metadata.js:countryCodeToRegionCodeMap on github]
+ * {@link https://github.com/ruimarinho/google-libphonenumber/blob/1e46138878cff479aafe2ce62175c6c49cb58720/src/metadata.js#L33}
  * @param {ValidationOptions} [validationOptions]
  * @returns {PropertyDecorator}
  */
@@ -931,7 +949,8 @@ export function IsUrl(options?: IsURLOptions, validationOptions?: ValidationOpti
 }
 
 /**
- * check if the string is a hash of type algorithm. Algorithm is one of ['md4', 'md5', 'sha1', 'sha256', 'sha384', 'sha512', 'ripemd128', 'ripemd160', 'tiger128', 'tiger160', 'tiger192', 'crc32', 'crc32b']
+ * check if the string is a hash of type algorithm. Algorithm is one of ['md4', 'md5', 'sha1', 'sha256', 
+ * 'sha384', 'sha512', 'ripemd128', 'ripemd160', 'tiger128', 'tiger160', 'tiger192', 'crc32', 'crc32b']
  *
  * @export
  * @param {HashAlgorithm} algorithm

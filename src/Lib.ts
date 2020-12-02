@@ -6,8 +6,8 @@
  */
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
-import helper from "think_lib";
-import logger from "think_logger";
+import * as helper from "koatty_lib";
+import { DefaultLogger as logger } from "koatty_logger";
 import { IOCContainer } from 'koatty_container';
 import { ValidatorFuncs, ClassValidator } from './util';
 
@@ -42,7 +42,7 @@ function ordinaryGetPrototypeOf(obj: any): any {
     // or ensure each class has a valid `constructor` property on its prototype that
     // points back to the constructor.
 
-    // If this is not the same as Function.[[Prototype]], then this is definately inherited.
+    // If this is not the same as Function.[[Prototype]], then this is definitely inherited.
     // This is the case when in ES6 or when using __proto__ in a compatible browser.
     if (proto !== functionPrototype) {
         return proto;
@@ -72,7 +72,7 @@ function ordinaryGetPrototypeOf(obj: any): any {
 }
 
 /**
- * get property matadata data
+ * get property metadata data
  *
  * @param {(string | symbol)} decoratorNameKey
  * @param {*} target
@@ -80,16 +80,16 @@ function ordinaryGetPrototypeOf(obj: any): any {
  */
 function listPropertyData(decoratorNameKey: string | symbol, target: any, propertyKey: string | symbol) {
     const originMap = getOriginMetadata(decoratorNameKey, target, propertyKey);
-    const datas: any = {};
+    const data: any = {};
     for (const [key, value] of originMap) {
-        datas[key] = value;
+        data[key] = value;
     }
-    return datas;
+    return data;
 }
 
 /**
  * get metadata value of a metadata key on the prototype chain of an object and property
- * @param metadataKey metadata's key
+ * @param metadataKey metadata key
  * @param target the target of metadataKey
  */
 export function recursiveGetMetadata(metadataKey: any, target: any, propertyKey?: string | symbol): any[] {
@@ -101,11 +101,11 @@ export function recursiveGetMetadata(metadataKey: any, target: any, propertyKey?
     let parent = ordinaryGetPrototypeOf(target);
     while (parent !== null) {
         // metadata = Reflect.getOwnMetadata(metadataKey, parent, propertyKey);
-        const pmetadata = listPropertyData(metadataKey, parent, propertyKey);
-        if (pmetadata) {
-            for (const n in pmetadata) {
+        const pMetadata = listPropertyData(metadataKey, parent, propertyKey);
+        if (pMetadata) {
+            for (const n in pMetadata) {
                 if (!metadata.hasOwnProperty(n)) {
-                    metadata[n] = pmetadata[n];
+                    metadata[n] = pMetadata[n];
                 }
             }
         }
@@ -165,7 +165,7 @@ export function getOriginMetadata(metadataKey: string | symbol, target: any, pro
 }
 
 /**
- * Convert paramer's type to defined.
+ * Convert parameter's type to defined.
  *
  * @param {*} param
  * @param {string} type
@@ -298,7 +298,7 @@ export function plainToClass(clazz: any, data: any, convert = false) {
         }
         return data;
     } catch (err) {
-        logger.error(err);
+        logger.Error(err);
         return data;
     }
 }
@@ -361,7 +361,7 @@ export function zipcode(value: string): boolean {
 }
 
 /**
- * Checks if value is a platenumber.
+ * Checks if value is a plateNumber.
  *
  * @param {string} value
  * @returns {boolean}
