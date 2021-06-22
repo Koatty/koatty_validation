@@ -5,8 +5,9 @@
  * @ version: 2020-03-19 16:41:36
  */
 
-import { IsMobile, IsCnName, ClassValidator, IsNotEmpty, IsIn, IsNotIn, IsHash, IsUrl, IsPhoneNumber, IsIP, IsEmail, Min, Max, IsDate, Contains, NotEquals, Equals, FunctionValidator, Expose, Valid, validParamter } from "../src/index";
+import {ClassValidator,  Min, Contains,  Expose, Valid } from "../src/index";
 import { plainToClass } from "../src/lib";
+import assert from "assert";
 
 class TestClass {
     @Min(3)
@@ -27,27 +28,18 @@ class TestClass {
     }
 }
 
-const ins = plainToClass(TestClass, {
-    id: 3,
-    name: '12',
-    text: 'aaa',
-    status: 2
-}, true);
-
-console.log({
-    id: 3,
-    name: '12',
-    text: 'aaa',
-    status: 2
-} instanceof TestClass);
-
-ClassValidator.valid(TestClass, {
-    id: 3,
-    name: '12',
-    text: 'aaa',
-    status: 2
-}).catch(err => {
-    console.log(err);
+describe("koatty_validation", function () {
+    it("ClassValidator", function () {
+        ClassValidator.valid(TestClass, {
+            id: 3,
+            name: '12',
+            text: 'aaa',
+            status: 2
+        }).then(res => {
+            assert.ok(res);
+        }).catch(err => {
+            assert.fail(err);
+        })
+        
+    })
 })
-
-// console.log(FunctionValidator.Contains(2, '3'));
