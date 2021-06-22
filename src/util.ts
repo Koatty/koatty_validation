@@ -5,6 +5,7 @@
  * @ version: 2020-05-10 10:45:21
  */
 import * as helper from "koatty_lib";
+import { CountryCode } from 'libphonenumber-js';
 import {
     plainToClass, checkParamsType, cnName, idNumber, zipCode,
     mobile, plateNumber, getOriginMetadata, PARAM_TYPE_KEY
@@ -195,7 +196,7 @@ export const FunctionValidator: any = {
      * See [google-libphonenumber, metadata.js:countryCodeToRegionCodeMap on github]
      * {@link https://github.com/ruimarinho/google-libphonenumber/blob/1e46138878cff479aafe2ce62175c6c49cb58720/src/metadata.js#L33}
      */
-    IsPhoneNumber: (value: string, region: string) => {
+    IsPhoneNumber: (value: string, region?: CountryCode) => {
         return isPhoneNumber(value, region);
     },
     /**
@@ -898,7 +899,7 @@ export function IsIP(version?: IsIpVersion, validationOptions?: ValidationOption
  * @param {ValidationOptions} [validationOptions]
  * @returns {PropertyDecorator}
  */
-export function IsPhoneNumber(region: string, validationOptions?: ValidationOptions): PropertyDecorator {
+export function IsPhoneNumber(region?: CountryCode, validationOptions?: ValidationOptions): PropertyDecorator {
     return function (object: Object, propertyName: string) {
         setExpose(object, propertyName);
 
