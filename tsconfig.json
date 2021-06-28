@@ -42,7 +42,8 @@
       // "./typings/*"
     ] /* List of folders to include type definitions from. */,
     "types": [
-      "node"
+      "node",
+      "jest"
     ] /* Type declaration files to be included in compilation. */,
     "allowSyntheticDefaultImports": true /* Allow default imports from modules with no default export. This does not affect code emit, just typechecking. */,
     "resolveJsonModule": true,
@@ -57,10 +58,10 @@
     "emitDecoratorMetadata": true /* Enables experimental support for emitting type metadata for decorators. */
   },
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "dist"
   ],
   "include": [
-    "src",
-    "src/**/*.json"
+    "src/**/*"
   ]
 }
