@@ -14,7 +14,7 @@
     "main": "./dist/index.js",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/thinkkoa/koatty_validation.git"
+        "url": "git+https://github.com/koatty/koatty_validation.git"
     },
     "keywords": [
         "validation",
@@ -30,9 +30,9 @@
     },
     "license": "MIT",
     "bugs": {
-        "url": "https://github.com/thinkkoa/koatty_validation/issues"
+        "url": "https://github.com/koatty/koatty_validation/issues"
     },
-    "homepage": "https://github.com/thinkkoa/koatty_validation",
+    "homepage": "https://github.com/koatty/koatty_validation",
     "maintainers": [
         {
             "name": "richenlin",

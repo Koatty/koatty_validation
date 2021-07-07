@@ -25,6 +25,36 @@ Validation Util for Koatty and ThinkORM. Based on class-validator, extended para
 * @Min
 * @Max
 * @Length
+  
+
+* @Valid
+* @Validated
+
+
+
+```js
+
+export class Controller {
+
+    Test(@Valid("IsNotEmpty", "can not be empty!!") id: number){
+        //todo
+    }
+
+    @Validated() // use dto validation
+    TestDto(user: UserDTO) {
+
+    }
+}
+
+export class UserDTO {
+    @IsNotEmpty({ message: "can not be empty!!" })
+    phoneNum: string;
+
+    @IsCnName({ message: "must be cn name"})
+    userName: string;
+}
+
+```
 
 # Validator for manual
 
