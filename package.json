@@ -1,6 +1,6 @@
 {
     "name": "koatty_validation",
-    "version": "1.0.2",
+    "version": "1.0.4",
     "description": "Validation Util for Koatty and ThinkORM.",
     "scripts": {
         "build": "del-cli --force dist && tsc",
