@@ -5,8 +5,7 @@
  * @ version: 2020-03-19 16:41:36
  */
 
-import {ClassValidator,  Min, Contains,  Expose, Valid } from "../src/index";
-import { plainToClass } from "../src/lib";
+import { ClassValidator, Min, Contains, Expose, Valid } from "../src/index";
 import assert from "assert";
 
 class TestClass {
@@ -40,6 +39,6 @@ describe("koatty_validation", function () {
         }).catch(err => {
             assert.fail(err);
         })
-        
+
     })
 })
