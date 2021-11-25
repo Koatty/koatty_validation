@@ -2,353 +2,14 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2020-05-10 10:45:21
+ * @ version: 2020-03-20 11:34:38
  */
+// tslint:disable-next-line: no-import-side-effect
+import "reflect-metadata";
 import * as helper from "koatty_lib";
-import { CountryCode } from 'libphonenumber-js';
-import {
-    plainToClass, checkParamsType, cnName, idNumber, zipCode,
-    mobile, plateNumber, getOriginMetadata, PARAM_TYPE_KEY
-} from "./lib";
-import {
-    validate, registerDecorator, ValidationArguments, ValidationOptions,
-    ValidationError, equals, notEquals, contains, isIn, isNotIn, isDate, length,
-    isEmail, isIP, isPhoneNumber, isURL, isHash, IsIpVersion
-} from "class-validator";
-// export const ValidatorCls = new Validator();
+import { DefaultLogger as logger } from "koatty_logger";
+import { PARAM_TYPE_KEY } from "./rule";
 
-// options for isEmail
-interface IsEmailOptions {
-    allow_display_name?: boolean;
-    require_display_name?: boolean;
-    allow_utf8_local_part?: boolean;
-    require_tld?: boolean;
-}
-
-// options for isURL
-interface IsURLOptions {
-    protocols?: string[];
-    require_tld?: boolean;
-    require_protocol?: boolean;
-    require_host?: boolean;
-    require_valid_protocol?: boolean;
-    allow_underscores?: boolean;
-    host_whitelist?: (string | RegExp)[];
-    host_blacklist?: (string | RegExp)[];
-    allow_trailing_dot?: boolean;
-    allow_protocol_relative_urls?: boolean;
-    disallow_auth?: boolean;
-}
-
-class ValidateClass {
-    private static instance: ValidateClass;
-
-    private constructor() {
-    }
-
-    /**
-     * 
-     *
-     * @static
-     * @returns
-     * @memberof ValidateUtil
-     */
-    static getInstance() {
-        return this.instance || (this.instance = new ValidateClass());
-    }
-
-    /**
-     * validated data vs dto class
-     *
-     * @param {*} Clazz
-     * @param {*} data
-     * @param {boolean} [convert=false] auto convert parameters type
-     * @returns {Promise<any>}
-     * @memberof ValidateClass
-     */
-    async valid(Clazz: any, data: any, convert = false): Promise<any> {
-        let obj: any = {};
-        if (data instanceof Clazz) {
-            obj = data;
-        } else {
-            obj = plainToClass(Clazz, data, convert);
-        }
-        let errors: ValidationError[] = [];
-        if (convert) {
-            errors = await validate(obj);
-        } else {
-            errors = await validate(obj, { skipMissingProperties: true });
-        }
-        if (errors.length > 0) {
-            const err: any = new Error(Object.values(errors[0].constraints)[0]);
-            err.code = 400;
-            err.status = 400;
-            throw err;
-        }
-        return obj;
-    }
-}
-
-/**
- * ClassValidator for manual
- */
-export const ClassValidator = ValidateClass.getInstance();
-
-
-
-interface IsEmailOptions {
-    allow_display_name?: boolean;
-    require_display_name?: boolean;
-    allow_utf8_local_part?: boolean;
-    require_tld?: boolean;
-}
-interface IsURLOptions {
-    protocols?: string[];
-    require_tld?: boolean;
-    require_protocol?: boolean;
-    require_host?: boolean;
-    require_valid_protocol?: boolean;
-    allow_underscores?: boolean;
-    host_whitelist?: (string | RegExp)[];
-    host_blacklist?: (string | RegExp)[];
-    allow_trailing_dot?: boolean;
-    allow_protocol_relative_urls?: boolean;
-    disallow_auth?: boolean;
-}
-type HashAlgorithm = "md4" | "md5" | "sha1" | "sha256" | "sha384" | "sha512"
-    | "ripemd128" | "ripemd160" | "tiger128" | "tiger160" | "tiger192" | "crc32" | "crc32b";
-/**
- * Validator Functions
- */
-export const FunctionValidator: any = {
-    /** 
-     * Checks if value matches ("===") the comparison.
-     */
-    Equals: (value: unknown, comparison: unknown) => {
-        return equals(value, comparison);
-    },
-    /**
-     * Checks if value does not match ("!==") the comparison.
-     */
-    NotEquals: (value: unknown, comparison: unknown) => {
-        return notEquals(value, comparison);
-    },
-    /**
-     * Checks if the string contains the seed. If given value is not a string, then it returns false.
-     */
-    Contains: (value: unknown, seed: string) => {
-        return contains(value, seed);
-    },
-    /**
-     * Checks if given value is in a array of allowed values.
-     */
-    IsIn: (value: unknown, possibleValues: unknown[]) => {
-        return isIn(value, possibleValues);
-    },
-    /**
-     * Checks if given value not in a array of allowed values.
-     */
-    IsNotIn: (value: unknown, possibleValues: unknown[]) => {
-        return isNotIn(value, possibleValues);
-    },
-    /**
-     * Checks if a given value is a real date.
-     */
-    IsDate: (value: unknown) => {
-        return isDate(value);
-    },
-    /**
-     * Checks if the first number is greater than or equal to the second.
-     */
-    Min: (num: unknown, min: number) => {
-        return helper.toNumber(num) >= min;
-    },
-    /**
-     * Checks if the first number is less than or equal to the second.
-     */
-    Max: (num: unknown, max: number) => {
-        return helper.toNumber(num) <= max;
-    },
-    /**
-     * Checks if the string's length falls in a range. Note: this function takes into account surrogate pairs. 
-     * If given value is not a string, then it returns false.
-     */
-    Length: (value: unknown, min: number, max?: number) => {
-        return length(value, min, max);
-    },
-    /**
-     * Checks if the string is an email. If given value is not a string, then it returns false.
-     */
-    IsEmail: (value: unknown, options?: IsEmailOptions) => {
-        return isEmail(value, options);
-    },
-    /**
-     * Checks if the string is an IP (version 4 or 6). If given value is not a string, then it returns false.
-     */
-    IsIP: (value: unknown, version?: any) => {
-        return isIP(value, version);
-    },
-    /**
-     * Checks if the string is a valid phone number.
-     * @param value — the potential phone number string to test
-     * @param region 2 characters uppercase country code (e.g. DE, US, CH). If users must enter the intl. 
-     * prefix (e.g. +41), then you may pass "ZZ" or null as region. 
-     * See [google-libphonenumber, metadata.js:countryCodeToRegionCodeMap on github]
-     * {@link https://github.com/ruimarinho/google-libphonenumber/blob/1e46138878cff479aafe2ce62175c6c49cb58720/src/metadata.js#L33}
-     */
-    IsPhoneNumber: (value: string, region?: CountryCode) => {
-        return isPhoneNumber(value, region);
-    },
-    /**
-     * Checks if the string is an url. If given value is not a string, then it returns false.
-     */
-    IsUrl: (value: string, options?: IsURLOptions) => {
-        return isURL(value, options);
-    },
-    /**
-     * check if the string is a hash of type algorithm. Algorithm is one of 
-     * ['md4', 'md5', 'sha1', 'sha256', 'sha384', 'sha512', 'ripemd128', 'ripemd160', 'tiger128', 'tiger160', 'tiger192', 'crc32', 'crc32b']
-     */
-    IsHash: (value: unknown, algorithm: HashAlgorithm) => {
-        return isHash(value, algorithm);
-    },
-    /**
-     * Checks if value is a chinese name.
-     */
-    IsCnName: (value: any) => {
-        if (!helper.isString(value)) {
-            return false;
-        }
-        return cnName(value);
-    },
-    /**
-     * Checks if value is a idcard number.
-     */
-    IsIdNumber: (value: any) => {
-        if (!helper.isString(value)) {
-            return false;
-        }
-        return idNumber(value);
-    },
-    /**
-     * Checks if value is a zipCode.
-     */
-    IsZipCode: (value: any) => {
-        if (!helper.isString(value)) {
-            return false;
-        }
-        return zipCode(value);
-    },
-    /**
-     * Checks if value is a mobile phone number.
-     */
-    IsMobile: (value: any) => {
-        if (!helper.isString(value)) {
-            return false;
-        }
-        return mobile(value);
-    },
-    /**
-     * Checks if value is a plateNumber.
-     */
-    IsPlateNumber: (value: any) => {
-        if (!helper.isString(value)) {
-            return false;
-        }
-        return plateNumber(value);
-    },
-    /**
-     * Checks value is not empty, undefined, null, '', NaN, [], {} and any empty string(including spaces, 
-     * tabs, formfeeds, etc.), returns false
-     */
-    IsNotEmpty: (value: any) => {
-        return !helper.isEmpty(value);
-    }
-};
-
-/**
- * type checked rules
- *
- * @export
- * @type {number}
- */
-export type ValidRules = "IsNotEmpty" | "IsDate" | "IsEmail" | "IsIP" |
-    "IsPhoneNumber" | "IsUrl" | "IsHash" | "IsCnName" | "IsIdNumber" | "IsZipCode" | "IsMobile" | "IsPlateNumber";
-
-
-/**
- * Use functions or built-in rules for validation.
- *
- * @export
- * @param {string} name
- * @param {*} value
- * @param {string} type
- * @param {(ValidRules | ValidRules[] | Function)} rule
- * @param {string} [message]
- * @param {boolean} [checkType=true]
- * @returns
- */
-export function ValidatorFuncs(name: string, value: any, type: string,
-    rule: ValidRules | ValidRules[] | Function, message?: string, checkType = true) {
-    // check type
-    if (checkType && !checkParamsType(value, type)) {
-        const err: any = new Error(`TypeError: invalid arguments '${name}'.`);
-        err.code = 400;
-        err.status = 400;
-        throw err;
-    }
-
-    if (helper.isFunction(rule)) {
-        if (!rule(value)) {
-            const err: any = new Error(message || `ValidatorError: invalid arguments[${name}].`);
-            err.code = 400;
-            err.status = 400;
-            throw err;
-        }
-        return value;
-    } else {
-        const funcs: any[] = <any[]>rule;
-        if (helper.isString(rule)) {
-            funcs.push(rule);
-        }
-        if (funcs.some((it: ValidRules) => FunctionValidator[it] && !FunctionValidator[it](value))) {
-            const err: any = new Error(message || `ValidatorError: invalid arguments[${name}].`);
-            err.code = 400;
-            err.status = 400;
-            throw err;
-        }
-    }
-
-    return value;
-}
-
-
-/**
- * append to the target class method to validated parameter.
- *
- * @export
- * @param {*} target
- * @param {string} propertyKey
- */
-// export function validParamter(target: any, propertyKey: string, metaDataTypes: any[]) {
-//     const validMetaDatas = recursiveGetMetadata(PARAM_RULE_KEY, target, propertyKey);
-//     defineNewProperty(target, propertyKey, function (props: any[]) {
-//         //convert type
-//         props = props.map((v, k) => {
-//             if (helper.isString(metaDataTypes[k])) {
-//                 v = convertParamsType(v, metaDataTypes[k]);
-//                 //@Valid()
-//                 if (validMetaDatas[k] && validMetaDatas[k].type && validMetaDatas[k].rule) {
-//                     ValidatorFuncs(`${k}`, v, validMetaDatas[k].type, validMetaDatas[k].rule, validMetaDatas[k].message);
-//                 }
-//             } else if (helper.isClass(metaDataTypes[k])) {
-//                 v = plainToClass(metaDataTypes[k], v, true);
-//             }
-//             return v;
-//         });
-//         return props;
-//     });
-// }
 
 /**
  * Set property as included in the process of transformation.
@@ -365,616 +26,394 @@ export function setExpose(object: Object, propertyName: string | symbol) {
     }
 }
 
-/**
- * Marks property as included in the process of transformation.
- *
- * @export
- * @returns {PropertyDecorator}
- */
-export function Expose(): PropertyDecorator {
-    return function (object: Object, propertyName: string) {
-        const types = Reflect.getMetadata("design:type", object, propertyName);
-        if (types) {
-            const originMap = getOriginMetadata(PARAM_TYPE_KEY, object);
-            originMap.set(propertyName, types.name);
-        }
-    };
+const functionPrototype = Object.getPrototypeOf(Function);
+// get property of an object
+// https://tc39.github.io/ecma262/#sec-ordinarygetprototypeof
+function ordinaryGetPrototypeOf(obj: any): any {
+    const proto = Object.getPrototypeOf(obj);
+    if (typeof obj !== "function" || obj === functionPrototype) {
+        return proto;
+    }
+
+    // TypeScript doesn't set __proto__ in ES5, as it's non-standard.
+    // Try to determine the superclass constructor. Compatible implementations
+    // must either set __proto__ on a subclass constructor to the superclass constructor,
+    // or ensure each class has a valid `constructor` property on its prototype that
+    // points back to the constructor.
+
+    // If this is not the same as Function.[[Prototype]], then this is definitely inherited.
+    // This is the case when in ES6 or when using __proto__ in a compatible browser.
+    if (proto !== functionPrototype) {
+        return proto;
+    }
+
+    // If the super prototype is Object.prototype, null, or undefined, then we cannot determine the heritage.
+    const prototype = obj.prototype;
+    const prototypeProto = prototype && Object.getPrototypeOf(prototype);
+    // tslint:disable-next-line: triple-equals
+    if (prototypeProto == undefined || prototypeProto === Object.prototype) {
+        return proto;
+    }
+
+    // If the constructor was not a function, then we cannot determine the heritage.
+    const constructor = prototypeProto.constructor;
+    if (typeof constructor !== "function") {
+        return proto;
+    }
+
+    // If we have some kind of self-reference, then we cannot determine the heritage.
+    if (constructor === obj) {
+        return proto;
+    }
+
+    // we have a pretty good guess at the heritage.
+    return constructor;
 }
 
 /**
- * Identifies that the field needs to be defined
+ * get property metadata data
+ *
+ * @param {(string | symbol)} decoratorNameKey
+ * @param {*} target
+ * @returns
+ */
+function listPropertyData(decoratorNameKey: string | symbol, target: any, propertyKey: string | symbol) {
+    const originMap = getOriginMetadata(decoratorNameKey, target, propertyKey);
+    const data: any = {};
+    for (const [key, value] of originMap) {
+        data[key] = value;
+    }
+    return data;
+}
+
+/**
+ * get metadata value of a metadata key on the prototype chain of an object and property
+ * @param metadataKey metadata key
+ * @param target the target of metadataKey
+ */
+export function recursiveGetMetadata(metadataKey: any, target: any, propertyKey?: string | symbol): any[] {
+    // get metadata value of a metadata key on the prototype
+    // let metadata = Reflect.getOwnMetadata(metadataKey, target, propertyKey);
+    const metadata = listPropertyData(metadataKey, target, propertyKey) || {};
+
+    // get metadata value of a metadata key on the prototype chain
+    let parent = ordinaryGetPrototypeOf(target);
+    while (parent !== null) {
+        // metadata = Reflect.getOwnMetadata(metadataKey, parent, propertyKey);
+        const pMetadata = listPropertyData(metadataKey, parent, propertyKey);
+        if (pMetadata) {
+            for (const n in pMetadata) {
+                if (!metadata.hasOwnProperty(n)) {
+                    metadata[n] = pMetadata[n];
+                }
+            }
+        }
+        parent = ordinaryGetPrototypeOf(parent);
+    }
+    return metadata;
+}
+
+/**
+ * Dynamically add methods for target class types
+ *
+ * @param {Function} clazz
+ * @param {string} protoName
+ * @param {Function} func
+ */
+export function defineNewProperty(clazz: Function, protoName: string, func: Function) {
+    const oldMethod = Reflect.get(clazz.prototype, protoName);
+    if (oldMethod) {
+        Reflect.defineProperty(clazz.prototype, protoName, {
+            writable: true,
+            value: function fn(...props: any[]) {
+                // process paramter
+                props = func(props);
+                // tslint:disable-next-line: no-invalid-this
+                return Reflect.apply(oldMethod, this, props);
+            }
+        });
+    }
+}
+
+/**
+ *
+ *
+ * @param {(string | symbol)} metadataKey
+ * @param {*} target
+ * @param {(string | symbol)} [propertyKey]
+ * @returns
+ */
+export function getOriginMetadata(metadataKey: string | symbol, target: any, propertyKey?: string | symbol) {
+    // filter Object.create(null)
+    if (typeof target === "object" && target.constructor) {
+        target = target.constructor;
+    }
+    if (propertyKey) {
+        // for property or method
+        if (!Reflect.hasMetadata(metadataKey, target, propertyKey)) {
+            Reflect.defineMetadata(metadataKey, new Map(), target, propertyKey);
+        }
+        return Reflect.getMetadata(metadataKey, target, propertyKey);
+    } else {
+        // for class
+        if (!Reflect.hasMetadata(metadataKey, target)) {
+            Reflect.defineMetadata(metadataKey, new Map(), target);
+        }
+        return Reflect.getMetadata(metadataKey, target);
+    }
+}
+
+/**
+ *
  *
  * @export
- * @returns {PropertyDecorator}
+ * @param {*} clazz
+ * @param {*} data
+ * @param {boolean} [convert=false]
+ * @returns
  */
-export function IsDefined(): PropertyDecorator {
-    return function (object: Object, propertyName: string) {
-        setExpose(object, propertyName);
-    };
+export function plainToClass(clazz: any, data: any, convert = false) {
+    try {
+        if (helper.isClass(clazz)) {
+            let cls;
+            if (!helper.isObject(data)) {
+                data = {};
+            }
+            if (data instanceof clazz) {
+                cls = data;
+            } else {
+                cls = Reflect.construct(clazz, []);
+            }
+            if (convert) {
+                return convertDtoParamsType(clazz, cls, data);
+            }
+            return Object.assign(cls, data);
+        }
+        return data;
+    } catch (err) {
+        logger.Error(err);
+        return data;
+    }
+}
+
+/**
+ * convertDtoParamsType
+ *
+ * @param {*} clazz
+ * @param {*} cls
+ * @param {*} data
+ * @returns {*}  
+ */
+export function convertDtoParamsType(clazz: any, cls: any, data: any) {
+    const originMap = getOriginMetadata(PARAM_TYPE_KEY, clazz);
+    for (const [key, type] of originMap) {
+        if (key && Object.prototype.hasOwnProperty.call(data, key)) {
+            cls[key] = convertParamsType(data[key], type);
+        }
+    }
+    return cls;
+}
+
+/**
+ * 绑定参数类型转换
+ *
+ * @param {*} param
+ * @param {string} type
+ * @returns {*}  
+ */
+export function convertParamsType(param: any, type: string) {
+    try {
+        switch (type) {
+            case "Number":
+            case "number":
+                if (helper.isNaN(param)) {
+                    return NaN;
+                }
+                if (helper.isNumber(param)) {
+                    return param;
+                }
+                if (helper.isNumberString(param)) {
+                    return helper.toNumber(param);
+                }
+                return NaN;
+            case "Boolean":
+            case "boolean":
+                return !!param;
+            case "Array":
+            case "array":
+            case "Tuple":
+            case "tuple":
+                if (helper.isArray(param)) {
+                    return param;
+                }
+                return helper.toArray(param);
+            case "String":
+            case "string":
+                if (helper.isString(param)) {
+                    return param;
+                }
+                return helper.toString(param);
+            case "Null":
+            case "null":
+                return null;
+            case "Undefined":
+            case "undefined":
+                return undefined;
+            case "Bigint":
+            case "bigint":
+                if (typeof param === 'bigint') {
+                    return param;
+                }
+                return BigInt(param);
+            // case "object":
+            // case "enum":
+            default: //any
+                return param;
+        }
+    } catch (err) {
+        return param;
+    }
+}
+
+/**
+ * Check the base types.
+ *
+ * @param {*} value
+ * @param {string} type
+ * @returns {*}
+ */
+export function checkParamsType(value: any, type: string): any {
+    switch (type) {
+        case "Number":
+        case "number":
+            if (!helper.isNumber(value) || helper.isNaN(value)) {
+                return false;
+            }
+            return true;
+        case "Boolean":
+        case "boolean":
+            if (!helper.isBoolean(value)) {
+                return false;
+            }
+            return true;
+        case "Array":
+        case "array":
+        case "Tuple":
+        case "tuple":
+            if (!helper.isArray(value)) {
+                return false;
+            }
+            return true;
+        case "String":
+        case "string":
+            if (!helper.isString(value)) {
+                return false;
+            }
+            return true;
+        case "Object":
+        case "object":
+        case "Enum":
+        case "enum":
+            if (helper.isTrueEmpty(value)) {
+                return false;
+            }
+            return true;
+        case "Null":
+        case "null":
+            if (!helper.isNull(value)) {
+                return false;
+            }
+            return true;
+        case "Undefined":
+        case "undefined":
+            if (!helper.isUndefined(value)) {
+                return false;
+            }
+            return true;
+        case "Bigint":
+        case "bigint":
+            if (typeof value !== 'bigint') {
+                return false;
+            }
+            return true;
+        default: //any
+            return true;
+    }
 }
 
 /**
  * Checks if value is a chinese name.
  *
- * @export
- * @param {string} property
- * @param {ValidationOptions} [validationOptions]
- * @returns {PropertyDecorator}
+ * @param {string} value
+ * @returns {boolean}
  */
-export function IsCnName(validationOptions?: ValidationOptions): PropertyDecorator {
-    return function (object: Object, propertyName: string) {
-        setExpose(object, propertyName);
-
-        registerDecorator({
-            name: "IsCnName",
-            target: object.constructor,
-            propertyName,
-            options: validationOptions,
-            validator: {
-                validate(value: any, args: ValidationArguments) {
-                    return cnName(value);
-                },
-                defaultMessage(args: ValidationArguments) {
-                    return "invalid parameter ($property).";
-                }
-            }
-        });
-    };
+export function cnName(value: string): boolean {
+    const reg = /^([a-zA-Z0-9\u4e00-\u9fa5\·]{1,10})$/;
+    return reg.test(value);
 }
 
 /**
- * Checks if value is a idCard number(chinese).
+ * Checks if value is a idCard number.
  *
- * @export
- * @param {string} property
- * @param {ValidationOptions} [validationOptions]
- * @returns {PropertyDecorator}
+ * @param {string} value
+ * @returns
  */
-export function IsIdNumber(validationOptions?: ValidationOptions): PropertyDecorator {
-    return function (object: Object, propertyName: string) {
-        setExpose(object, propertyName);
-
-        registerDecorator({
-            name: "IsIdNumber",
-            target: object.constructor,
-            propertyName,
-            options: validationOptions,
-            validator: {
-                validate(value: any, args: ValidationArguments) {
-                    return idNumber(value);
-                },
-                defaultMessage(args: ValidationArguments) {
-                    return "invalid parameter ($property).";
-                }
-            }
-        });
-    };
+export function idNumber(value: string): boolean {
+    if (/^\d{15}$/.test(value)) {
+        return true;
+    }
+    if ((/^\d{17}[0-9X]$/).test(value)) {
+        const vs = '1,0,x,9,8,7,6,5,4,3,2'.split(',');
+        const ps: any[] = '7,9,10,5,8,4,2,1,6,3,7,9,10,5,8,4,2'.split(',');
+        const ss: any[] = value.toLowerCase().split('');
+        let r = 0;
+        for (let i = 0; i < 17; i++) {
+            r += ps[i] * ss[i];
+        }
+        const isOk = (vs[r % 11] === ss[17]);
+        return isOk;
+    }
+    return false;
 }
 
 /**
- * Checks if value is a zipCode(chinese).
+ * Checks if value is a mobile phone number.
  *
- * @export
- * @param {string} property
- * @param {ValidationOptions} [validationOptions]
- * @returns {PropertyDecorator}
+ * @param {string} value
+ * @returns {boolean}
  */
-export function IsZipCode(validationOptions?: ValidationOptions): PropertyDecorator {
-    return function (object: Object, propertyName: string) {
-        setExpose(object, propertyName);
-
-        registerDecorator({
-            name: "IsZipCode",
-            target: object.constructor,
-            propertyName,
-            options: validationOptions,
-            validator: {
-                validate(value: any, args: ValidationArguments) {
-                    return zipCode(value);
-                },
-                defaultMessage(args: ValidationArguments) {
-                    return "invalid parameter ($property).";
-                }
-            }
-        });
-    };
+export function mobile(value: string): boolean {
+    const reg = /^(13|14|15|16|17|18|19)\d{9}$/;
+    return reg.test(value);
 }
 
 /**
- * Checks if value is a mobile phone number(chinese).
+ * Checks if value is a zipCode.
  *
- * @export
- * @param {string} property
- * @param {ValidationOptions} [validationOptions]
- * @returns {PropertyDecorator}
+ * @param {string} value
+ * @returns {boolean}
  */
-export function IsMobile(validationOptions?: ValidationOptions): PropertyDecorator {
-    return function (object: Object, propertyName: string) {
-        setExpose(object, propertyName);
-
-        registerDecorator({
-            name: "IsMobile",
-            target: object.constructor,
-            propertyName,
-            options: validationOptions,
-            validator: {
-                validate(value: any, args: ValidationArguments) {
-                    return mobile(value);
-                },
-                defaultMessage(args: ValidationArguments) {
-                    return "invalid parameter ($property).";
-                }
-            }
-        });
-    };
+export function zipCode(value: string): boolean {
+    const reg = /^\d{6}$/;
+    return reg.test(value);
 }
 
 /**
- * Checks if value is a plate number(chinese).
+ * Checks if value is a plateNumber.
  *
- * @export
- * @param {string} property
- * @param {ValidationOptions} [validationOptions]
- * @returns {PropertyDecorator}
+ * @param {string} value
+ * @returns {boolean}
  */
-export function IsPlateNumber(validationOptions?: ValidationOptions): PropertyDecorator {
-    return function (object: Object, propertyName: string) {
-        setExpose(object, propertyName);
-
-        registerDecorator({
-            name: "IsPlateNumber",
-            target: object.constructor,
-            propertyName,
-            options: validationOptions,
-            validator: {
-                validate(value: any, args: ValidationArguments) {
-                    return plateNumber(value);
-                },
-                defaultMessage(args: ValidationArguments) {
-                    return "invalid parameter ($property).";
-                }
-            }
-        });
-    };
-
-}
-
-/**
- * Checks value is not empty, undefined, null, '', NaN, [], {} and any empty string(including spaces, tabs, formfeeds, etc.), returns false.
- *
- * @export
- * @param {ValidationOptions} [validationOptions]
- * @returns {PropertyDecorator}
- */
-export function IsNotEmpty(validationOptions?: ValidationOptions): PropertyDecorator {
-    return function (object: Object, propertyName: string) {
-        setExpose(object, propertyName);
-
-        registerDecorator({
-            name: "IsNotEmpty",
-            target: object.constructor,
-            propertyName,
-            options: validationOptions,
-            validator: {
-                validate(value: any, args: ValidationArguments) {
-                    return !helper.isEmpty(value);
-                },
-                defaultMessage(args: ValidationArguments) {
-                    return "invalid parameter ($property).";
-                }
-            }
-        });
-    };
-}
-
-/**
- * Checks if value matches ("===") the comparison.
- *
- * @export
- * @param {*} comparison
- * @param {ValidationOptions} [validationOptions]
- * @returns {PropertyDecorator}
- */
-export function Equals(comparison: any, validationOptions?: ValidationOptions): PropertyDecorator {
-    return function (object: Object, propertyName: string) {
-        setExpose(object, propertyName);
-
-        registerDecorator({
-            name: "vEquals",
-            target: object.constructor,
-            propertyName,
-            options: validationOptions,
-            validator: {
-                validate(value: any, args: ValidationArguments) {
-                    return equals(value, comparison);
-                },
-                defaultMessage(args: ValidationArguments) {
-                    return `invalid parameter, ($property) must be equals ${comparison}.`;
-                }
-            }
-        });
-    };
-}
-
-/**
- * Checks if value does not match ("!==") the comparison.
- *
- * @export
- * @param {*} comparison
- * @param {ValidationOptions} [validationOptions]
- * @returns {PropertyDecorator}
- */
-export function NotEquals(comparison: any, validationOptions?: ValidationOptions): PropertyDecorator {
-    return function (object: Object, propertyName: string) {
-        setExpose(object, propertyName);
-
-        registerDecorator({
-            name: "vNotEquals",
-            target: object.constructor,
-            propertyName,
-            options: validationOptions,
-            validator: {
-                validate(value: any, args: ValidationArguments) {
-                    return notEquals(value, comparison);
-                },
-                defaultMessage(args: ValidationArguments) {
-                    return `invalid parameter, ($property) must be not equals ${comparison}.`;
-                }
-            }
-        });
-    };
-}
-
-/**
- * Checks if the string contains the seed.
- *
- * @export
- * @param {string} seed
- * @param {ValidationOptions} [validationOptions]
- * @returns {PropertyDecorator}
- */
-export function Contains(seed: string, validationOptions?: ValidationOptions): PropertyDecorator {
-    return function (object: Object, propertyName: string) {
-        setExpose(object, propertyName);
-
-        registerDecorator({
-            name: "vContains",
-            target: object.constructor,
-            propertyName,
-            options: validationOptions,
-            validator: {
-                validate(value: any, args: ValidationArguments) {
-                    return contains(value, seed);
-                    // return typeof value === "string" && (value.indexOf(seed) > -1);
-                },
-                defaultMessage(args: ValidationArguments) {
-                    return `invalid parameter, ($property) must be contains ${seed}.`;
-                }
-            }
-        });
-    };
-}
-
-/**
- * Checks if given value is in a array of allowed values.
- *
- * @export
- * @param {any[]} possibleValues
- * @param {ValidationOptions} [validationOptions]
- * @returns {PropertyDecorator}
- */
-export function IsIn(possibleValues: any[], validationOptions?: ValidationOptions): PropertyDecorator {
-    return function (object: Object, propertyName: string) {
-        setExpose(object, propertyName);
-
-        registerDecorator({
-            name: "vIsIn",
-            target: object.constructor,
-            propertyName,
-            options: validationOptions,
-            validator: {
-                validate(value: any, args: ValidationArguments) {
-                    return isIn(value, possibleValues);
-                },
-                defaultMessage(args: ValidationArguments) {
-                    return `invalid parameter ($property).`;
-                }
-            }
-        });
-    };
-}
-
-/**
- * Checks if given value not in a array of allowed values.
- *
- * @export
- * @param {any[]} possibleValues
- * @param {ValidationOptions} [validationOptions]
- * @returns {PropertyDecorator}
- */
-export function IsNotIn(possibleValues: any[], validationOptions?: ValidationOptions): PropertyDecorator {
-    return function (object: Object, propertyName: string) {
-        setExpose(object, propertyName);
-
-        registerDecorator({
-            name: "vIsNotIn",
-            target: object.constructor,
-            propertyName,
-            options: validationOptions,
-            validator: {
-                validate(value: any, args: ValidationArguments) {
-                    return isNotIn(value, possibleValues);
-                },
-                defaultMessage(args: ValidationArguments) {
-                    return `invalid parameter ($property).`;
-                }
-            }
-        });
-    };
-}
-
-/**
- * Checks if a given value is a real date.
- *
- * @export
- * @param {ValidationOptions} [validationOptions]
- * @returns {PropertyDecorator}
- */
-export function IsDate(validationOptions?: ValidationOptions): PropertyDecorator {
-    return function (object: Object, propertyName: string) {
-        setExpose(object, propertyName);
-
-        registerDecorator({
-            name: "vIsDate",
-            target: object.constructor,
-            propertyName,
-            options: validationOptions,
-            validator: {
-                validate(value: any, args: ValidationArguments) {
-                    return isDate(value);
-                },
-                defaultMessage(args: ValidationArguments) {
-                    return `invalid parameter ($property).`;
-                }
-            }
-        });
-    };
-}
-
-/**
- * Checks if the first number is greater than or equal to the min value.
- *
- * @export
- * @param {number} min
- * @param {ValidationOptions} [validationOptions]
- * @returns {PropertyDecorator}
- */
-export function Min(min: number, validationOptions?: ValidationOptions): PropertyDecorator {
-    return function (object: Object, propertyName: string) {
-        setExpose(object, propertyName);
-
-        registerDecorator({
-            name: "vMin",
-            target: object.constructor,
-            propertyName,
-            options: validationOptions,
-            validator: {
-                validate(value: any, args: ValidationArguments) {
-                    return helper.toNumber(value) >= min;
-                },
-                defaultMessage(args: ValidationArguments) {
-                    return `invalid parameter ($property).`;
-                }
-            }
-        });
-    };
-}
-
-/**
- * Checks if the first number is less than or equal to the max value.
- *
- * @export
- * @param {number} max
- * @param {ValidationOptions} [validationOptions]
- * @returns {PropertyDecorator}
- */
-export function Max(max: number, validationOptions?: ValidationOptions): PropertyDecorator {
-    return function (object: Object, propertyName: string) {
-        setExpose(object, propertyName);
-
-        registerDecorator({
-            name: "vMax",
-            target: object.constructor,
-            propertyName,
-            options: validationOptions,
-            validator: {
-                validate(value: any, args: ValidationArguments) {
-                    return helper.toNumber(value) <= max;
-                },
-                defaultMessage(args: ValidationArguments) {
-                    return `invalid parameter ($property).`;
-                }
-            }
-        });
-    };
-}
-
-/**
- * Checks if the string's length falls in a range. Note: this function takes into account surrogate pairs. 
- * If given value is not a string, then it returns false.
- *
- * @export
- * @param {number} min
- * @param {number} [max]
- * @param {ValidationOptions} [validationOptions]
- * @returns {PropertyDecorator}
- */
-export function Length(min: number, max?: number, validationOptions?: ValidationOptions): PropertyDecorator {
-    return function (object: Object, propertyName: string) {
-        setExpose(object, propertyName);
-
-        registerDecorator({
-            name: "vLength",
-            target: object.constructor,
-            propertyName,
-            options: validationOptions,
-            validator: {
-                validate(value: any, args: ValidationArguments) {
-                    return length(value, min, max);
-                },
-                defaultMessage(args: ValidationArguments) {
-                    return `invalid parameter ($property).`;
-                }
-            }
-        });
-    };
-}
-
-/**
- * Checks if the string is an email. If given value is not a string, then it returns false.
- *
- * @export
- * @param {IsEmailOptions} [options]
- * @param {ValidationOptions} [validationOptions]
- * @returns {PropertyDecorator}
- */
-export function IsEmail(options?: IsEmailOptions, validationOptions?: ValidationOptions): PropertyDecorator {
-    return function (object: Object, propertyName: string) {
-        setExpose(object, propertyName);
-
-        registerDecorator({
-            name: "vIsEmail",
-            target: object.constructor,
-            propertyName,
-            options: validationOptions,
-            validator: {
-                validate(value: any, args: ValidationArguments) {
-                    return isEmail(value);
-                },
-                defaultMessage(args: ValidationArguments) {
-                    return `invalid parameter ($property).`;
-                }
-            }
-        });
-    };
-}
-
-/**
- * Checks if the string is an IP (version 4 or 6). If given value is not a string, then it returns false.
- *
- * @export
- * @param {number} [version]
- * @param {ValidationOptions} [validationOptions]
- * @returns {PropertyDecorator}
- */
-export function IsIP(version?: IsIpVersion, validationOptions?: ValidationOptions): PropertyDecorator {
-    return function (object: Object, propertyName: string) {
-        setExpose(object, propertyName);
-
-        registerDecorator({
-            name: "vIsIP",
-            target: object.constructor,
-            propertyName,
-            options: validationOptions,
-            validator: {
-                validate(value: any, args: ValidationArguments) {
-                    return isIP(value, version);
-                },
-                defaultMessage(args: ValidationArguments) {
-                    return `invalid parameter ($property).`;
-                }
-            }
-        });
-    };
-}
-
-/**
- * Checks if the string is a valid phone number.
- *
- * @export
- * @param {string} {string} region 2 characters uppercase country code (e.g. DE, US, CH).
- * If users must enter the intl. prefix (e.g. +41), then you may pass "ZZ" or null as region.
- * See [google-libphonenumber, metadata.js:countryCodeToRegionCodeMap on github]
- * {@link https://github.com/ruimarinho/google-libphonenumber/blob/1e46138878cff479aafe2ce62175c6c49cb58720/src/metadata.js#L33}
- * @param {ValidationOptions} [validationOptions]
- * @returns {PropertyDecorator}
- */
-export function IsPhoneNumber(region?: CountryCode, validationOptions?: ValidationOptions): PropertyDecorator {
-    return function (object: Object, propertyName: string) {
-        setExpose(object, propertyName);
-
-        registerDecorator({
-            name: "vIsPhoneNumber",
-            target: object.constructor,
-            propertyName,
-            options: validationOptions,
-            validator: {
-                validate(value: any, args: ValidationArguments) {
-                    return isPhoneNumber(value, region);
-                },
-                defaultMessage(args: ValidationArguments) {
-                    return `invalid parameter ($property).`;
-                }
-            }
-        });
-    };
-}
-
-/**
- * Checks if the string is an url.
- *
- * @export
- * @param {IsURLOptions} [options]
- * @param {ValidationOptions} [validationOptions]
- * @returns {PropertyDecorator}
- */
-export function IsUrl(options?: IsURLOptions, validationOptions?: ValidationOptions): PropertyDecorator {
-    return function (object: Object, propertyName: string) {
-        setExpose(object, propertyName);
-
-        registerDecorator({
-            name: "vIsUrl",
-            target: object.constructor,
-            propertyName,
-            options: validationOptions,
-            validator: {
-                validate(value: any, args: ValidationArguments) {
-                    return isURL(value, options);
-                },
-                defaultMessage(args: ValidationArguments) {
-                    return `invalid parameter ($property).`;
-                }
-            }
-        });
-    };
-}
-
-/**
- * check if the string is a hash of type algorithm. Algorithm is one of ['md4', 'md5', 'sha1', 'sha256', 
- * 'sha384', 'sha512', 'ripemd128', 'ripemd160', 'tiger128', 'tiger160', 'tiger192', 'crc32', 'crc32b']
- *
- * @export
- * @param {HashAlgorithm} algorithm
- * @param {ValidationOptions} [validationOptions]
- * @returns {PropertyDecorator}
- */
-export function IsHash(algorithm: HashAlgorithm, validationOptions?: ValidationOptions): PropertyDecorator {
-    return function (object: Object, propertyName: string) {
-        setExpose(object, propertyName);
-
-        registerDecorator({
-            name: "vIsHash",
-            target: object.constructor,
-            propertyName,
-            options: validationOptions,
-            validator: {
-                validate(value: any, args: ValidationArguments) {
-                    return isHash(value, algorithm);
-                },
-                defaultMessage(args: ValidationArguments) {
-                    return `invalid parameter, ($property) must be is an ${algorithm} Hash string.`;
-                }
-            }
-        });
-    };
+export function plateNumber(value: string): boolean {
+    // let reg = new RegExp('^(([\u4e00-\u9fa5][a-zA-Z]|[\u4e00-\u9fa5]{2}\d{2}|[\u4e00-\u9fa5]{2}[a-zA-Z])[-]?|([wW][Jj][\u4e00-\u9fa5]{1}[-]?)|([a-zA-Z]{2}))([A-Za-z0-9]{5}|[DdFf][A-HJ-NP-Za-hj-np-z0-9][0-9]{4}|[0-9]{5}[DdFf])$');
+    // let xReg = /^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领A-Z]{1}[A-Z]{1}(([0-9]{5}[DF]$)|([DF][A-HJ-NP-Z0-9][0-9]{4}$))/;
+    const xReg = /^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领]{1}[A-Z]{1}(([0-9]{5}[DF]$)|([DF][A-HJ-NP-Z0-9][0-9]{4}$))/;
+    // let cReg = /^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领A-Z]{1}[A-Z]{1}[A-HJ-NP-Z0-9]{4}[A-HJ-NP-Z0-9挂学警港澳]{1}$/;
+    const cReg = /^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领]{1}[A-Z]{1}[A-HJ-NP-Z0-9]{4}[A-HJ-NP-Z0-9挂学警港澳]{1}$/;
+    if (value.length === 7) {
+        return cReg.test(value);
+    } else {
+        //新能源车牌
+        return xReg.test(value);
+    }
 }
