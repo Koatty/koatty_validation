@@ -173,27 +173,22 @@ export function getOriginMetadata(metadataKey: string | symbol, target: any, pro
  * @returns
  */
 export function plainToClass(clazz: any, data: any, convert = false) {
-    try {
-        if (helper.isClass(clazz)) {
-            let cls;
-            if (!helper.isObject(data)) {
-                data = {};
-            }
-            if (data instanceof clazz) {
-                cls = data;
-            } else {
-                cls = Reflect.construct(clazz, []);
-            }
-            if (convert) {
-                return convertDtoParamsType(clazz, cls, data);
-            }
-            return Object.assign(cls, data);
+    if (helper.isClass(clazz)) {
+        let cls;
+        if (!helper.isObject(data)) {
+            data = {};
         }
-        return data;
-    } catch (err) {
-        logger.Error(err);
-        return data;
+        if (data instanceof clazz) {
+            cls = data;
+        } else {
+            cls = Reflect.construct(clazz, []);
+        }
+        if (convert) {
+            return convertDtoParamsType(clazz, cls, data);
+        }
+        return Object.assign(cls, data);
     }
+    return data;
 }
 
 /**
@@ -205,10 +200,19 @@ export function plainToClass(clazz: any, data: any, convert = false) {
  * @returns {*}  
  */
 export function convertDtoParamsType(clazz: any, cls: any, data: any) {
-    const originMap = getOriginMetadata(PARAM_TYPE_KEY, clazz);
-    for (const [key, type] of originMap) {
-        if (key && Object.prototype.hasOwnProperty.call(data, key)) {
-            cls[key] = convertParamsType(data[key], type);
+    if (Object.prototype.hasOwnProperty.call(cls, "_typeDef")) {
+        for (const key in cls) {
+            if (Object.prototype.hasOwnProperty.call(data, key)
+                && Object.prototype.hasOwnProperty.call(cls._typeDef, key)) {
+                data[key] = convertParamsType(data[key], cls._typeDef[key]);
+            }
+        }
+    } else {
+        const originMap = getOriginMetadata(PARAM_TYPE_KEY, clazz);
+        for (const [key, type] of originMap) {
+            if (key && Object.prototype.hasOwnProperty.call(data, key)) {
+                cls[key] = convertParamsType(data[key], type);
+            }
         }
     }
     return cls;
