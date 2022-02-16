@@ -10,7 +10,6 @@ export * from "./rule";
 export * from "./decorator";
 export {
     checkParamsType, convertParamsType,
-    convertDtoParamsType, plainToClass,
-    getOriginMetadata
+    convertDtoParamsType, plainToClass
 } from "./util";
 // export decorators from class-validator

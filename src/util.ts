@@ -7,7 +7,7 @@
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
 import * as helper from "koatty_lib";
-import { DefaultLogger as logger } from "koatty_logger";
+import { getOriginMetadata } from "koatty_container";
 import { PARAM_TYPE_KEY } from "./rule";
 
 
@@ -132,34 +132,6 @@ export function defineNewProperty(clazz: Function, protoName: string, func: Func
                 return Reflect.apply(oldMethod, this, props);
             }
         });
-    }
-}
-
-/**
- *
- *
- * @param {(string | symbol)} metadataKey
- * @param {*} target
- * @param {(string | symbol)} [propertyKey]
- * @returns
- */
-export function getOriginMetadata(metadataKey: string | symbol, target: any, propertyKey?: string | symbol) {
-    // filter Object.create(null)
-    if (typeof target === "object" && target.constructor) {
-        target = target.constructor;
-    }
-    if (propertyKey) {
-        // for property or method
-        if (!Reflect.hasMetadata(metadataKey, target, propertyKey)) {
-            Reflect.defineMetadata(metadataKey, new Map(), target, propertyKey);
-        }
-        return Reflect.getMetadata(metadataKey, target, propertyKey);
-    } else {
-        // for class
-        if (!Reflect.hasMetadata(metadataKey, target)) {
-            Reflect.defineMetadata(metadataKey, new Map(), target);
-        }
-        return Reflect.getMetadata(metadataKey, target);
     }
 }
 
