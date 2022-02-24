@@ -3,13 +3,16 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2021-11-25 10:47:04
- * @LastEditTime: 2021-11-25 11:07:02
+ * @LastEditTime: 2022-02-24 16:35:56
  */
 import * as helper from "koatty_lib";
 import { CountryCode } from 'libphonenumber-js';
-import { IsEmailOptions, IsURLOptions, HashAlgorithm } from ".";
+import { IsEmailOptions, IsURLOptions, HashAlgorithm, ValidOtpions } from "./decorator";
 import { checkParamsType, cnName, idNumber, mobile, plainToClass, plateNumber, zipCode } from "./util";
-import { contains, equals, isEmail, isHash, isIn, isIP, isNotIn, isPhoneNumber, isURL, length, notEquals, validate, ValidationError } from "class-validator";
+import {
+    contains, equals, isEmail, isHash, isIn, isIP, isNotIn, isPhoneNumber,
+    isURL, notEquals, validate, ValidationError
+} from "class-validator";
 
 // constant
 export const PARAM_TYPE_KEY = 'PARAM_TYPE_KEY';
@@ -35,15 +38,6 @@ export enum paramterTypes {
     "Null", "null",
     "Undefined", "undefined",
 }
-
-/**
- * type checked rules
- *
- * @export
- * @type {number}
- */
-export type ValidRules = "IsNotEmpty" | "IsDate" | "IsEmail" | "IsIP" |
-    "IsPhoneNumber" | "IsUrl" | "IsHash" | "IsCnName" | "IsIdNumber" | "IsZipCode" | "IsMobile" | "IsPlateNumber";
 
 
 class ValidateClass {
@@ -101,63 +95,31 @@ class ValidateClass {
 export const ClassValidator = ValidateClass.getInstance();
 
 /**
+ * type checked rules
+ *
+ * @export
+ * @type {number}
+ */
+export type ValidRules = "IsNotEmpty" | "IsDate" | "IsEmail" | "IsIP" |
+    "IsPhoneNumber" | "IsUrl" | "IsHash" | "IsCnName" | "IsIdNumber" | "IsZipCode" | "IsMobile" | "IsPlateNumber" |
+    "Equals" | "NotEquals" | "Contains" | "IsIn" | "IsNotIn" | "Gt" | "Lt" | "Gte" | "Lte";
+
+/**
  * Validator Functions
  */
-export const FunctionValidator: any = {
-    /** 
-     * Checks if value matches ("===") the comparison.
-     */
-    Equals: (value: unknown, comparison: unknown) => {
-        return equals(value, comparison);
-    },
+const ValidFuncs = {
     /**
-     * Checks if value does not match ("!==") the comparison.
+     * Checks value is not empty, undefined, null, '', NaN, [], {} and any empty string(including spaces, 
+     * tabs, formfeeds, etc.), returns false
      */
-    NotEquals: (value: unknown, comparison: unknown) => {
-        return notEquals(value, comparison);
-    },
-    /**
-     * Checks if the string contains the seed. If given value is not a string, then it returns false.
-     */
-    Contains: (value: unknown, seed: string) => {
-        return contains(value, seed);
-    },
-    /**
-     * Checks if given value is in a array of allowed values.
-     */
-    IsIn: (value: unknown, possibleValues: unknown[]) => {
-        return isIn(value, possibleValues);
-    },
-    /**
-     * Checks if given value not in a array of allowed values.
-     */
-    IsNotIn: (value: unknown, possibleValues: unknown[]) => {
-        return isNotIn(value, possibleValues);
+    IsNotEmpty: (value: unknown) => {
+        return !helper.isEmpty(value);
     },
     /**
      * Checks if a given value is a real date.
      */
     IsDate: (value: unknown) => {
         return helper.isDate(value);
-    },
-    /**
-     * Checks if the first number is greater than or equal to the second.
-     */
-    Min: (num: unknown, min: number) => {
-        return helper.toNumber(num) >= min;
-    },
-    /**
-     * Checks if the first number is less than or equal to the second.
-     */
-    Max: (num: unknown, max: number) => {
-        return helper.toNumber(num) <= max;
-    },
-    /**
-     * Checks if the string's length falls in a range. Note: this function takes into account surrogate pairs. 
-     * If given value is not a string, then it returns false.
-     */
-    Length: (value: unknown, min: number, max?: number) => {
-        return length(value, min, max);
     },
     /**
      * Checks if the string is an email. If given value is not a string, then it returns false.
@@ -240,60 +202,150 @@ export const FunctionValidator: any = {
         }
         return plateNumber(value);
     },
-    /**
-     * Checks value is not empty, undefined, null, '', NaN, [], {} and any empty string(including spaces, 
-     * tabs, formfeeds, etc.), returns false
+    /** 
+     * Checks if value matches ("===") the comparison.
      */
-    IsNotEmpty: (value: any) => {
-        return !helper.isEmpty(value);
-    }
-};
-
-
+    Equals: (value: unknown, comparison: unknown) => {
+        return equals(value, comparison);
+    },
+    /**
+     * Checks if value does not match ("!==") the comparison.
+     */
+    NotEquals: (value: unknown, comparison: unknown) => {
+        return notEquals(value, comparison);
+    },
+    /**
+     * Checks if the string contains the seed. If given value is not a string, then it returns false.
+     */
+    Contains: (value: unknown, seed: string) => {
+        return contains(value, seed);
+    },
+    /**
+     * Checks if given value is in a array of allowed values.
+     */
+    IsIn: (value: unknown, possibleValues: unknown[]) => {
+        return isIn(value, possibleValues);
+    },
+    /**
+     * Checks if given value not in a array of allowed values.
+     */
+    IsNotIn: (value: unknown, possibleValues: unknown[]) => {
+        return isNotIn(value, possibleValues);
+    },
+    /**
+     * Checks if the first number is greater than or equal to the second.
+     */
+    Gt: (num: unknown, min: number) => {
+        return helper.toNumber(num) > min;
+    },
+    /**
+     * Checks if the first number is less than or equal to the second.
+     */
+    Lt: (num: unknown, max: number) => {
+        return helper.toNumber(num) < max;
+    },
+    /**
+     * Checks if the first number is greater than or equal to the second.
+     */
+    Gte: (num: unknown, min: number) => {
+        return helper.toNumber(num) >= min;
+    },
+    /**
+     * Checks if the first number is less than or equal to the second.
+     */
+    Lte: (num: unknown, max: number) => {
+        return helper.toNumber(num) <= max;
+    },
+}
 
 /**
  * Use functions or built-in rules for validation.
  *
  * @export
- * @param {string} name
- * @param {*} value
- * @param {string} type
- * @param {(ValidRules | ValidRules[] | Function)} rule
- * @param {string} [message]
- * @param {boolean} [checkType=true]
- * @returns
+ * @param {ValidRules} rule
+ * @param {unknown} value
+ * @param {(string | ValidOtpions)} [options]
+ * @returns {*}  
  */
-export function ValidatorFuncs(name: string, value: any, type: string,
-    rule: ValidRules | ValidRules[] | Function, message?: string, checkType = true) {
-    // check type
-    if (checkType && !checkParamsType(value, type)) {
-        const err: any = new Error(`TypeError: invalid arguments '${name}'.`);
-        err.code = 400;
-        err.status = 400;
-        throw err;
+const FV: {
+    [key in ValidRules]: (value: unknown, options?: string | ValidOtpions) => void;
+} = {
+    IsNotEmpty: function (value: unknown, options?: string | ValidOtpions): void {
+        throw new Error("Function not implemented.");
+    },
+    IsDate: function (value: unknown, options?: string | ValidOtpions): void {
+        throw new Error("Function not implemented.");
+    },
+    IsEmail: function (value: unknown, options?: string | ValidOtpions): void {
+        throw new Error("Function not implemented.");
+    },
+    IsIP: function (value: unknown, options?: string | ValidOtpions): void {
+        throw new Error("Function not implemented.");
+    },
+    IsPhoneNumber: function (value: unknown, options?: string | ValidOtpions): void {
+        throw new Error("Function not implemented.");
+    },
+    IsUrl: function (value: unknown, options?: string | ValidOtpions): void {
+        throw new Error("Function not implemented.");
+    },
+    IsHash: function (value: unknown, options?: string | ValidOtpions): void {
+        throw new Error("Function not implemented.");
+    },
+    IsCnName: function (value: unknown, options?: string | ValidOtpions): void {
+        throw new Error("Function not implemented.");
+    },
+    IsIdNumber: function (value: unknown, options?: string | ValidOtpions): void {
+        throw new Error("Function not implemented.");
+    },
+    IsZipCode: function (value: unknown, options?: string | ValidOtpions): void {
+        throw new Error("Function not implemented.");
+    },
+    IsMobile: function (value: unknown, options?: string | ValidOtpions): void {
+        throw new Error("Function not implemented.");
+    },
+    IsPlateNumber: function (value: unknown, options?: string | ValidOtpions): void {
+        throw new Error("Function not implemented.");
+    },
+    Equals: function (value: unknown, options?: string | ValidOtpions): void {
+        throw new Error("Function not implemented.");
+    },
+    NotEquals: function (value: unknown, options?: string | ValidOtpions): void {
+        throw new Error("Function not implemented.");
+    },
+    Contains: function (value: unknown, options?: string | ValidOtpions): void {
+        throw new Error("Function not implemented.");
+    },
+    IsIn: function (value: unknown, options?: string | ValidOtpions): void {
+        throw new Error("Function not implemented.");
+    },
+    IsNotIn: function (value: unknown, options?: string | ValidOtpions): void {
+        throw new Error("Function not implemented.");
+    },
+    Gt: function (value: unknown, options?: string | ValidOtpions): void {
+        throw new Error("Function not implemented.");
+    },
+    Lt: function (value: unknown, options?: string | ValidOtpions): void {
+        throw new Error("Function not implemented.");
+    },
+    Gte: function (value: unknown, options?: string | ValidOtpions): void {
+        throw new Error("Function not implemented.");
+    },
+    Lte: function (value: unknown, options?: string | ValidOtpions): void {
+        throw new Error("Function not implemented.");
     }
-
-    if (helper.isFunction(rule)) {
-        if (!rule(value)) {
-            const err: any = new Error(message || `ValidatorError: invalid arguments[${name}].`);
+};
+Object.keys(ValidFuncs).forEach((key: ValidRules) => {
+    FV[key] = (value: unknown, options?: string | ValidOtpions) => {
+        if (helper.isString(options)) {
+            options = { message: options, value: null };
+        }
+        if (!(<any>ValidFuncs)[key](value, options)) {
+            const err: any = new Error(options.message || `ValidatorError: invalid arguments.`);
             err.code = 400;
             err.status = 400;
             throw err;
         }
-        return value;
-    } else {
-        const funcs: any[] = <any[]>rule;
-        if (helper.isString(rule)) {
-            funcs.push(rule);
-        }
-        if (funcs.some((it: ValidRules) => FunctionValidator[it] && !FunctionValidator[it](value))) {
-            const err: any = new Error(message || `ValidatorError: invalid arguments[${name}].`);
-            err.code = 400;
-            err.status = 400;
-            throw err;
-        }
     }
+});
 
-    return value;
-}
-
+export const FunctionValidator = FV;

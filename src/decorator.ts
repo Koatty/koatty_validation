@@ -3,7 +3,7 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2021-11-25 10:46:57
- * @LastEditTime: 2022-02-16 18:17:22
+ * @LastEditTime: 2022-02-24 15:33:34
  */
 import * as helper from "koatty_lib";
 import { CountryCode } from 'libphonenumber-js';
@@ -37,20 +37,23 @@ export interface IsURLOptions {
     allow_protocol_relative_urls?: boolean;
     disallow_auth?: boolean;
 }
-
+// HashAlgorithm
 export type HashAlgorithm = "md4" | "md5" | "sha1" | "sha256" | "sha384" | "sha512"
     | "ripemd128" | "ripemd160" | "tiger128" | "tiger160" | "tiger192" | "crc32" | "crc32b";
 
+// ValidOtpions
+export type ValidOtpions = { message: string, value: any };
 
 /**
  * Validation parameter's type and values.
  *
  * @export
  * @param {(ValidRules | ValidRules[] | Function)} rule
- * @param {string} [message]
- * @returns {ParameterDecorator}
+ * @param {*} [options] If the options type is a string, the value is the error message of the validation rule. 
+ * Some validation rules require additional parameters, ext: @Valid("Gte", {message:"Requires value greater than or equal to 100", value: 100})
+ * @returns {*}  {ParameterDecorator}
  */
-export function Valid(rule: ValidRules | ValidRules[] | Function, message?: string): ParameterDecorator {
+export function Valid(rule: ValidRules | ValidRules[] | Function, options?: string | ValidOtpions): ParameterDecorator {
     let rules: any = [];
     if (helper.isString(rule)) {
         rules = (<string>rule).split(",");
@@ -61,11 +64,13 @@ export function Valid(rule: ValidRules | ValidRules[] | Function, message?: stri
         // 获取成员参数类型
         const paramTypes = Reflect.getMetadata("design:paramtypes", target, propertyKey);
         const type = (paramTypes[descriptor] && paramTypes[descriptor].name) ? paramTypes[descriptor].name : "object";
-
+        if (helper.isString(options)) {
+            options = { message: options, value: null };
+        }
         IOCContainer.attachPropertyData(PARAM_RULE_KEY, {
             name: propertyKey,
             rule: rules,
-            message,
+            options,
             index: descriptor,
             type
         }, target, propertyKey);
@@ -499,7 +504,64 @@ export function IsDate(validationOptions?: ValidationOptions): PropertyDecorator
  * @param {ValidationOptions} [validationOptions]
  * @returns {PropertyDecorator}
  */
-export function Min(min: number, validationOptions?: ValidationOptions): PropertyDecorator {
+export function Gt(min: number, validationOptions?: ValidationOptions): PropertyDecorator {
+    return function (object: Object, propertyName: string) {
+        setExpose(object, propertyName);
+
+        registerDecorator({
+            name: "vMin",
+            target: object.constructor,
+            propertyName,
+            options: validationOptions,
+            validator: {
+                validate(value: any, args: ValidationArguments) {
+                    return helper.toNumber(value) > min;
+                },
+                defaultMessage(args: ValidationArguments) {
+                    return `invalid parameter ($property).`;
+                }
+            }
+        });
+    };
+}
+
+/**
+ * Checks if the first number is less than or equal to the max value.
+ *
+ * @export
+ * @param {number} max
+ * @param {ValidationOptions} [validationOptions]
+ * @returns {PropertyDecorator}
+ */
+export function Lt(max: number, validationOptions?: ValidationOptions): PropertyDecorator {
+    return function (object: Object, propertyName: string) {
+        setExpose(object, propertyName);
+
+        registerDecorator({
+            name: "vMax",
+            target: object.constructor,
+            propertyName,
+            options: validationOptions,
+            validator: {
+                validate(value: any, args: ValidationArguments) {
+                    return helper.toNumber(value) < max;
+                },
+                defaultMessage(args: ValidationArguments) {
+                    return `invalid parameter ($property).`;
+                }
+            }
+        });
+    };
+}
+/**
+ * Checks if the first number is greater than or equal to the min value.
+ *
+ * @export
+ * @param {number} min
+ * @param {ValidationOptions} [validationOptions]
+ * @returns {PropertyDecorator}
+ */
+export function Gte(min: number, validationOptions?: ValidationOptions): PropertyDecorator {
     return function (object: Object, propertyName: string) {
         setExpose(object, propertyName);
 
@@ -528,7 +590,7 @@ export function Min(min: number, validationOptions?: ValidationOptions): Propert
  * @param {ValidationOptions} [validationOptions]
  * @returns {PropertyDecorator}
  */
-export function Max(max: number, validationOptions?: ValidationOptions): PropertyDecorator {
+export function Lte(max: number, validationOptions?: ValidationOptions): PropertyDecorator {
     return function (object: Object, propertyName: string) {
         setExpose(object, propertyName);
 

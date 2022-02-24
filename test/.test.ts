@@ -5,11 +5,12 @@
  * @ version: 2020-03-19 16:41:36
  */
 
-import { ClassValidator, Min, Contains, Expose, Valid } from "../src/index";
+import { ClassValidator, Gt, Contains, Expose, Valid, Gte } from "../src/index";
 import assert from "assert";
+import FunctionValidator from "../src/rule";
 
 class TestClass {
-    @Min(3)
+    @Gte(3)
     id: number;
 
     @Contains("12")
@@ -28,7 +29,12 @@ class TestClass {
 }
 
 describe("koatty_validation", function () {
-    it("ClassValidator", function () {
+
+    it("FunctionValidator", () => {
+        assert.ifError(FunctionValidator.IsNotEmpty("2", "参数不能为空"))
+    })
+
+    it("ClassValidator", () => {
         ClassValidator.valid(TestClass, {
             id: 3,
             name: '12',
@@ -39,6 +45,5 @@ describe("koatty_validation", function () {
         }).catch(err => {
             assert.fail(err);
         })
-
     })
 })
