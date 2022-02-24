@@ -11,5 +11,5 @@ type checked rules
 <b>Signature:</b>
 
 ```typescript
-export declare type ValidRules = "IsNotEmpty" | "IsDate" | "IsEmail" | "IsIP" | "IsPhoneNumber" | "IsUrl" | "IsHash" | "IsCnName" | "IsIdNumber" | "IsZipCode" | "IsMobile" | "IsPlateNumber";
+export declare type ValidRules = "IsNotEmpty" | "IsDate" | "IsEmail" | "IsIP" | "IsPhoneNumber" | "IsUrl" | "IsHash" | "IsCnName" | "IsIdNumber" | "IsZipCode" | "IsMobile" | "IsPlateNumber" | "Equals" | "NotEquals" | "Contains" | "IsIn" | "IsNotIn" | "Gt" | "Lt" | "Gte" | "Lte";
 ```

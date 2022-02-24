@@ -22,11 +22,11 @@ Validation Util for Koatty and ThinkORM. Based on class-validator, extended para
 * @IsIn
 * @IsNotIn
 * @IsDate
-* @Min
-* @Max
-* @Length
+* @Gt
+* @Gte
+* @Lt
+* @Lte
   
-
 * @Valid
 * @Validated
 
@@ -60,31 +60,33 @@ export class UserDTO {
 
 ## FunctionValidator
 
-* FunctionValidator.IsCnName
-* FunctionValidator.IsIdNumber
-* FunctionValidator.IsZipCode
-* FunctionValidator.IsMobile
-* FunctionValidator.IsPlateNumber
-* FunctionValidator.IsEmail
-* FunctionValidator.IsIP
-* FunctionValidator.IsPhoneNumber
-* FunctionValidator.IsUrl
-* FunctionValidator.IsHash
-* FunctionValidator.IsNotEmpty
-* FunctionValidator.Equals
-* FunctionValidator.NotEquals
-* FunctionValidator.Contains
-* FunctionValidator.IsIn
-* FunctionValidator.IsNotIn
-* FunctionValidator.IsDate
-* FunctionValidator.Min
-* FunctionValidator.Max
-* FunctionValidator.Length
+* IsCnName
+* IsIdNumber
+* IsZipCode
+* IsMobile
+* IsPlateNumber
+* IsEmail
+* IsIP
+* IsPhoneNumber
+* IsUrl
+* IsHash
+* IsNotEmpty
+* Equals
+* NotEquals
+* Contains
+* IsIn
+* IsNotIn
+* IsDate
+* Gt
+* Gte
+* Lt
+* Lte
 
 ```js
-if (!FunctionValidator.IsNotEmpty(data)) {
-    console.log('error');
-}
+const str = "";
+// throw Error
+FunctionValidator.IsNotEmpty(str, "参数不能为空");
+FunctionValidator.Contains(str, {message: "参数必须包含s", value: "s"});
 ```
 
 ## ClassValidator

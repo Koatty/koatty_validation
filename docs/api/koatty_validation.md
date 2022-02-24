@@ -20,6 +20,8 @@
 |  [convertParamsType(param, type)](./koatty_validation.convertparamstype.md) | 绑定参数类型转换 |
 |  [Equals(comparison, validationOptions)](./koatty_validation.equals.md) | Checks if value matches ("===") the comparison. |
 |  [Expose()](./koatty_validation.expose.md) | Marks property as included in the process of transformation. |
+|  [Gt(min, validationOptions)](./koatty_validation.gt.md) | Checks if the first number is greater than or equal to the min value. |
+|  [Gte(min, validationOptions)](./koatty_validation.gte.md) | Checks if the first number is greater than or equal to the min value. |
 |  [IsCnName(validationOptions)](./koatty_validation.iscnname.md) | Checks if value is a chinese name. |
 |  [IsDate(validationOptions)](./koatty_validation.isdate.md) | Checks if a given value is a real date. |
 |  [IsDefined()](./koatty_validation.isdefined.md) | Identifies that the field needs to be defined |
@@ -36,13 +38,12 @@
 |  [IsUrl(options, validationOptions)](./koatty_validation.isurl.md) | Checks if the string is an url. |
 |  [IsZipCode(validationOptions)](./koatty_validation.iszipcode.md) | Checks if value is a zipCode(chinese). |
 |  [Length(min, max, validationOptions)](./koatty_validation.length.md) | Checks if the string's length falls in a range. Note: this function takes into account surrogate pairs. If given value is not a string, then it returns false. |
-|  [Max(max, validationOptions)](./koatty_validation.max.md) | Checks if the first number is less than or equal to the max value. |
-|  [Min(min, validationOptions)](./koatty_validation.min.md) | Checks if the first number is greater than or equal to the min value. |
+|  [Lt(max, validationOptions)](./koatty_validation.lt.md) | Checks if the first number is less than or equal to the max value. |
+|  [Lte(max, validationOptions)](./koatty_validation.lte.md) | Checks if the first number is less than or equal to the max value. |
 |  [NotEquals(comparison, validationOptions)](./koatty_validation.notequals.md) | Checks if value does not match ("!==") the comparison. |
 |  [plainToClass(clazz, data, convert)](./koatty_validation.plaintoclass.md) |  |
-|  [Valid(rule, message)](./koatty_validation.valid.md) | Validation parameter's type and values. |
+|  [Valid(rule, options)](./koatty_validation.valid.md) | Validation parameter's type and values. |
 |  [Validated()](./koatty_validation.validated.md) | Validation parameter's type and values from DTO class. |
-|  [ValidatorFuncs(name, value, type, rule, message, checkType)](./koatty_validation.validatorfuncs.md) | Use functions or built-in rules for validation. |
 
 ## Interfaces
 
@@ -57,7 +58,6 @@
 |  --- | --- |
 |  [ClassValidator](./koatty_validation.classvalidator.md) | ClassValidator for manual |
 |  [ENABLE\_VALIDATED](./koatty_validation.enable_validated.md) |  |
-|  [FunctionValidator](./koatty_validation.functionvalidator.md) | Validator Functions |
 |  [PARAM\_CHECK\_KEY](./koatty_validation.param_check_key.md) |  |
 |  [PARAM\_RULE\_KEY](./koatty_validation.param_rule_key.md) |  |
 |  [PARAM\_TYPE\_KEY](./koatty_validation.param_type_key.md) |  |
@@ -67,5 +67,6 @@
 |  Type Alias | Description |
 |  --- | --- |
 |  [HashAlgorithm](./koatty_validation.hashalgorithm.md) |  |
+|  [ValidOtpions](./koatty_validation.validotpions.md) |  |
 |  [ValidRules](./koatty_validation.validrules.md) | type checked rules  {<!-- -->number<!-- -->} |
 

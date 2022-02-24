@@ -10,7 +10,7 @@ Validation parameter's type and values.
 <b>Signature:</b>
 
 ```typescript
-export declare function Valid(rule: ValidRules | ValidRules[] | Function, message?: string): ParameterDecorator;
+export declare function Valid(rule: ValidRules | ValidRules[] | Function, options?: string | ValidOtpions): ParameterDecorator;
 ```
 
 ## Parameters
@@ -18,11 +18,11 @@ export declare function Valid(rule: ValidRules | ValidRules[] | Function, messag
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  rule | [ValidRules](./koatty_validation.validrules.md) \| [ValidRules](./koatty_validation.validrules.md)<!-- -->\[\] \| Function |  |
-|  message | string |  |
+|  options | string \| [ValidOtpions](./koatty_validation.validotpions.md) | If the options type is a string, the value is the error message of the validation rule. Some validation rules require additional parameters, ext: @<!-- -->Valid("Gte", {<!-- -->message:"Requires value greater than or equal to 100", value: 100<!-- -->}<!-- -->) |
 
 <b>Returns:</b>
 
 ParameterDecorator
 
-{<!-- -->ParameterDecorator<!-- -->}
+{<!-- -->\*<!-- -->} {<!-- -->ParameterDecorator<!-- -->}
 
