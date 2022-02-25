@@ -7,7 +7,7 @@
 
 import { ClassValidator, Gt, Contains, Expose, Valid, Gte } from "../src/index";
 import assert from "assert";
-import FunctionValidator from "../src/rule";
+import { FunctionValidator } from "../src/rule";
 
 class TestClass {
     @Gte(3)

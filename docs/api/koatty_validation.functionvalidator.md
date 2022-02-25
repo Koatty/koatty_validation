@@ -4,30 +4,13 @@
 
 ## FunctionValidator variable
 
+Use functions or built-in rules for validation.
+
+
 <b>Signature:</b>
 
 ```typescript
 FunctionValidator: {
-    IsNotEmpty: (value: unknown, options?: string | ValidOtpions) => void;
-    IsDate: (value: unknown, options?: string | ValidOtpions) => void;
-    IsEmail: (value: unknown, options?: string | ValidOtpions) => void;
-    IsIP: (value: unknown, options?: string | ValidOtpions) => void;
-    IsPhoneNumber: (value: unknown, options?: string | ValidOtpions) => void;
-    IsUrl: (value: unknown, options?: string | ValidOtpions) => void;
-    IsHash: (value: unknown, options?: string | ValidOtpions) => void;
-    IsCnName: (value: unknown, options?: string | ValidOtpions) => void;
-    IsIdNumber: (value: unknown, options?: string | ValidOtpions) => void;
-    IsZipCode: (value: unknown, options?: string | ValidOtpions) => void;
-    IsMobile: (value: unknown, options?: string | ValidOtpions) => void;
-    IsPlateNumber: (value: unknown, options?: string | ValidOtpions) => void;
-    Equals: (value: unknown, options?: string | ValidOtpions) => void;
-    NotEquals: (value: unknown, options?: string | ValidOtpions) => void;
-    Contains: (value: unknown, options?: string | ValidOtpions) => void;
-    IsIn: (value: unknown, options?: string | ValidOtpions) => void;
-    IsNotIn: (value: unknown, options?: string | ValidOtpions) => void;
-    Gt: (value: unknown, options?: string | ValidOtpions) => void;
-    Lt: (value: unknown, options?: string | ValidOtpions) => void;
-    Gte: (value: unknown, options?: string | ValidOtpions) => void;
-    Lte: (value: unknown, options?: string | ValidOtpions) => void;
+    [key in ValidRules]: (value: unknown, options?: string | ValidOtpions) => void;
 }
 ```

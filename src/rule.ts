@@ -3,7 +3,7 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2021-11-25 10:47:04
- * @LastEditTime: 2022-02-24 16:35:56
+ * @LastEditTime: 2022-02-25 09:51:04
  */
 import * as helper from "koatty_lib";
 import { CountryCode } from 'libphonenumber-js';
@@ -267,7 +267,7 @@ const ValidFuncs = {
  * @param {(string | ValidOtpions)} [options]
  * @returns {*}  
  */
-const FV: {
+const FunctionValidator: {
     [key in ValidRules]: (value: unknown, options?: string | ValidOtpions) => void;
 } = {
     IsNotEmpty: function (value: unknown, options?: string | ValidOtpions): void {
@@ -335,7 +335,7 @@ const FV: {
     }
 };
 Object.keys(ValidFuncs).forEach((key: ValidRules) => {
-    FV[key] = (value: unknown, options?: string | ValidOtpions) => {
+    FunctionValidator[key] = (value: unknown, options?: string | ValidOtpions) => {
         if (helper.isString(options)) {
             options = { message: options, value: null };
         }
@@ -348,4 +348,4 @@ Object.keys(ValidFuncs).forEach((key: ValidRules) => {
     }
 });
 
-export const FunctionValidator = FV;
+export { FunctionValidator };

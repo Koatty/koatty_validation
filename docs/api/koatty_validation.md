@@ -58,7 +58,7 @@
 |  --- | --- |
 |  [ClassValidator](./koatty_validation.classvalidator.md) | ClassValidator for manual |
 |  [ENABLE\_VALIDATED](./koatty_validation.enable_validated.md) |  |
-|  [FunctionValidator](./koatty_validation.functionvalidator.md) |  |
+|  [FunctionValidator](./koatty_validation.functionvalidator.md) | Use functions or built-in rules for validation. |
 |  [PARAM\_CHECK\_KEY](./koatty_validation.param_check_key.md) |  |
 |  [PARAM\_RULE\_KEY](./koatty_validation.param_rule_key.md) |  |
 |  [PARAM\_TYPE\_KEY](./koatty_validation.param_type_key.md) |  |

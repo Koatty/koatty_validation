@@ -1,5 +1,5 @@
 # koatty_validation
-Validation Util for Koatty and ThinkORM. Based on class-validator, extended parameter type checking and restricted attribute functions.
+Validation Util for Koatty. Based on class-validator, extended parameter type checking and restricted attribute functions.
 
 
 # User Decorators
@@ -82,14 +82,18 @@ export class UserDTO {
 * Lt
 * Lte
 
+exp:
+
 ```js
 const str = "";
 // throw Error
-FunctionValidator.IsNotEmpty(str, "参数不能为空");
-FunctionValidator.Contains(str, {message: "参数必须包含s", value: "s"});
+FunctionValidator.IsNotEmpty(str, "cannot be empty");
+FunctionValidator.Contains(str, {message: "must contain s", value: "s"});
 ```
 
 ## ClassValidator
+
+exp:
 
 ```js
 class SchemaClass {
