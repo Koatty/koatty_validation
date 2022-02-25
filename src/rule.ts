@@ -3,12 +3,12 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2021-11-25 10:47:04
- * @LastEditTime: 2022-02-25 09:51:04
+ * @LastEditTime: 2022-02-25 10:33:20
  */
 import * as helper from "koatty_lib";
 import { CountryCode } from 'libphonenumber-js';
 import { IsEmailOptions, IsURLOptions, HashAlgorithm, ValidOtpions } from "./decorator";
-import { checkParamsType, cnName, idNumber, mobile, plainToClass, plateNumber, zipCode } from "./util";
+import { cnName, idNumber, mobile, plainToClass, plateNumber, zipCode } from "./util";
 import {
     contains, equals, isEmail, isHash, isIn, isIP, isNotIn, isPhoneNumber,
     isURL, notEquals, validate, ValidationError
@@ -80,10 +80,7 @@ class ValidateClass {
             errors = await validate(obj, { skipMissingProperties: true });
         }
         if (errors.length > 0) {
-            const err: any = new Error(Object.values(errors[0].constraints)[0]);
-            err.code = 400;
-            err.status = 400;
-            throw err;
+            throw new Error(Object.values(errors[0].constraints)[0]);
         }
         return obj;
     }
@@ -340,10 +337,7 @@ Object.keys(ValidFuncs).forEach((key: ValidRules) => {
             options = { message: options, value: null };
         }
         if (!(<any>ValidFuncs)[key](value, options)) {
-            const err: any = new Error(options.message || `ValidatorError: invalid arguments.`);
-            err.code = 400;
-            err.status = 400;
-            throw err;
+            throw new Error(options.message || `ValidatorError: invalid arguments.`);
         }
     }
 });

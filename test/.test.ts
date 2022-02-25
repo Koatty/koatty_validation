@@ -32,6 +32,13 @@ describe("koatty_validation", function () {
 
     it("FunctionValidator", () => {
         assert.ifError(FunctionValidator.IsNotEmpty("2", "参数不能为空"))
+        try {
+            FunctionValidator.IsNotEmpty("", "参数不能为空");
+        } catch (error) {
+            console.log(false);
+
+        };
+
     })
 
     it("ClassValidator", () => {
