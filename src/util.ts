@@ -10,7 +10,6 @@ import * as helper from "koatty_lib";
 import { getOriginMetadata } from "koatty_container";
 import { PARAM_TYPE_KEY } from "./rule";
 
-
 /**
  * Set property as included in the process of transformation.
  *
@@ -103,7 +102,7 @@ export function recursiveGetMetadata(metadataKey: any, target: any, propertyKey?
         const pMetadata = listPropertyData(metadataKey, parent, propertyKey);
         if (pMetadata) {
             for (const n in pMetadata) {
-                if (!metadata.hasOwnProperty(n)) {
+                if (!Object.hasOwnProperty.call(metadata, n)) {
                     metadata[n] = pMetadata[n];
                 }
             }

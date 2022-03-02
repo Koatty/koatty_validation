@@ -3,7 +3,7 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2021-11-25 10:46:57
- * @LastEditTime: 2022-02-24 15:33:34
+ * @LastEditTime: 2022-03-02 11:23:27
  */
 import * as helper from "koatty_lib";
 import { CountryCode } from 'libphonenumber-js';
@@ -63,9 +63,9 @@ export function Valid(rule: ValidRules | ValidRules[] | Function, options?: stri
     return (target: any, propertyKey: string, descriptor: any) => {
         // 获取成员参数类型
         const paramTypes = Reflect.getMetadata("design:paramtypes", target, propertyKey);
-        const type = (paramTypes[descriptor] && paramTypes[descriptor].name) ? paramTypes[descriptor].name : "object";
+        const type = (paramTypes[descriptor]?.name) ? paramTypes[descriptor].name : 'object';
         if (helper.isString(options)) {
-            options = { message: options, value: null };
+            options = { message: <string>options, value: null };
         }
         IOCContainer.attachPropertyData(PARAM_RULE_KEY, {
             name: propertyKey,
