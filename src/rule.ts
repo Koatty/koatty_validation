@@ -3,7 +3,7 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2021-11-25 10:47:04
- * @LastEditTime: 2022-02-25 10:33:20
+ * @LastEditTime: 2022-03-09 18:23:18
  */
 import * as helper from "koatty_lib";
 import { CountryCode } from 'libphonenumber-js';
@@ -336,7 +336,7 @@ Object.keys(ValidFuncs).forEach((key: ValidRules) => {
         if (helper.isString(options)) {
             options = { message: options, value: null };
         }
-        if (!(<any>ValidFuncs)[key](value, options)) {
+        if (!(<any>ValidFuncs)[key](value, options.value)) {
             throw new Error(options.message || `ValidatorError: invalid arguments.`);
         }
     }
