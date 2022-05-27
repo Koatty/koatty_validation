@@ -17,7 +17,7 @@ export declare function IsZipCode(validationOptions?: ValidationOptions): Proper
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  validationOptions | ValidationOptions |  |
+|  validationOptions | ValidationOptions | <i>(Optional)</i> |
 
 <b>Returns:</b>
 

@@ -17,7 +17,7 @@ export declare function IsNotEmpty(validationOptions?: ValidationOptions): Prope
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  validationOptions | ValidationOptions |  |
+|  validationOptions | ValidationOptions | <i>(Optional)</i> |
 
 <b>Returns:</b>
 

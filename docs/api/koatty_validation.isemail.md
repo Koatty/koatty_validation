@@ -17,8 +17,8 @@ export declare function IsEmail(options?: IsEmailOptions, validationOptions?: Va
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  options | [IsEmailOptions](./koatty_validation.isemailoptions.md) |  |
-|  validationOptions | ValidationOptions |  |
+|  options | [IsEmailOptions](./koatty_validation.isemailoptions.md) | <i>(Optional)</i> |
+|  validationOptions | ValidationOptions | <i>(Optional)</i> |
 
 <b>Returns:</b>
 

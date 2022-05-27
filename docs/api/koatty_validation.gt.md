@@ -18,7 +18,7 @@ export declare function Gt(min: number, validationOptions?: ValidationOptions): 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  min | number |  |
-|  validationOptions | ValidationOptions |  |
+|  validationOptions | ValidationOptions | <i>(Optional)</i> |
 
 <b>Returns:</b>
 

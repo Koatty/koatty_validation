@@ -17,7 +17,7 @@ export declare function plainToClass(clazz: any, data: any, convert?: boolean): 
 |  --- | --- | --- |
 |  clazz | any |  |
 |  data | any |  |
-|  convert | boolean |  |
+|  convert | boolean | <i>(Optional)</i> |
 
 <b>Returns:</b>
 

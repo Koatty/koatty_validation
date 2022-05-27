@@ -17,8 +17,8 @@ export declare function IsPhoneNumber(region?: CountryCode, validationOptions?: 
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  region | CountryCode |  |
-|  validationOptions | ValidationOptions |  |
+|  region | CountryCode | <i>(Optional)</i> |
+|  validationOptions | ValidationOptions | <i>(Optional)</i> |
 
 <b>Returns:</b>
 

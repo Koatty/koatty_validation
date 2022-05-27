@@ -18,8 +18,8 @@ export declare function Length(min: number, max?: number, validationOptions?: Va
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  min | number |  |
-|  max | number |  |
-|  validationOptions | ValidationOptions |  |
+|  max | number | <i>(Optional)</i> |
+|  validationOptions | ValidationOptions | <i>(Optional)</i> |
 
 <b>Returns:</b>
 

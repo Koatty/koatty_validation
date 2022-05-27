@@ -18,7 +18,7 @@ export declare function IsIn(possibleValues: any[], validationOptions?: Validati
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  possibleValues | any\[\] |  |
-|  validationOptions | ValidationOptions |  |
+|  validationOptions | ValidationOptions | <i>(Optional)</i> |
 
 <b>Returns:</b>
 

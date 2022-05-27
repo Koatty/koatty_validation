@@ -18,7 +18,7 @@ export declare function Lte(max: number, validationOptions?: ValidationOptions):
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  max | number |  |
-|  validationOptions | ValidationOptions |  |
+|  validationOptions | ValidationOptions | <i>(Optional)</i> |
 
 <b>Returns:</b>
 

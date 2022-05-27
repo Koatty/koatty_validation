@@ -17,7 +17,7 @@ export declare function IsDate(validationOptions?: ValidationOptions): PropertyD
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  validationOptions | ValidationOptions |  |
+|  validationOptions | ValidationOptions | <i>(Optional)</i> |
 
 <b>Returns:</b>
 

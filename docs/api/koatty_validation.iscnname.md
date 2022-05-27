@@ -17,7 +17,7 @@ export declare function IsCnName(validationOptions?: ValidationOptions): Propert
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  validationOptions | ValidationOptions |  |
+|  validationOptions | ValidationOptions | <i>(Optional)</i> |
 
 <b>Returns:</b>
 

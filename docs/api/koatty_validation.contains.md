@@ -18,7 +18,7 @@ export declare function Contains(seed: string, validationOptions?: ValidationOpt
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  seed | string |  |
-|  validationOptions | ValidationOptions |  |
+|  validationOptions | ValidationOptions | <i>(Optional)</i> |
 
 <b>Returns:</b>
 

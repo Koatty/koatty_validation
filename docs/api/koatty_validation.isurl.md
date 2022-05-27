@@ -17,8 +17,8 @@ export declare function IsUrl(options?: IsURLOptions, validationOptions?: Valida
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  options | [IsURLOptions](./koatty_validation.isurloptions.md) |  |
-|  validationOptions | ValidationOptions |  |
+|  options | [IsURLOptions](./koatty_validation.isurloptions.md) | <i>(Optional)</i> |
+|  validationOptions | ValidationOptions | <i>(Optional)</i> |
 
 <b>Returns:</b>
 

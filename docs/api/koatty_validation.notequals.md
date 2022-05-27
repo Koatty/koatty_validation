@@ -18,7 +18,7 @@ export declare function NotEquals(comparison: any, validationOptions?: Validatio
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  comparison | any |  |
-|  validationOptions | ValidationOptions |  |
+|  validationOptions | ValidationOptions | <i>(Optional)</i> |
 
 <b>Returns:</b>
 

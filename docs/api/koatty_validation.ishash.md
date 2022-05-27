@@ -18,7 +18,7 @@ export declare function IsHash(algorithm: HashAlgorithm, validationOptions?: Val
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  algorithm | [HashAlgorithm](./koatty_validation.hashalgorithm.md) |  |
-|  validationOptions | ValidationOptions |  |
+|  validationOptions | ValidationOptions | <i>(Optional)</i> |
 
 <b>Returns:</b>
 

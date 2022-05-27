@@ -17,7 +17,7 @@ export declare function IsPlateNumber(validationOptions?: ValidationOptions): Pr
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  validationOptions | ValidationOptions |  |
+|  validationOptions | ValidationOptions | <i>(Optional)</i> |
 
 <b>Returns:</b>
 

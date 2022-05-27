@@ -17,8 +17,8 @@ export declare function IsIP(version?: IsIpVersion, validationOptions?: Validati
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  version | IsIpVersion |  |
-|  validationOptions | ValidationOptions |  |
+|  version | IsIpVersion | <i>(Optional)</i> |
+|  validationOptions | ValidationOptions | <i>(Optional)</i> |
 
 <b>Returns:</b>
 

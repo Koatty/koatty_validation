@@ -17,7 +17,7 @@ export declare function IsIdNumber(validationOptions?: ValidationOptions): Prope
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  validationOptions | ValidationOptions |  |
+|  validationOptions | ValidationOptions | <i>(Optional)</i> |
 
 <b>Returns:</b>
 
