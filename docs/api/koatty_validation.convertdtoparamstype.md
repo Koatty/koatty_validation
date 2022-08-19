@@ -24,5 +24,5 @@ export declare function convertDtoParamsType(clazz: any, cls: any, data: any): a
 
 any
 
-{<!-- -->\*<!-- -->}
+{<!-- -->\*<!-- -->} cls
 
