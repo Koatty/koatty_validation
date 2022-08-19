@@ -10,6 +10,6 @@
 export * from "./rule";
 export * from "./decorator";
 export {
-    checkParamsType, convertParamsType,
-    convertDtoParamsType, plainToClass
+  checkParamsType, convertParamsType,
+  convertDtoParamsType, plainToClass
 } from "./util";

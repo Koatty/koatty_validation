@@ -3,7 +3,7 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2021-11-25 10:46:57
- * @LastEditTime: 2022-03-02 11:23:27
+ * @LastEditTime: 2022-08-19 14:21:12
  */
 import * as helper from "koatty_lib";
 import { CountryCode } from 'libphonenumber-js';
@@ -11,35 +11,35 @@ import { getOriginMetadata, IOCContainer } from 'koatty_container';
 import { PARAM_CHECK_KEY, PARAM_RULE_KEY, PARAM_TYPE_KEY, ValidRules } from "./rule";
 import { cnName, idNumber, mobile, plateNumber, setExpose, zipCode } from "./util";
 import {
-    contains, equals, isDate, isEmail, isHash, isIn, isIP, IsIpVersion, isNotIn,
-    isPhoneNumber, isURL, length, notEquals, registerDecorator, ValidationArguments, ValidationOptions
+  contains, equals, isDate, isEmail, isHash, isIn, isIP, IsIpVersion, isNotIn,
+  isPhoneNumber, isURL, length, notEquals, registerDecorator, ValidationArguments, ValidationOptions
 } from "class-validator";
 
 // options for isEmail
 export interface IsEmailOptions {
-    allow_display_name?: boolean;
-    require_display_name?: boolean;
-    allow_utf8_local_part?: boolean;
-    require_tld?: boolean;
+  allow_display_name?: boolean;
+  require_display_name?: boolean;
+  allow_utf8_local_part?: boolean;
+  require_tld?: boolean;
 }
 
 // options for isURL
 export interface IsURLOptions {
-    protocols?: string[];
-    require_tld?: boolean;
-    require_protocol?: boolean;
-    require_host?: boolean;
-    require_valid_protocol?: boolean;
-    allow_underscores?: boolean;
-    host_whitelist?: (string | RegExp)[];
-    host_blacklist?: (string | RegExp)[];
-    allow_trailing_dot?: boolean;
-    allow_protocol_relative_urls?: boolean;
-    disallow_auth?: boolean;
+  protocols?: string[];
+  require_tld?: boolean;
+  require_protocol?: boolean;
+  require_host?: boolean;
+  require_valid_protocol?: boolean;
+  allow_underscores?: boolean;
+  host_whitelist?: (string | RegExp)[];
+  host_blacklist?: (string | RegExp)[];
+  allow_trailing_dot?: boolean;
+  allow_protocol_relative_urls?: boolean;
+  disallow_auth?: boolean;
 }
 // HashAlgorithm
 export type HashAlgorithm = "md4" | "md5" | "sha1" | "sha256" | "sha384" | "sha512"
-    | "ripemd128" | "ripemd160" | "tiger128" | "tiger160" | "tiger192" | "crc32" | "crc32b";
+  | "ripemd128" | "ripemd160" | "tiger128" | "tiger160" | "tiger192" | "crc32" | "crc32b";
 
 // ValidOtpions
 export type ValidOtpions = { message: string, value: any };
@@ -54,27 +54,27 @@ export type ValidOtpions = { message: string, value: any };
  * @returns {*}  {ParameterDecorator}
  */
 export function Valid(rule: ValidRules | ValidRules[] | Function, options?: string | ValidOtpions): ParameterDecorator {
-    let rules: any = [];
-    if (helper.isString(rule)) {
-        rules = (<string>rule).split(",");
-    } else {
-        rules = rule;
+  let rules: any = [];
+  if (helper.isString(rule)) {
+    rules = (<string>rule).split(",");
+  } else {
+    rules = rule;
+  }
+  return (target: any, propertyKey: string, descriptor: any) => {
+    // 获取成员参数类型
+    const paramTypes = Reflect.getMetadata("design:paramtypes", target, propertyKey);
+    const type = (paramTypes[descriptor]?.name) ? paramTypes[descriptor].name : 'object';
+    if (helper.isString(options)) {
+      options = { message: <string>options, value: null };
     }
-    return (target: any, propertyKey: string, descriptor: any) => {
-        // 获取成员参数类型
-        const paramTypes = Reflect.getMetadata("design:paramtypes", target, propertyKey);
-        const type = (paramTypes[descriptor]?.name) ? paramTypes[descriptor].name : 'object';
-        if (helper.isString(options)) {
-            options = { message: <string>options, value: null };
-        }
-        IOCContainer.attachPropertyData(PARAM_RULE_KEY, {
-            name: propertyKey,
-            rule: rules,
-            options,
-            index: descriptor,
-            type
-        }, target, propertyKey);
-    };
+    IOCContainer.attachPropertyData(PARAM_RULE_KEY, {
+      name: propertyKey,
+      rule: rules,
+      options,
+      index: descriptor,
+      type
+    }, target, propertyKey);
+  };
 }
 
 /**
@@ -84,40 +84,40 @@ export function Valid(rule: ValidRules | ValidRules[] | Function, options?: stri
  * @returns {MethodDecorator}
  */
 export function Validated(): MethodDecorator {
-    return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
-        //
-        IOCContainer.savePropertyData(PARAM_CHECK_KEY, {
-            dtoCheck: 1
-        }, target, propertyKey);
+  return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
+    //
+    IOCContainer.savePropertyData(PARAM_CHECK_KEY, {
+      dtoCheck: 1
+    }, target, propertyKey);
 
-        // 获取成员参数类型
-        // const paramTypes = Reflect.getMetadata("design:paramtypes", target, propertyKey) || [];
+    // 获取成员参数类型
+    // const paramTypes = Reflect.getMetadata("design:paramtypes", target, propertyKey) || [];
 
-        // const { value, configurable, enumerable } = descriptor;
-        // descriptor = {
-        //     configurable,
-        //     enumerable,
-        //     writable: true,
-        //     value: async function valid(...props: any[]) {
-        //         const ps: any[] = [];
-        //         // tslint:disable-next-line: no-unused-expression
-        //         (props || []).map((value: any, index: number) => {
-        //             const type = (paramTypes[index] && paramTypes[index].name) ? paramTypes[index].name : "any";
-        //             if (!paramterTypes[type]) {
-        //                 ps.push(ClassValidator.valid(paramTypes[index], value, true));
-        //             } else {
-        //                 ps.push(Promise.resolve(value));
-        //             }
-        //         });
-        //         if (ps.length > 0) {
-        //             props = await Promise.all(ps);
-        //         }
-        //         // tslint:disable-next-line: no-invalid-this
-        //         return value.apply(this, props);
-        //     }
-        // };
-        // return descriptor;
-    };
+    // const { value, configurable, enumerable } = descriptor;
+    // descriptor = {
+    //     configurable,
+    //     enumerable,
+    //     writable: true,
+    //     value: async function valid(...props: any[]) {
+    //         const ps: any[] = [];
+    //         // tslint:disable-next-line: no-unused-expression
+    //         (props || []).map((value: any, index: number) => {
+    //             const type = (paramTypes[index] && paramTypes[index].name) ? paramTypes[index].name : "any";
+    //             if (!paramterTypes[type]) {
+    //                 ps.push(ClassValidator.valid(paramTypes[index], value, true));
+    //             } else {
+    //                 ps.push(Promise.resolve(value));
+    //             }
+    //         });
+    //         if (ps.length > 0) {
+    //             props = await Promise.all(ps);
+    //         }
+    //         // tslint:disable-next-line: no-invalid-this
+    //         return value.apply(this, props);
+    //     }
+    // };
+    // return descriptor;
+  };
 }
 
 /**
@@ -127,13 +127,13 @@ export function Validated(): MethodDecorator {
  * @returns {PropertyDecorator}
  */
 export function Expose(): PropertyDecorator {
-    return function (object: Object, propertyName: string) {
-        const types = Reflect.getMetadata("design:type", object, propertyName);
-        if (types) {
-            const originMap = getOriginMetadata(PARAM_TYPE_KEY, object);
-            originMap.set(propertyName, types.name);
-        }
-    };
+  return function (object: Object, propertyName: string) {
+    const types = Reflect.getMetadata("design:type", object, propertyName);
+    if (types) {
+      const originMap = getOriginMetadata(PARAM_TYPE_KEY, object);
+      originMap.set(propertyName, types.name);
+    }
+  };
 }
 
 /**
@@ -143,9 +143,9 @@ export function Expose(): PropertyDecorator {
  * @returns {PropertyDecorator}
  */
 export function IsDefined(): PropertyDecorator {
-    return function (object: Object, propertyName: string) {
-        setExpose(object, propertyName);
-    };
+  return function (object: Object, propertyName: string) {
+    setExpose(object, propertyName);
+  };
 }
 
 /**
@@ -157,24 +157,24 @@ export function IsDefined(): PropertyDecorator {
  * @returns {PropertyDecorator}
  */
 export function IsCnName(validationOptions?: ValidationOptions): PropertyDecorator {
-    return function (object: Object, propertyName: string) {
-        setExpose(object, propertyName);
+  return function (object: Object, propertyName: string) {
+    setExpose(object, propertyName);
 
-        registerDecorator({
-            name: "IsCnName",
-            target: object.constructor,
-            propertyName,
-            options: validationOptions,
-            validator: {
-                validate(value: any, args: ValidationArguments) {
-                    return cnName(value);
-                },
-                defaultMessage(args: ValidationArguments) {
-                    return "invalid parameter ($property).";
-                }
-            }
-        });
-    };
+    registerDecorator({
+      name: "IsCnName",
+      target: object.constructor,
+      propertyName,
+      options: validationOptions,
+      validator: {
+        validate(value: any, args: ValidationArguments) {
+          return cnName(value);
+        },
+        defaultMessage(args: ValidationArguments) {
+          return "invalid parameter ($property).";
+        }
+      }
+    });
+  };
 }
 
 /**
@@ -186,24 +186,24 @@ export function IsCnName(validationOptions?: ValidationOptions): PropertyDecorat
  * @returns {PropertyDecorator}
  */
 export function IsIdNumber(validationOptions?: ValidationOptions): PropertyDecorator {
-    return function (object: Object, propertyName: string) {
-        setExpose(object, propertyName);
+  return function (object: Object, propertyName: string) {
+    setExpose(object, propertyName);
 
-        registerDecorator({
-            name: "IsIdNumber",
-            target: object.constructor,
-            propertyName,
-            options: validationOptions,
-            validator: {
-                validate(value: any, args: ValidationArguments) {
-                    return idNumber(value);
-                },
-                defaultMessage(args: ValidationArguments) {
-                    return "invalid parameter ($property).";
-                }
-            }
-        });
-    };
+    registerDecorator({
+      name: "IsIdNumber",
+      target: object.constructor,
+      propertyName,
+      options: validationOptions,
+      validator: {
+        validate(value: any, args: ValidationArguments) {
+          return idNumber(value);
+        },
+        defaultMessage(args: ValidationArguments) {
+          return "invalid parameter ($property).";
+        }
+      }
+    });
+  };
 }
 
 /**
@@ -215,24 +215,24 @@ export function IsIdNumber(validationOptions?: ValidationOptions): PropertyDecor
  * @returns {PropertyDecorator}
  */
 export function IsZipCode(validationOptions?: ValidationOptions): PropertyDecorator {
-    return function (object: Object, propertyName: string) {
-        setExpose(object, propertyName);
+  return function (object: Object, propertyName: string) {
+    setExpose(object, propertyName);
 
-        registerDecorator({
-            name: "IsZipCode",
-            target: object.constructor,
-            propertyName,
-            options: validationOptions,
-            validator: {
-                validate(value: any, args: ValidationArguments) {
-                    return zipCode(value);
-                },
-                defaultMessage(args: ValidationArguments) {
-                    return "invalid parameter ($property).";
-                }
-            }
-        });
-    };
+    registerDecorator({
+      name: "IsZipCode",
+      target: object.constructor,
+      propertyName,
+      options: validationOptions,
+      validator: {
+        validate(value: any, args: ValidationArguments) {
+          return zipCode(value);
+        },
+        defaultMessage(args: ValidationArguments) {
+          return "invalid parameter ($property).";
+        }
+      }
+    });
+  };
 }
 
 /**
@@ -244,24 +244,24 @@ export function IsZipCode(validationOptions?: ValidationOptions): PropertyDecora
  * @returns {PropertyDecorator}
  */
 export function IsMobile(validationOptions?: ValidationOptions): PropertyDecorator {
-    return function (object: Object, propertyName: string) {
-        setExpose(object, propertyName);
+  return function (object: Object, propertyName: string) {
+    setExpose(object, propertyName);
 
-        registerDecorator({
-            name: "IsMobile",
-            target: object.constructor,
-            propertyName,
-            options: validationOptions,
-            validator: {
-                validate(value: any, args: ValidationArguments) {
-                    return mobile(value);
-                },
-                defaultMessage(args: ValidationArguments) {
-                    return "invalid parameter ($property).";
-                }
-            }
-        });
-    };
+    registerDecorator({
+      name: "IsMobile",
+      target: object.constructor,
+      propertyName,
+      options: validationOptions,
+      validator: {
+        validate(value: any, args: ValidationArguments) {
+          return mobile(value);
+        },
+        defaultMessage(args: ValidationArguments) {
+          return "invalid parameter ($property).";
+        }
+      }
+    });
+  };
 }
 
 /**
@@ -273,24 +273,24 @@ export function IsMobile(validationOptions?: ValidationOptions): PropertyDecorat
  * @returns {PropertyDecorator}
  */
 export function IsPlateNumber(validationOptions?: ValidationOptions): PropertyDecorator {
-    return function (object: Object, propertyName: string) {
-        setExpose(object, propertyName);
+  return function (object: Object, propertyName: string) {
+    setExpose(object, propertyName);
 
-        registerDecorator({
-            name: "IsPlateNumber",
-            target: object.constructor,
-            propertyName,
-            options: validationOptions,
-            validator: {
-                validate(value: any, args: ValidationArguments) {
-                    return plateNumber(value);
-                },
-                defaultMessage(args: ValidationArguments) {
-                    return "invalid parameter ($property).";
-                }
-            }
-        });
-    };
+    registerDecorator({
+      name: "IsPlateNumber",
+      target: object.constructor,
+      propertyName,
+      options: validationOptions,
+      validator: {
+        validate(value: any, args: ValidationArguments) {
+          return plateNumber(value);
+        },
+        defaultMessage(args: ValidationArguments) {
+          return "invalid parameter ($property).";
+        }
+      }
+    });
+  };
 
 }
 
@@ -302,24 +302,24 @@ export function IsPlateNumber(validationOptions?: ValidationOptions): PropertyDe
  * @returns {PropertyDecorator}
  */
 export function IsNotEmpty(validationOptions?: ValidationOptions): PropertyDecorator {
-    return function (object: Object, propertyName: string) {
-        setExpose(object, propertyName);
+  return function (object: Object, propertyName: string) {
+    setExpose(object, propertyName);
 
-        registerDecorator({
-            name: "IsNotEmpty",
-            target: object.constructor,
-            propertyName,
-            options: validationOptions,
-            validator: {
-                validate(value: any, args: ValidationArguments) {
-                    return !helper.isEmpty(value);
-                },
-                defaultMessage(args: ValidationArguments) {
-                    return "invalid parameter ($property).";
-                }
-            }
-        });
-    };
+    registerDecorator({
+      name: "IsNotEmpty",
+      target: object.constructor,
+      propertyName,
+      options: validationOptions,
+      validator: {
+        validate(value: any, args: ValidationArguments) {
+          return !helper.isEmpty(value);
+        },
+        defaultMessage(args: ValidationArguments) {
+          return "invalid parameter ($property).";
+        }
+      }
+    });
+  };
 }
 
 /**
@@ -331,24 +331,24 @@ export function IsNotEmpty(validationOptions?: ValidationOptions): PropertyDecor
  * @returns {PropertyDecorator}
  */
 export function Equals(comparison: any, validationOptions?: ValidationOptions): PropertyDecorator {
-    return function (object: Object, propertyName: string) {
-        setExpose(object, propertyName);
+  return function (object: Object, propertyName: string) {
+    setExpose(object, propertyName);
 
-        registerDecorator({
-            name: "vEquals",
-            target: object.constructor,
-            propertyName,
-            options: validationOptions,
-            validator: {
-                validate(value: any, args: ValidationArguments) {
-                    return equals(value, comparison);
-                },
-                defaultMessage(args: ValidationArguments) {
-                    return `invalid parameter, ($property) must be equals ${comparison}.`;
-                }
-            }
-        });
-    };
+    registerDecorator({
+      name: "vEquals",
+      target: object.constructor,
+      propertyName,
+      options: validationOptions,
+      validator: {
+        validate(value: any, args: ValidationArguments) {
+          return equals(value, comparison);
+        },
+        defaultMessage(args: ValidationArguments) {
+          return `invalid parameter, ($property) must be equals ${comparison}.`;
+        }
+      }
+    });
+  };
 }
 
 /**
@@ -360,24 +360,24 @@ export function Equals(comparison: any, validationOptions?: ValidationOptions): 
  * @returns {PropertyDecorator}
  */
 export function NotEquals(comparison: any, validationOptions?: ValidationOptions): PropertyDecorator {
-    return function (object: Object, propertyName: string) {
-        setExpose(object, propertyName);
+  return function (object: Object, propertyName: string) {
+    setExpose(object, propertyName);
 
-        registerDecorator({
-            name: "vNotEquals",
-            target: object.constructor,
-            propertyName,
-            options: validationOptions,
-            validator: {
-                validate(value: any, args: ValidationArguments) {
-                    return notEquals(value, comparison);
-                },
-                defaultMessage(args: ValidationArguments) {
-                    return `invalid parameter, ($property) must be not equals ${comparison}.`;
-                }
-            }
-        });
-    };
+    registerDecorator({
+      name: "vNotEquals",
+      target: object.constructor,
+      propertyName,
+      options: validationOptions,
+      validator: {
+        validate(value: any, args: ValidationArguments) {
+          return notEquals(value, comparison);
+        },
+        defaultMessage(args: ValidationArguments) {
+          return `invalid parameter, ($property) must be not equals ${comparison}.`;
+        }
+      }
+    });
+  };
 }
 
 /**
@@ -389,25 +389,25 @@ export function NotEquals(comparison: any, validationOptions?: ValidationOptions
  * @returns {PropertyDecorator}
  */
 export function Contains(seed: string, validationOptions?: ValidationOptions): PropertyDecorator {
-    return function (object: Object, propertyName: string) {
-        setExpose(object, propertyName);
+  return function (object: Object, propertyName: string) {
+    setExpose(object, propertyName);
 
-        registerDecorator({
-            name: "vContains",
-            target: object.constructor,
-            propertyName,
-            options: validationOptions,
-            validator: {
-                validate(value: any, args: ValidationArguments) {
-                    return contains(value, seed);
-                    // return typeof value === "string" && (value.indexOf(seed) > -1);
-                },
-                defaultMessage(args: ValidationArguments) {
-                    return `invalid parameter, ($property) must be contains ${seed}.`;
-                }
-            }
-        });
-    };
+    registerDecorator({
+      name: "vContains",
+      target: object.constructor,
+      propertyName,
+      options: validationOptions,
+      validator: {
+        validate(value: any, args: ValidationArguments) {
+          return contains(value, seed);
+          // return typeof value === "string" && (value.indexOf(seed) > -1);
+        },
+        defaultMessage(args: ValidationArguments) {
+          return `invalid parameter, ($property) must be contains ${seed}.`;
+        }
+      }
+    });
+  };
 }
 
 /**
@@ -419,24 +419,24 @@ export function Contains(seed: string, validationOptions?: ValidationOptions): P
  * @returns {PropertyDecorator}
  */
 export function IsIn(possibleValues: any[], validationOptions?: ValidationOptions): PropertyDecorator {
-    return function (object: Object, propertyName: string) {
-        setExpose(object, propertyName);
+  return function (object: Object, propertyName: string) {
+    setExpose(object, propertyName);
 
-        registerDecorator({
-            name: "vIsIn",
-            target: object.constructor,
-            propertyName,
-            options: validationOptions,
-            validator: {
-                validate(value: any, args: ValidationArguments) {
-                    return isIn(value, possibleValues);
-                },
-                defaultMessage(args: ValidationArguments) {
-                    return `invalid parameter ($property).`;
-                }
-            }
-        });
-    };
+    registerDecorator({
+      name: "vIsIn",
+      target: object.constructor,
+      propertyName,
+      options: validationOptions,
+      validator: {
+        validate(value: any, args: ValidationArguments) {
+          return isIn(value, possibleValues);
+        },
+        defaultMessage(args: ValidationArguments) {
+          return `invalid parameter ($property).`;
+        }
+      }
+    });
+  };
 }
 
 /**
@@ -448,24 +448,24 @@ export function IsIn(possibleValues: any[], validationOptions?: ValidationOption
  * @returns {PropertyDecorator}
  */
 export function IsNotIn(possibleValues: any[], validationOptions?: ValidationOptions): PropertyDecorator {
-    return function (object: Object, propertyName: string) {
-        setExpose(object, propertyName);
+  return function (object: Object, propertyName: string) {
+    setExpose(object, propertyName);
 
-        registerDecorator({
-            name: "vIsNotIn",
-            target: object.constructor,
-            propertyName,
-            options: validationOptions,
-            validator: {
-                validate(value: any, args: ValidationArguments) {
-                    return isNotIn(value, possibleValues);
-                },
-                defaultMessage(args: ValidationArguments) {
-                    return `invalid parameter ($property).`;
-                }
-            }
-        });
-    };
+    registerDecorator({
+      name: "vIsNotIn",
+      target: object.constructor,
+      propertyName,
+      options: validationOptions,
+      validator: {
+        validate(value: any, args: ValidationArguments) {
+          return isNotIn(value, possibleValues);
+        },
+        defaultMessage(args: ValidationArguments) {
+          return `invalid parameter ($property).`;
+        }
+      }
+    });
+  };
 }
 
 /**
@@ -476,24 +476,24 @@ export function IsNotIn(possibleValues: any[], validationOptions?: ValidationOpt
  * @returns {PropertyDecorator}
  */
 export function IsDate(validationOptions?: ValidationOptions): PropertyDecorator {
-    return function (object: Object, propertyName: string) {
-        setExpose(object, propertyName);
+  return function (object: Object, propertyName: string) {
+    setExpose(object, propertyName);
 
-        registerDecorator({
-            name: "vIsDate",
-            target: object.constructor,
-            propertyName,
-            options: validationOptions,
-            validator: {
-                validate(value: any, args: ValidationArguments) {
-                    return isDate(value);
-                },
-                defaultMessage(args: ValidationArguments) {
-                    return `invalid parameter ($property).`;
-                }
-            }
-        });
-    };
+    registerDecorator({
+      name: "vIsDate",
+      target: object.constructor,
+      propertyName,
+      options: validationOptions,
+      validator: {
+        validate(value: any, args: ValidationArguments) {
+          return isDate(value);
+        },
+        defaultMessage(args: ValidationArguments) {
+          return `invalid parameter ($property).`;
+        }
+      }
+    });
+  };
 }
 
 /**
@@ -505,24 +505,24 @@ export function IsDate(validationOptions?: ValidationOptions): PropertyDecorator
  * @returns {PropertyDecorator}
  */
 export function Gt(min: number, validationOptions?: ValidationOptions): PropertyDecorator {
-    return function (object: Object, propertyName: string) {
-        setExpose(object, propertyName);
+  return function (object: Object, propertyName: string) {
+    setExpose(object, propertyName);
 
-        registerDecorator({
-            name: "vMin",
-            target: object.constructor,
-            propertyName,
-            options: validationOptions,
-            validator: {
-                validate(value: any, args: ValidationArguments) {
-                    return helper.toNumber(value) > min;
-                },
-                defaultMessage(args: ValidationArguments) {
-                    return `invalid parameter ($property).`;
-                }
-            }
-        });
-    };
+    registerDecorator({
+      name: "vMin",
+      target: object.constructor,
+      propertyName,
+      options: validationOptions,
+      validator: {
+        validate(value: any, args: ValidationArguments) {
+          return helper.toNumber(value) > min;
+        },
+        defaultMessage(args: ValidationArguments) {
+          return `invalid parameter ($property).`;
+        }
+      }
+    });
+  };
 }
 
 /**
@@ -534,24 +534,24 @@ export function Gt(min: number, validationOptions?: ValidationOptions): Property
  * @returns {PropertyDecorator}
  */
 export function Lt(max: number, validationOptions?: ValidationOptions): PropertyDecorator {
-    return function (object: Object, propertyName: string) {
-        setExpose(object, propertyName);
+  return function (object: Object, propertyName: string) {
+    setExpose(object, propertyName);
 
-        registerDecorator({
-            name: "vMax",
-            target: object.constructor,
-            propertyName,
-            options: validationOptions,
-            validator: {
-                validate(value: any, args: ValidationArguments) {
-                    return helper.toNumber(value) < max;
-                },
-                defaultMessage(args: ValidationArguments) {
-                    return `invalid parameter ($property).`;
-                }
-            }
-        });
-    };
+    registerDecorator({
+      name: "vMax",
+      target: object.constructor,
+      propertyName,
+      options: validationOptions,
+      validator: {
+        validate(value: any, args: ValidationArguments) {
+          return helper.toNumber(value) < max;
+        },
+        defaultMessage(args: ValidationArguments) {
+          return `invalid parameter ($property).`;
+        }
+      }
+    });
+  };
 }
 /**
  * Checks if the first number is greater than or equal to the min value.
@@ -562,24 +562,24 @@ export function Lt(max: number, validationOptions?: ValidationOptions): Property
  * @returns {PropertyDecorator}
  */
 export function Gte(min: number, validationOptions?: ValidationOptions): PropertyDecorator {
-    return function (object: Object, propertyName: string) {
-        setExpose(object, propertyName);
+  return function (object: Object, propertyName: string) {
+    setExpose(object, propertyName);
 
-        registerDecorator({
-            name: "vMin",
-            target: object.constructor,
-            propertyName,
-            options: validationOptions,
-            validator: {
-                validate(value: any, args: ValidationArguments) {
-                    return helper.toNumber(value) >= min;
-                },
-                defaultMessage(args: ValidationArguments) {
-                    return `invalid parameter ($property).`;
-                }
-            }
-        });
-    };
+    registerDecorator({
+      name: "vMin",
+      target: object.constructor,
+      propertyName,
+      options: validationOptions,
+      validator: {
+        validate(value: any, args: ValidationArguments) {
+          return helper.toNumber(value) >= min;
+        },
+        defaultMessage(args: ValidationArguments) {
+          return `invalid parameter ($property).`;
+        }
+      }
+    });
+  };
 }
 
 /**
@@ -591,24 +591,24 @@ export function Gte(min: number, validationOptions?: ValidationOptions): Propert
  * @returns {PropertyDecorator}
  */
 export function Lte(max: number, validationOptions?: ValidationOptions): PropertyDecorator {
-    return function (object: Object, propertyName: string) {
-        setExpose(object, propertyName);
+  return function (object: Object, propertyName: string) {
+    setExpose(object, propertyName);
 
-        registerDecorator({
-            name: "vMax",
-            target: object.constructor,
-            propertyName,
-            options: validationOptions,
-            validator: {
-                validate(value: any, args: ValidationArguments) {
-                    return helper.toNumber(value) <= max;
-                },
-                defaultMessage(args: ValidationArguments) {
-                    return `invalid parameter ($property).`;
-                }
-            }
-        });
-    };
+    registerDecorator({
+      name: "vMax",
+      target: object.constructor,
+      propertyName,
+      options: validationOptions,
+      validator: {
+        validate(value: any, args: ValidationArguments) {
+          return helper.toNumber(value) <= max;
+        },
+        defaultMessage(args: ValidationArguments) {
+          return `invalid parameter ($property).`;
+        }
+      }
+    });
+  };
 }
 
 /**
@@ -622,24 +622,24 @@ export function Lte(max: number, validationOptions?: ValidationOptions): Propert
  * @returns {PropertyDecorator}
  */
 export function Length(min: number, max?: number, validationOptions?: ValidationOptions): PropertyDecorator {
-    return function (object: Object, propertyName: string) {
-        setExpose(object, propertyName);
+  return function (object: Object, propertyName: string) {
+    setExpose(object, propertyName);
 
-        registerDecorator({
-            name: "vLength",
-            target: object.constructor,
-            propertyName,
-            options: validationOptions,
-            validator: {
-                validate(value: any, args: ValidationArguments) {
-                    return length(value, min, max);
-                },
-                defaultMessage(args: ValidationArguments) {
-                    return `invalid parameter ($property).`;
-                }
-            }
-        });
-    };
+    registerDecorator({
+      name: "vLength",
+      target: object.constructor,
+      propertyName,
+      options: validationOptions,
+      validator: {
+        validate(value: any, args: ValidationArguments) {
+          return length(value, min, max);
+        },
+        defaultMessage(args: ValidationArguments) {
+          return `invalid parameter ($property).`;
+        }
+      }
+    });
+  };
 }
 
 /**
@@ -651,24 +651,24 @@ export function Length(min: number, max?: number, validationOptions?: Validation
  * @returns {PropertyDecorator}
  */
 export function IsEmail(options?: IsEmailOptions, validationOptions?: ValidationOptions): PropertyDecorator {
-    return function (object: Object, propertyName: string) {
-        setExpose(object, propertyName);
+  return function (object: Object, propertyName: string) {
+    setExpose(object, propertyName);
 
-        registerDecorator({
-            name: "vIsEmail",
-            target: object.constructor,
-            propertyName,
-            options: validationOptions,
-            validator: {
-                validate(value: any, args: ValidationArguments) {
-                    return isEmail(value);
-                },
-                defaultMessage(args: ValidationArguments) {
-                    return `invalid parameter ($property).`;
-                }
-            }
-        });
-    };
+    registerDecorator({
+      name: "vIsEmail",
+      target: object.constructor,
+      propertyName,
+      options: validationOptions,
+      validator: {
+        validate(value: any, args: ValidationArguments) {
+          return isEmail(value);
+        },
+        defaultMessage(args: ValidationArguments) {
+          return `invalid parameter ($property).`;
+        }
+      }
+    });
+  };
 }
 
 /**
@@ -680,24 +680,24 @@ export function IsEmail(options?: IsEmailOptions, validationOptions?: Validation
  * @returns {PropertyDecorator}
  */
 export function IsIP(version?: IsIpVersion, validationOptions?: ValidationOptions): PropertyDecorator {
-    return function (object: Object, propertyName: string) {
-        setExpose(object, propertyName);
+  return function (object: Object, propertyName: string) {
+    setExpose(object, propertyName);
 
-        registerDecorator({
-            name: "vIsIP",
-            target: object.constructor,
-            propertyName,
-            options: validationOptions,
-            validator: {
-                validate(value: any, args: ValidationArguments) {
-                    return isIP(value, version);
-                },
-                defaultMessage(args: ValidationArguments) {
-                    return `invalid parameter ($property).`;
-                }
-            }
-        });
-    };
+    registerDecorator({
+      name: "vIsIP",
+      target: object.constructor,
+      propertyName,
+      options: validationOptions,
+      validator: {
+        validate(value: any, args: ValidationArguments) {
+          return isIP(value, version);
+        },
+        defaultMessage(args: ValidationArguments) {
+          return `invalid parameter ($property).`;
+        }
+      }
+    });
+  };
 }
 
 /**
@@ -712,24 +712,24 @@ export function IsIP(version?: IsIpVersion, validationOptions?: ValidationOption
  * @returns {PropertyDecorator}
  */
 export function IsPhoneNumber(region?: CountryCode, validationOptions?: ValidationOptions): PropertyDecorator {
-    return function (object: Object, propertyName: string) {
-        setExpose(object, propertyName);
+  return function (object: Object, propertyName: string) {
+    setExpose(object, propertyName);
 
-        registerDecorator({
-            name: "vIsPhoneNumber",
-            target: object.constructor,
-            propertyName,
-            options: validationOptions,
-            validator: {
-                validate(value: any, args: ValidationArguments) {
-                    return isPhoneNumber(value, region);
-                },
-                defaultMessage(args: ValidationArguments) {
-                    return `invalid parameter ($property).`;
-                }
-            }
-        });
-    };
+    registerDecorator({
+      name: "vIsPhoneNumber",
+      target: object.constructor,
+      propertyName,
+      options: validationOptions,
+      validator: {
+        validate(value: any, args: ValidationArguments) {
+          return isPhoneNumber(value, region);
+        },
+        defaultMessage(args: ValidationArguments) {
+          return `invalid parameter ($property).`;
+        }
+      }
+    });
+  };
 }
 
 /**
@@ -741,24 +741,24 @@ export function IsPhoneNumber(region?: CountryCode, validationOptions?: Validati
  * @returns {PropertyDecorator}
  */
 export function IsUrl(options?: IsURLOptions, validationOptions?: ValidationOptions): PropertyDecorator {
-    return function (object: Object, propertyName: string) {
-        setExpose(object, propertyName);
+  return function (object: Object, propertyName: string) {
+    setExpose(object, propertyName);
 
-        registerDecorator({
-            name: "vIsUrl",
-            target: object.constructor,
-            propertyName,
-            options: validationOptions,
-            validator: {
-                validate(value: any, args: ValidationArguments) {
-                    return isURL(value, options);
-                },
-                defaultMessage(args: ValidationArguments) {
-                    return `invalid parameter ($property).`;
-                }
-            }
-        });
-    };
+    registerDecorator({
+      name: "vIsUrl",
+      target: object.constructor,
+      propertyName,
+      options: validationOptions,
+      validator: {
+        validate(value: any, args: ValidationArguments) {
+          return isURL(value, options);
+        },
+        defaultMessage(args: ValidationArguments) {
+          return `invalid parameter ($property).`;
+        }
+      }
+    });
+  };
 }
 
 /**
@@ -771,23 +771,23 @@ export function IsUrl(options?: IsURLOptions, validationOptions?: ValidationOpti
  * @returns {PropertyDecorator}
  */
 export function IsHash(algorithm: HashAlgorithm, validationOptions?: ValidationOptions): PropertyDecorator {
-    return function (object: Object, propertyName: string) {
-        setExpose(object, propertyName);
+  return function (object: Object, propertyName: string) {
+    setExpose(object, propertyName);
 
-        registerDecorator({
-            name: "vIsHash",
-            target: object.constructor,
-            propertyName,
-            options: validationOptions,
-            validator: {
-                validate(value: any, args: ValidationArguments) {
-                    return isHash(value, algorithm);
-                },
-                defaultMessage(args: ValidationArguments) {
-                    return `invalid parameter, ($property) must be is an ${algorithm} Hash string.`;
-                }
-            }
-        });
-    };
+    registerDecorator({
+      name: "vIsHash",
+      target: object.constructor,
+      propertyName,
+      options: validationOptions,
+      validator: {
+        validate(value: any, args: ValidationArguments) {
+          return isHash(value, algorithm);
+        },
+        defaultMessage(args: ValidationArguments) {
+          return `invalid parameter, ($property) must be is an ${algorithm} Hash string.`;
+        }
+      }
+    });
+  };
 }
 
