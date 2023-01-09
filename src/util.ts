@@ -175,7 +175,7 @@ export function convertOrCheckDtoParamsType(clazz: any, cls: any, convert: boole
           cls[key] = convertParamsType(cls[key], cls._typeDef[key]);
         } else {
           if (!checkParamsType(cls[key], cls._typeDef[key])) {
-            throw new Error("invalid arguments type");
+            throw new Error(`parameter ${key} type error`);
           }
         }
       }
@@ -188,7 +188,7 @@ export function convertOrCheckDtoParamsType(clazz: any, cls: any, convert: boole
           cls[key] = convertParamsType(cls[key], type);
         } else {
           if (!checkParamsType(cls[key], type)) {
-            throw new Error("invalid arguments type");
+            throw new Error(`parameter ${key} type error`);
           }
         }
       }
