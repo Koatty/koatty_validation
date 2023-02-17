@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.7](https://github.com/koatty/koatty_validation/compare/v1.2.6...v1.2.7) (2023-02-17)
+
+
+### Bug Fixes
+
+* add script ([ca82c14](https://github.com/koatty/koatty_validation/commit/ca82c14b0a2226024fb2c4476ba7353be7a2f65a))
+* plainToClass convert type ([06ed46e](https://github.com/koatty/koatty_validation/commit/06ed46e21ce191dc1c9f5c18ee7d029e9b6d4abf))
+
 ### [1.2.6](https://github.com/koatty/koatty_validation/compare/v1.2.5...v1.2.6) (2023-01-09)
 
 
