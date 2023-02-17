@@ -154,70 +154,33 @@ export function plainToClass(clazz: any, data: any, convert = false) {
     } else {
       cls = Object.assign(Reflect.construct(clazz, []), data);
     }
-    return convertOrCheckDtoParamsType(clazz, cls, convert);
+    if (convert) {
+      return convertDtoParamsType(clazz, cls);
+    }
+    return cls;
   }
   return data;
 }
 
 /**
- * convertOrCheckDtoParamsType
- *
- * @param {*} clazz
- * @param {*} cls
- * @param {boolean} convert
- * @returns {*} cls
- */
-export function convertOrCheckDtoParamsType(clazz: any, cls: any, convert: boolean) {
-  if (Object.prototype.hasOwnProperty.call(cls, "_typeDef")) {
-    for (const key in cls) {
-      if (Object.prototype.hasOwnProperty.call(cls._typeDef, key)) {
-        if (convert) {
-          cls[key] = convertParamsType(cls[key], cls._typeDef[key]);
-        } else {
-          if (!checkParamsType(cls[key], cls._typeDef[key])) {
-            throw new Error(`parameter ${key} type error`);
-          }
-        }
-      }
-    }
-  } else {
-    const originMap = getOriginMetadata(PARAM_TYPE_KEY, clazz);
-    for (const [key, type] of originMap) {
-      if (key) {
-        if (convert) {
-          cls[key] = convertParamsType(cls[key], type);
-        } else {
-          if (!checkParamsType(cls[key], type)) {
-            throw new Error(`parameter ${key} type error`);
-          }
-        }
-      }
-    }
-  }
-  return cls;
-}
-/**
  * convertDtoParamsType
  *
  * @param {*} clazz
  * @param {*} cls
- * @param {boolean} convert
- * @param {boolean} data
  * @returns {*} cls
  */
-export function convertDtoParamsType(clazz: any, cls: any, data: any) {
+export function convertDtoParamsType(clazz: any, cls: any) {
   if (Object.prototype.hasOwnProperty.call(cls, "_typeDef")) {
     for (const key in cls) {
       if (Object.prototype.hasOwnProperty.call(cls._typeDef, key)) {
-        cls[key] = convertParamsType(data[key], cls._typeDef[key]);
-
+        cls[key] = convertParamsType(cls[key], cls._typeDef[key]);
       }
     }
   } else {
     const originMap = getOriginMetadata(PARAM_TYPE_KEY, clazz);
     for (const [key, type] of originMap) {
       if (key) {
-        cls[key] = convertParamsType(data[key], type);
+        cls[key] = convertParamsType(cls[key], type);
       }
     }
   }
