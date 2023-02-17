@@ -172,14 +172,15 @@ export function plainToClass(clazz: any, data: any, convert = false) {
 export function convertDtoParamsType(clazz: any, cls: any) {
   if (Object.prototype.hasOwnProperty.call(cls, "_typeDef")) {
     for (const key in cls) {
-      if (Object.prototype.hasOwnProperty.call(cls._typeDef, key)) {
+      if (Object.prototype.hasOwnProperty.call(cls._typeDef, key) &&
+        cls[key] !== undefined) {
         cls[key] = convertParamsType(cls[key], cls._typeDef[key]);
       }
     }
   } else {
     const originMap = getOriginMetadata(PARAM_TYPE_KEY, clazz);
     for (const [key, type] of originMap) {
-      if (key) {
+      if (key && cls[key] !== undefined) {
         cls[key] = convertParamsType(cls[key], type);
       }
     }
