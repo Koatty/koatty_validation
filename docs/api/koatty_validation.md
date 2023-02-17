@@ -16,7 +16,7 @@
 |  --- | --- |
 |  [checkParamsType(value, type)](./koatty_validation.checkparamstype.md) | Check the base types. |
 |  [Contains(seed, validationOptions)](./koatty_validation.contains.md) | Checks if the string contains the seed. |
-|  [convertDtoParamsType(clazz, cls, data)](./koatty_validation.convertdtoparamstype.md) | convertDtoParamsType |
+|  [convertDtoParamsType(clazz, cls)](./koatty_validation.convertdtoparamstype.md) | convertDtoParamsType |
 |  [convertParamsType(param, type)](./koatty_validation.convertparamstype.md) | 绑定参数类型转换 |
 |  [Equals(comparison, validationOptions)](./koatty_validation.equals.md) | Checks if value matches ("===") the comparison. |
 |  [Expose()](./koatty_validation.expose.md) | Marks property as included in the process of transformation. |
