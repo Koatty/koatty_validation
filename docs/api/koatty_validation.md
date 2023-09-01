@@ -41,7 +41,7 @@
 |  [Lt(max, validationOptions)](./koatty_validation.lt.md) | Checks if the first number is less than or equal to the max value. |
 |  [Lte(max, validationOptions)](./koatty_validation.lte.md) | Checks if the first number is less than or equal to the max value. |
 |  [NotEquals(comparison, validationOptions)](./koatty_validation.notequals.md) | Checks if value does not match ("!==") the comparison. |
-|  [plainToClass(clazz, data, convert)](./koatty_validation.plaintoclass.md) |  |
+|  [plainToClass(clazz, data, convert)](./koatty_validation.plaintoclass.md) | plain object convert to class instance |
 |  [Valid(rule, options)](./koatty_validation.valid.md) | Validation parameter's type and values. |
 |  [Validated()](./koatty_validation.validated.md) | Validation parameter's type and values from DTO class. |
 

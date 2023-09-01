@@ -4,6 +4,8 @@
 
 ## plainToClass() function
 
+plain object convert to class instance
+
 
 <b>Signature:</b>
 

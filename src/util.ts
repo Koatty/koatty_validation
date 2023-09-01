@@ -135,7 +135,7 @@ export function defineNewProperty(clazz: Function, protoName: string, func: Func
 }
 
 /**
- *
+ * plain object convert to class instance
  *
  * @export
  * @param {*} clazz
@@ -145,21 +145,65 @@ export function defineNewProperty(clazz: Function, protoName: string, func: Func
  */
 export function plainToClass(clazz: any, data: any, convert = false) {
   if (helper.isClass(clazz)) {
-    let cls;
     if (!helper.isObject(data)) {
       data = {};
     }
     if (data instanceof clazz) {
-      cls = data;
-    } else {
-      cls = Object.assign(Reflect.construct(clazz, []), data);
+      return data;
     }
-    if (convert) {
-      return convertDtoParamsType(clazz, cls);
+
+    return assignDtoParams(clazz, data, convert);
+  }
+  return data;
+}
+
+/**
+ * assign dto params 
+ * @param clazz 
+ * @param data 
+ * @param convert 
+ * @returns 
+ */
+function assignDtoParams(clazz: any, data: any, convert = false) {
+  const cls: any = Reflect.construct(clazz, [])
+  if (convert) {
+    return convertAssignDtoParams(clazz, cls, data);
+  } else {
+    for (const key in cls) {
+      if (Object.prototype.hasOwnProperty.call(data, key) &&
+        data[key] !== undefined) {
+        cls[key] = data[key];
+      }
     }
     return cls;
   }
-  return data;
+}
+
+/**
+ * convert type and assign dto params 
+ * @param clazz 
+ * @param cls 
+ * @param data 
+ * @returns 
+ */
+function convertAssignDtoParams(clazz: any, cls: any, data: any) {
+  if (Object.prototype.hasOwnProperty.call(cls, "_typeDef")) {
+    for (const key in cls) {
+      if (Object.prototype.hasOwnProperty.call(cls._typeDef, key) &&
+        data[key] !== undefined) {
+        cls[key] = convertParamsType(data[key], cls._typeDef[key]);
+      }
+    }
+  }
+  else {
+    const originMap = getOriginMetadata(PARAM_TYPE_KEY, clazz);
+    for (const [key, type] of originMap) {
+      if (key && data[key] !== undefined) {
+        cls[key] = convertParamsType(data[key], type);
+      }
+    }
+  }
+  return cls;
 }
 
 /**
