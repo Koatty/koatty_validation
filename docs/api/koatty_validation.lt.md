@@ -7,7 +7,7 @@
 Checks if the first number is less than or equal to the max value.
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export declare function Lt(max: number, validationOptions?: ValidationOptions): PropertyDecorator;
@@ -18,9 +18,9 @@ export declare function Lt(max: number, validationOptions?: ValidationOptions): 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  max | number |  |
-|  validationOptions | ValidationOptions | <i>(Optional)</i> |
+|  validationOptions | ValidationOptions | _(Optional)_ |
 
-<b>Returns:</b>
+**Returns:**
 
 PropertyDecorator
 

@@ -7,7 +7,7 @@
 Checks value is not empty, undefined, null, '', NaN, \[\], {<!-- -->} and any empty string(including spaces, tabs, formfeeds, etc.), returns false.
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export declare function IsNotEmpty(validationOptions?: ValidationOptions): PropertyDecorator;
@@ -17,9 +17,9 @@ export declare function IsNotEmpty(validationOptions?: ValidationOptions): Prope
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  validationOptions | ValidationOptions | <i>(Optional)</i> |
+|  validationOptions | ValidationOptions | _(Optional)_ |
 
-<b>Returns:</b>
+**Returns:**
 
 PropertyDecorator
 

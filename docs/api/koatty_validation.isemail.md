@@ -7,7 +7,7 @@
 Checks if the string is an email. If given value is not a string, then it returns false.
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export declare function IsEmail(options?: IsEmailOptions, validationOptions?: ValidationOptions): PropertyDecorator;
@@ -17,10 +17,10 @@ export declare function IsEmail(options?: IsEmailOptions, validationOptions?: Va
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  options | [IsEmailOptions](./koatty_validation.isemailoptions.md) | <i>(Optional)</i> |
-|  validationOptions | ValidationOptions | <i>(Optional)</i> |
+|  options | [IsEmailOptions](./koatty_validation.isemailoptions.md) | _(Optional)_ |
+|  validationOptions | ValidationOptions | _(Optional)_ |
 
-<b>Returns:</b>
+**Returns:**
 
 PropertyDecorator
 

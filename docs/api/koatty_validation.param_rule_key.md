@@ -4,7 +4,7 @@
 
 ## PARAM\_RULE\_KEY variable
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 PARAM_RULE_KEY = "PARAM_RULE_KEY"

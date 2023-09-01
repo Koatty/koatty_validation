@@ -7,7 +7,7 @@
 Checks if the string is an url.
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export declare function IsUrl(options?: IsURLOptions, validationOptions?: ValidationOptions): PropertyDecorator;
@@ -17,10 +17,10 @@ export declare function IsUrl(options?: IsURLOptions, validationOptions?: Valida
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  options | [IsURLOptions](./koatty_validation.isurloptions.md) | <i>(Optional)</i> |
-|  validationOptions | ValidationOptions | <i>(Optional)</i> |
+|  options | [IsURLOptions](./koatty_validation.isurloptions.md) | _(Optional)_ |
+|  validationOptions | ValidationOptions | _(Optional)_ |
 
-<b>Returns:</b>
+**Returns:**
 
 PropertyDecorator
 

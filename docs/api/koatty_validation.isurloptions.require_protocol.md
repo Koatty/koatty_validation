@@ -4,7 +4,7 @@
 
 ## IsURLOptions.require\_protocol property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 require_protocol?: boolean;

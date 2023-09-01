@@ -4,7 +4,7 @@
 
 ## IsURLOptions.allow\_protocol\_relative\_urls property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 allow_protocol_relative_urls?: boolean;

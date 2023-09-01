@@ -4,7 +4,7 @@
 
 ## ENABLE\_VALIDATED variable
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 ENABLE_VALIDATED = "ENABLE_VALIDATED"

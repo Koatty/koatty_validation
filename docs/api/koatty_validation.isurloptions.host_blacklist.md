@@ -4,7 +4,7 @@
 
 ## IsURLOptions.host\_blacklist property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 host_blacklist?: (string | RegExp)[];

@@ -4,7 +4,7 @@
 
 ## IsURLOptions.protocols property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 protocols?: string[];

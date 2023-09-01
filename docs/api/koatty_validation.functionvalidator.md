@@ -7,7 +7,7 @@
 Use functions or built-in rules for validation.
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 FunctionValidator: {

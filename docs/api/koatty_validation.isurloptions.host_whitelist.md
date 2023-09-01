@@ -4,7 +4,7 @@
 
 ## IsURLOptions.host\_whitelist property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 host_whitelist?: (string | RegExp)[];

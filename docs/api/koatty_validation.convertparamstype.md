@@ -6,7 +6,7 @@
 
 绑定参数类型转换
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export declare function convertParamsType(param: any, type: string): any;
@@ -19,7 +19,7 @@ export declare function convertParamsType(param: any, type: string): any;
 |  param | any |  |
 |  type | string |  |
 
-<b>Returns:</b>
+**Returns:**
 
 any
 

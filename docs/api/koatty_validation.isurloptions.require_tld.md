@@ -4,7 +4,7 @@
 
 ## IsURLOptions.require\_tld property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 require_tld?: boolean;

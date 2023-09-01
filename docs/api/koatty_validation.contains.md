@@ -7,7 +7,7 @@
 Checks if the string contains the seed.
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export declare function Contains(seed: string, validationOptions?: ValidationOptions): PropertyDecorator;
@@ -18,9 +18,9 @@ export declare function Contains(seed: string, validationOptions?: ValidationOpt
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  seed | string |  |
-|  validationOptions | ValidationOptions | <i>(Optional)</i> |
+|  validationOptions | ValidationOptions | _(Optional)_ |
 
-<b>Returns:</b>
+**Returns:**
 
 PropertyDecorator
 

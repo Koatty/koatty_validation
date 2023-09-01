@@ -7,7 +7,7 @@
 Checks if value matches ("===") the comparison.
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export declare function Equals(comparison: any, validationOptions?: ValidationOptions): PropertyDecorator;
@@ -18,9 +18,9 @@ export declare function Equals(comparison: any, validationOptions?: ValidationOp
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  comparison | any |  |
-|  validationOptions | ValidationOptions | <i>(Optional)</i> |
+|  validationOptions | ValidationOptions | _(Optional)_ |
 
-<b>Returns:</b>
+**Returns:**
 
 PropertyDecorator
 

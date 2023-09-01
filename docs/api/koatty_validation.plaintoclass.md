@@ -7,7 +7,7 @@
 plain object convert to class instance
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export declare function plainToClass(clazz: any, data: any, convert?: boolean): any;
@@ -19,9 +19,9 @@ export declare function plainToClass(clazz: any, data: any, convert?: boolean): 
 |  --- | --- | --- |
 |  clazz | any |  |
 |  data | any |  |
-|  convert | boolean | <i>(Optional)</i> |
+|  convert | boolean | _(Optional)_ |
 
-<b>Returns:</b>
+**Returns:**
 
 any
 

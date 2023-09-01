@@ -6,7 +6,7 @@
 
 convertDtoParamsType
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export declare function convertDtoParamsType(clazz: any, cls: any): any;
@@ -19,7 +19,7 @@ export declare function convertDtoParamsType(clazz: any, cls: any): any;
 |  clazz | any |  |
 |  cls | any |  |
 
-<b>Returns:</b>
+**Returns:**
 
 any
 

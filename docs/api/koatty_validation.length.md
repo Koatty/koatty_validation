@@ -7,7 +7,7 @@
 Checks if the string's length falls in a range. Note: this function takes into account surrogate pairs. If given value is not a string, then it returns false.
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export declare function Length(min: number, max?: number, validationOptions?: ValidationOptions): PropertyDecorator;
@@ -18,10 +18,10 @@ export declare function Length(min: number, max?: number, validationOptions?: Va
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  min | number |  |
-|  max | number | <i>(Optional)</i> |
-|  validationOptions | ValidationOptions | <i>(Optional)</i> |
+|  max | number | _(Optional)_ |
+|  validationOptions | ValidationOptions | _(Optional)_ |
 
-<b>Returns:</b>
+**Returns:**
 
 PropertyDecorator
 

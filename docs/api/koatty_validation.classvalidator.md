@@ -6,7 +6,7 @@
 
 ClassValidator for manual
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 ClassValidator: ValidateClass

@@ -4,7 +4,7 @@
 
 ## IsEmailOptions interface
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export interface IsEmailOptions 
@@ -12,10 +12,10 @@ export interface IsEmailOptions
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [allow\_display\_name?](./koatty_validation.isemailoptions.allow_display_name.md) | boolean | <i>(Optional)</i> |
-|  [allow\_utf8\_local\_part?](./koatty_validation.isemailoptions.allow_utf8_local_part.md) | boolean | <i>(Optional)</i> |
-|  [require\_display\_name?](./koatty_validation.isemailoptions.require_display_name.md) | boolean | <i>(Optional)</i> |
-|  [require\_tld?](./koatty_validation.isemailoptions.require_tld.md) | boolean | <i>(Optional)</i> |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [allow\_display\_name?](./koatty_validation.isemailoptions.allow_display_name.md) |  | boolean | _(Optional)_ |
+|  [allow\_utf8\_local\_part?](./koatty_validation.isemailoptions.allow_utf8_local_part.md) |  | boolean | _(Optional)_ |
+|  [require\_display\_name?](./koatty_validation.isemailoptions.require_display_name.md) |  | boolean | _(Optional)_ |
+|  [require\_tld?](./koatty_validation.isemailoptions.require_tld.md) |  | boolean | _(Optional)_ |
 

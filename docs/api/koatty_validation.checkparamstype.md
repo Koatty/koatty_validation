@@ -6,7 +6,7 @@
 
 Check the base types.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export declare function checkParamsType(value: any, type: string): any;
@@ -19,7 +19,7 @@ export declare function checkParamsType(value: any, type: string): any;
 |  value | any |  |
 |  type | string |  |
 
-<b>Returns:</b>
+**Returns:**
 
 any
 

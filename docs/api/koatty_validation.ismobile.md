@@ -7,7 +7,7 @@
 Checks if value is a mobile phone number(chinese).
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export declare function IsMobile(validationOptions?: ValidationOptions): PropertyDecorator;
@@ -17,9 +17,9 @@ export declare function IsMobile(validationOptions?: ValidationOptions): Propert
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  validationOptions | ValidationOptions | <i>(Optional)</i> |
+|  validationOptions | ValidationOptions | _(Optional)_ |
 
-<b>Returns:</b>
+**Returns:**
 
 PropertyDecorator
 

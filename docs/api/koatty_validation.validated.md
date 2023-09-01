@@ -7,12 +7,12 @@
 Validation parameter's type and values from DTO class.
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export declare function Validated(): MethodDecorator;
 ```
-<b>Returns:</b>
+**Returns:**
 
 MethodDecorator
 

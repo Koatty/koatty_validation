@@ -7,7 +7,7 @@
 Checks if given value is in a array of allowed values.
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export declare function IsIn(possibleValues: any[], validationOptions?: ValidationOptions): PropertyDecorator;
@@ -18,9 +18,9 @@ export declare function IsIn(possibleValues: any[], validationOptions?: Validati
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  possibleValues | any\[\] |  |
-|  validationOptions | ValidationOptions | <i>(Optional)</i> |
+|  validationOptions | ValidationOptions | _(Optional)_ |
 
-<b>Returns:</b>
+**Returns:**
 
 PropertyDecorator
 

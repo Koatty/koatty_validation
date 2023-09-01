@@ -7,7 +7,7 @@
 Checks if the string is a valid phone number.
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export declare function IsPhoneNumber(region?: CountryCode, validationOptions?: ValidationOptions): PropertyDecorator;
@@ -17,10 +17,10 @@ export declare function IsPhoneNumber(region?: CountryCode, validationOptions?: 
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  region | CountryCode | <i>(Optional)</i> |
-|  validationOptions | ValidationOptions | <i>(Optional)</i> |
+|  region | CountryCode | _(Optional)_ |
+|  validationOptions | ValidationOptions | _(Optional)_ |
 
-<b>Returns:</b>
+**Returns:**
 
 PropertyDecorator
 

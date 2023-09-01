@@ -7,7 +7,7 @@
 Checks if value is a idCard number(chinese).
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export declare function IsIdNumber(validationOptions?: ValidationOptions): PropertyDecorator;
@@ -17,9 +17,9 @@ export declare function IsIdNumber(validationOptions?: ValidationOptions): Prope
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  validationOptions | ValidationOptions | <i>(Optional)</i> |
+|  validationOptions | ValidationOptions | _(Optional)_ |
 
-<b>Returns:</b>
+**Returns:**
 
 PropertyDecorator
 

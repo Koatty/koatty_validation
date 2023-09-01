@@ -8,42 +8,42 @@
 
 |  Enumeration | Description |
 |  --- | --- |
-|  [paramterTypes](./koatty_validation.paramtertypes.md) | paramterTypes  {<!-- -->number<!-- -->} |
+|  [paramterTypes](./koatty_validation.paramtertypes.md) | <p>paramterTypes</p><p>  {<!-- -->number<!-- -->}</p> |
 
 ## Functions
 
 |  Function | Description |
 |  --- | --- |
 |  [checkParamsType(value, type)](./koatty_validation.checkparamstype.md) | Check the base types. |
-|  [Contains(seed, validationOptions)](./koatty_validation.contains.md) | Checks if the string contains the seed. |
+|  [Contains(seed, validationOptions)](./koatty_validation.contains.md) | <p>Checks if the string contains the seed.</p> |
 |  [convertDtoParamsType(clazz, cls)](./koatty_validation.convertdtoparamstype.md) | convertDtoParamsType |
 |  [convertParamsType(param, type)](./koatty_validation.convertparamstype.md) | 绑定参数类型转换 |
-|  [Equals(comparison, validationOptions)](./koatty_validation.equals.md) | Checks if value matches ("===") the comparison. |
-|  [Expose()](./koatty_validation.expose.md) | Marks property as included in the process of transformation. |
-|  [Gt(min, validationOptions)](./koatty_validation.gt.md) | Checks if the first number is greater than or equal to the min value. |
-|  [Gte(min, validationOptions)](./koatty_validation.gte.md) | Checks if the first number is greater than or equal to the min value. |
-|  [IsCnName(validationOptions)](./koatty_validation.iscnname.md) | Checks if value is a chinese name. |
-|  [IsDate(validationOptions)](./koatty_validation.isdate.md) | Checks if a given value is a real date. |
-|  [IsDefined()](./koatty_validation.isdefined.md) | Identifies that the field needs to be defined |
-|  [IsEmail(options, validationOptions)](./koatty_validation.isemail.md) | Checks if the string is an email. If given value is not a string, then it returns false. |
-|  [IsHash(algorithm, validationOptions)](./koatty_validation.ishash.md) | check if the string is a hash of type algorithm. Algorithm is one of \['md4', 'md5', 'sha1', 'sha256', 'sha384', 'sha512', 'ripemd128', 'ripemd160', 'tiger128', 'tiger160', 'tiger192', 'crc32', 'crc32b'\] |
-|  [IsIdNumber(validationOptions)](./koatty_validation.isidnumber.md) | Checks if value is a idCard number(chinese). |
-|  [IsIn(possibleValues, validationOptions)](./koatty_validation.isin.md) | Checks if given value is in a array of allowed values. |
-|  [IsIP(version, validationOptions)](./koatty_validation.isip.md) | Checks if the string is an IP (version 4 or 6). If given value is not a string, then it returns false. |
-|  [IsMobile(validationOptions)](./koatty_validation.ismobile.md) | Checks if value is a mobile phone number(chinese). |
-|  [IsNotEmpty(validationOptions)](./koatty_validation.isnotempty.md) | Checks value is not empty, undefined, null, '', NaN, \[\], {<!-- -->} and any empty string(including spaces, tabs, formfeeds, etc.), returns false. |
-|  [IsNotIn(possibleValues, validationOptions)](./koatty_validation.isnotin.md) | Checks if given value not in a array of allowed values. |
-|  [IsPhoneNumber(region, validationOptions)](./koatty_validation.isphonenumber.md) | Checks if the string is a valid phone number. |
-|  [IsPlateNumber(validationOptions)](./koatty_validation.isplatenumber.md) | Checks if value is a plate number(chinese). |
-|  [IsUrl(options, validationOptions)](./koatty_validation.isurl.md) | Checks if the string is an url. |
-|  [IsZipCode(validationOptions)](./koatty_validation.iszipcode.md) | Checks if value is a zipCode(chinese). |
-|  [Length(min, max, validationOptions)](./koatty_validation.length.md) | Checks if the string's length falls in a range. Note: this function takes into account surrogate pairs. If given value is not a string, then it returns false. |
-|  [Lt(max, validationOptions)](./koatty_validation.lt.md) | Checks if the first number is less than or equal to the max value. |
-|  [Lte(max, validationOptions)](./koatty_validation.lte.md) | Checks if the first number is less than or equal to the max value. |
-|  [NotEquals(comparison, validationOptions)](./koatty_validation.notequals.md) | Checks if value does not match ("!==") the comparison. |
-|  [plainToClass(clazz, data, convert)](./koatty_validation.plaintoclass.md) | plain object convert to class instance |
-|  [Valid(rule, options)](./koatty_validation.valid.md) | Validation parameter's type and values. |
-|  [Validated()](./koatty_validation.validated.md) | Validation parameter's type and values from DTO class. |
+|  [Equals(comparison, validationOptions)](./koatty_validation.equals.md) | <p>Checks if value matches ("===") the comparison.</p> |
+|  [Expose()](./koatty_validation.expose.md) | <p>Marks property as included in the process of transformation.</p> |
+|  [Gt(min, validationOptions)](./koatty_validation.gt.md) | <p>Checks if the first number is greater than or equal to the min value.</p> |
+|  [Gte(min, validationOptions)](./koatty_validation.gte.md) | <p>Checks if the first number is greater than or equal to the min value.</p> |
+|  [IsCnName(validationOptions)](./koatty_validation.iscnname.md) | <p>Checks if value is a chinese name.</p> |
+|  [IsDate(validationOptions)](./koatty_validation.isdate.md) | <p>Checks if a given value is a real date.</p> |
+|  [IsDefined()](./koatty_validation.isdefined.md) | <p>Identifies that the field needs to be defined</p> |
+|  [IsEmail(options, validationOptions)](./koatty_validation.isemail.md) | <p>Checks if the string is an email. If given value is not a string, then it returns false.</p> |
+|  [IsHash(algorithm, validationOptions)](./koatty_validation.ishash.md) | <p>check if the string is a hash of type algorithm. Algorithm is one of \['md4', 'md5', 'sha1', 'sha256', 'sha384', 'sha512', 'ripemd128', 'ripemd160', 'tiger128', 'tiger160', 'tiger192', 'crc32', 'crc32b'\]</p> |
+|  [IsIdNumber(validationOptions)](./koatty_validation.isidnumber.md) | <p>Checks if value is a idCard number(chinese).</p> |
+|  [IsIn(possibleValues, validationOptions)](./koatty_validation.isin.md) | <p>Checks if given value is in a array of allowed values.</p> |
+|  [IsIP(version, validationOptions)](./koatty_validation.isip.md) | <p>Checks if the string is an IP (version 4 or 6). If given value is not a string, then it returns false.</p> |
+|  [IsMobile(validationOptions)](./koatty_validation.ismobile.md) | <p>Checks if value is a mobile phone number(chinese).</p> |
+|  [IsNotEmpty(validationOptions)](./koatty_validation.isnotempty.md) | <p>Checks value is not empty, undefined, null, '', NaN, \[\], {<!-- -->} and any empty string(including spaces, tabs, formfeeds, etc.), returns false.</p> |
+|  [IsNotIn(possibleValues, validationOptions)](./koatty_validation.isnotin.md) | <p>Checks if given value not in a array of allowed values.</p> |
+|  [IsPhoneNumber(region, validationOptions)](./koatty_validation.isphonenumber.md) | <p>Checks if the string is a valid phone number.</p> |
+|  [IsPlateNumber(validationOptions)](./koatty_validation.isplatenumber.md) | <p>Checks if value is a plate number(chinese).</p> |
+|  [IsUrl(options, validationOptions)](./koatty_validation.isurl.md) | <p>Checks if the string is an url.</p> |
+|  [IsZipCode(validationOptions)](./koatty_validation.iszipcode.md) | <p>Checks if value is a zipCode(chinese).</p> |
+|  [Length(min, max, validationOptions)](./koatty_validation.length.md) | <p>Checks if the string's length falls in a range. Note: this function takes into account surrogate pairs. If given value is not a string, then it returns false.</p> |
+|  [Lt(max, validationOptions)](./koatty_validation.lt.md) | <p>Checks if the first number is less than or equal to the max value.</p> |
+|  [Lte(max, validationOptions)](./koatty_validation.lte.md) | <p>Checks if the first number is less than or equal to the max value.</p> |
+|  [NotEquals(comparison, validationOptions)](./koatty_validation.notequals.md) | <p>Checks if value does not match ("!==") the comparison.</p> |
+|  [plainToClass(clazz, data, convert)](./koatty_validation.plaintoclass.md) | <p>plain object convert to class instance</p> |
+|  [Valid(rule, options)](./koatty_validation.valid.md) | <p>Validation parameter's type and values.</p> |
+|  [Validated()](./koatty_validation.validated.md) | <p>Validation parameter's type and values from DTO class.</p> |
 
 ## Interfaces
 
@@ -58,7 +58,7 @@
 |  --- | --- |
 |  [ClassValidator](./koatty_validation.classvalidator.md) | ClassValidator for manual |
 |  [ENABLE\_VALIDATED](./koatty_validation.enable_validated.md) |  |
-|  [FunctionValidator](./koatty_validation.functionvalidator.md) | Use functions or built-in rules for validation. |
+|  [FunctionValidator](./koatty_validation.functionvalidator.md) | <p>Use functions or built-in rules for validation.</p> |
 |  [PARAM\_CHECK\_KEY](./koatty_validation.param_check_key.md) |  |
 |  [PARAM\_RULE\_KEY](./koatty_validation.param_rule_key.md) |  |
 |  [PARAM\_TYPE\_KEY](./koatty_validation.param_type_key.md) |  |
@@ -69,5 +69,5 @@
 |  --- | --- |
 |  [HashAlgorithm](./koatty_validation.hashalgorithm.md) |  |
 |  [ValidOtpions](./koatty_validation.validotpions.md) |  |
-|  [ValidRules](./koatty_validation.validrules.md) | type checked rules  {<!-- -->number<!-- -->} |
+|  [ValidRules](./koatty_validation.validrules.md) | <p>type checked rules</p><p>  {<!-- -->number<!-- -->}</p> |
 

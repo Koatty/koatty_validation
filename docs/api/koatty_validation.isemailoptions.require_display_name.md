@@ -4,7 +4,7 @@
 
 ## IsEmailOptions.require\_display\_name property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 require_display_name?: boolean;

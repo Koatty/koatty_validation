@@ -4,7 +4,7 @@
 
 ## IsEmailOptions.allow\_utf8\_local\_part property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 allow_utf8_local_part?: boolean;

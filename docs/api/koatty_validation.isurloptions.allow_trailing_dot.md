@@ -4,7 +4,7 @@
 
 ## IsURLOptions.allow\_trailing\_dot property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 allow_trailing_dot?: boolean;

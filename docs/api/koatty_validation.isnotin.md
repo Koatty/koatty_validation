@@ -7,7 +7,7 @@
 Checks if given value not in a array of allowed values.
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export declare function IsNotIn(possibleValues: any[], validationOptions?: ValidationOptions): PropertyDecorator;
@@ -18,9 +18,9 @@ export declare function IsNotIn(possibleValues: any[], validationOptions?: Valid
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  possibleValues | any\[\] |  |
-|  validationOptions | ValidationOptions | <i>(Optional)</i> |
+|  validationOptions | ValidationOptions | _(Optional)_ |
 
-<b>Returns:</b>
+**Returns:**
 
 PropertyDecorator
 

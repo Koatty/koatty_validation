@@ -4,7 +4,7 @@
 
 ## IsURLOptions interface
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export interface IsURLOptions 
@@ -12,17 +12,17 @@ export interface IsURLOptions
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [allow\_protocol\_relative\_urls?](./koatty_validation.isurloptions.allow_protocol_relative_urls.md) | boolean | <i>(Optional)</i> |
-|  [allow\_trailing\_dot?](./koatty_validation.isurloptions.allow_trailing_dot.md) | boolean | <i>(Optional)</i> |
-|  [allow\_underscores?](./koatty_validation.isurloptions.allow_underscores.md) | boolean | <i>(Optional)</i> |
-|  [disallow\_auth?](./koatty_validation.isurloptions.disallow_auth.md) | boolean | <i>(Optional)</i> |
-|  [host\_blacklist?](./koatty_validation.isurloptions.host_blacklist.md) | (string \| RegExp)\[\] | <i>(Optional)</i> |
-|  [host\_whitelist?](./koatty_validation.isurloptions.host_whitelist.md) | (string \| RegExp)\[\] | <i>(Optional)</i> |
-|  [protocols?](./koatty_validation.isurloptions.protocols.md) | string\[\] | <i>(Optional)</i> |
-|  [require\_host?](./koatty_validation.isurloptions.require_host.md) | boolean | <i>(Optional)</i> |
-|  [require\_protocol?](./koatty_validation.isurloptions.require_protocol.md) | boolean | <i>(Optional)</i> |
-|  [require\_tld?](./koatty_validation.isurloptions.require_tld.md) | boolean | <i>(Optional)</i> |
-|  [require\_valid\_protocol?](./koatty_validation.isurloptions.require_valid_protocol.md) | boolean | <i>(Optional)</i> |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [allow\_protocol\_relative\_urls?](./koatty_validation.isurloptions.allow_protocol_relative_urls.md) |  | boolean | _(Optional)_ |
+|  [allow\_trailing\_dot?](./koatty_validation.isurloptions.allow_trailing_dot.md) |  | boolean | _(Optional)_ |
+|  [allow\_underscores?](./koatty_validation.isurloptions.allow_underscores.md) |  | boolean | _(Optional)_ |
+|  [disallow\_auth?](./koatty_validation.isurloptions.disallow_auth.md) |  | boolean | _(Optional)_ |
+|  [host\_blacklist?](./koatty_validation.isurloptions.host_blacklist.md) |  | (string \| RegExp)\[\] | _(Optional)_ |
+|  [host\_whitelist?](./koatty_validation.isurloptions.host_whitelist.md) |  | (string \| RegExp)\[\] | _(Optional)_ |
+|  [protocols?](./koatty_validation.isurloptions.protocols.md) |  | string\[\] | _(Optional)_ |
+|  [require\_host?](./koatty_validation.isurloptions.require_host.md) |  | boolean | _(Optional)_ |
+|  [require\_protocol?](./koatty_validation.isurloptions.require_protocol.md) |  | boolean | _(Optional)_ |
+|  [require\_tld?](./koatty_validation.isurloptions.require_tld.md) |  | boolean | _(Optional)_ |
+|  [require\_valid\_protocol?](./koatty_validation.isurloptions.require_valid_protocol.md) |  | boolean | _(Optional)_ |
 

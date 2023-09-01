@@ -7,7 +7,7 @@
 Checks if the string is an IP (version 4 or 6). If given value is not a string, then it returns false.
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export declare function IsIP(version?: IsIpVersion, validationOptions?: ValidationOptions): PropertyDecorator;
@@ -17,10 +17,10 @@ export declare function IsIP(version?: IsIpVersion, validationOptions?: Validati
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  version | IsIpVersion | <i>(Optional)</i> |
-|  validationOptions | ValidationOptions | <i>(Optional)</i> |
+|  version | IsIpVersion | _(Optional)_ |
+|  validationOptions | ValidationOptions | _(Optional)_ |
 
-<b>Returns:</b>
+**Returns:**
 
 PropertyDecorator
 

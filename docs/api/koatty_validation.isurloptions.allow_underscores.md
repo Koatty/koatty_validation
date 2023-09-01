@@ -4,7 +4,7 @@
 
 ## IsURLOptions.allow\_underscores property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 allow_underscores?: boolean;

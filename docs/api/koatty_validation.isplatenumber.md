@@ -7,7 +7,7 @@
 Checks if value is a plate number(chinese).
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export declare function IsPlateNumber(validationOptions?: ValidationOptions): PropertyDecorator;
@@ -17,9 +17,9 @@ export declare function IsPlateNumber(validationOptions?: ValidationOptions): Pr
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  validationOptions | ValidationOptions | <i>(Optional)</i> |
+|  validationOptions | ValidationOptions | _(Optional)_ |
 
-<b>Returns:</b>
+**Returns:**
 
 PropertyDecorator
 

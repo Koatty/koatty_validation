@@ -4,7 +4,7 @@
 
 ## IsURLOptions.require\_host property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 require_host?: boolean;

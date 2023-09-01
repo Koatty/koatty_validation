@@ -4,7 +4,7 @@
 
 ## IsURLOptions.disallow\_auth property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 disallow_auth?: boolean;

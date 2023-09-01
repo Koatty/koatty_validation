@@ -7,7 +7,7 @@
 Checks if the first number is greater than or equal to the min value.
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export declare function Gt(min: number, validationOptions?: ValidationOptions): PropertyDecorator;
@@ -18,9 +18,9 @@ export declare function Gt(min: number, validationOptions?: ValidationOptions): 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  min | number |  |
-|  validationOptions | ValidationOptions | <i>(Optional)</i> |
+|  validationOptions | ValidationOptions | _(Optional)_ |
 
-<b>Returns:</b>
+**Returns:**
 
 PropertyDecorator
 

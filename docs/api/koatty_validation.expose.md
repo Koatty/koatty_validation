@@ -7,12 +7,12 @@
 Marks property as included in the process of transformation.
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export declare function Expose(): PropertyDecorator;
 ```
-<b>Returns:</b>
+**Returns:**
 
 PropertyDecorator
 

@@ -7,7 +7,7 @@
 Checks if a given value is a real date.
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export declare function IsDate(validationOptions?: ValidationOptions): PropertyDecorator;
@@ -17,9 +17,9 @@ export declare function IsDate(validationOptions?: ValidationOptions): PropertyD
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  validationOptions | ValidationOptions | <i>(Optional)</i> |
+|  validationOptions | ValidationOptions | _(Optional)_ |
 
-<b>Returns:</b>
+**Returns:**
 
 PropertyDecorator
 
