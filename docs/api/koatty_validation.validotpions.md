@@ -7,7 +7,7 @@
 **Signature:**
 
 ```typescript
-export declare type ValidOtpions = {
+export type ValidOtpions = {
     message: string;
     value: any;
 };
