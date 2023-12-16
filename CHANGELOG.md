@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.10](https://github.com/koatty/koatty_validation/compare/v1.2.9...v1.2.10) (2023-12-16)
+
+
+### Bug Fixes
+
+* assign dto property ([2357642](https://github.com/koatty/koatty_validation/commit/2357642f6ac1479c839454d40ec4bd89f3fbd7b2))
+
 ### [1.2.9](https://github.com/koatty/koatty_validation/compare/v1.2.8...v1.2.9) (2023-09-01)
 
 ### [1.2.8](https://github.com/koatty/koatty_validation/compare/v1.2.7...v1.2.8) (2023-02-17)
