@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.3.0](https://github.com/koatty/koatty_validation/compare/v1.2.10...v1.3.0) (2024-01-03)
+
+
+### Features
+
+* 增加@CheckFunc ([d5bdc2d](https://github.com/koatty/koatty_validation/commit/d5bdc2d51cdbf6d558e376bfda51e126158d4e75))
+
+
+### Bug Fixes
+
+* export ValidFuncs ([7d42023](https://github.com/koatty/koatty_validation/commit/7d42023138e9577c9646423c4c38faffba46fb10))
+
 ### [1.2.10](https://github.com/koatty/koatty_validation/compare/v1.2.9...v1.2.10) (2023-12-16)
 
 
