@@ -89,6 +89,10 @@ const str = "";
 // throw Error
 FunctionValidator.IsNotEmpty(str, "cannot be empty");
 FunctionValidator.Contains(str, {message: "must contain s", value: "s"});
+// 
+if (!ValidFuncs.IsNotEmpty(str)) {
+    console.log("empty");
+}
 ```
 
 ## ClassValidator

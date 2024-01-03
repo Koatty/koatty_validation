@@ -170,9 +170,9 @@ function assignDtoParams(clazz: any, data: any, convert = false) {
   const cls: any = Reflect.construct(clazz, []);
   if (convert) {
     const mataData = getDtoParamsMata(clazz, cls);
-    for (const [key, type] of mataData) {
+    for (const [key, type] of Object.entries(mataData)) {
       if (key && data[key] !== undefined) {
-        cls[key] = convertParamsType(data[key], type);
+        cls[key] = convertParamsType(data[key], <string>type);
       }
     }
   } else {
