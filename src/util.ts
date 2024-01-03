@@ -7,7 +7,7 @@
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
 import * as helper from "koatty_lib";
-import { getOriginMetadata } from "koatty_container";
+import { IOCContainer, getOriginMetadata } from "koatty_container";
 import { PARAM_TYPE_KEY } from "./rule";
 
 /**
@@ -76,7 +76,8 @@ function ordinaryGetPrototypeOf(obj: any): any {
  * @param {*} target
  * @returns
  */
-function listPropertyData(decoratorNameKey: string | symbol, target: any, propertyKey: string | symbol) {
+function listPropertyData(decoratorNameKey: string | symbol,
+  target: any, propertyKey: string | symbol) {
   const originMap = getOriginMetadata(decoratorNameKey, target, propertyKey);
   const data: any = {};
   for (const [key, value] of originMap) {
@@ -90,7 +91,8 @@ function listPropertyData(decoratorNameKey: string | symbol, target: any, proper
  * @param metadataKey metadata key
  * @param target the target of metadataKey
  */
-export function recursiveGetMetadata(metadataKey: any, target: any, propertyKey?: string | symbol): any[] {
+export function recursiveGetMetadata(metadataKey: any, target: any,
+  propertyKey?: string | symbol): any[] {
   // get metadata value of a metadata key on the prototype
   // let metadata = Reflect.getOwnMetadata(metadataKey, target, propertyKey);
   const metadata = listPropertyData(metadataKey, target, propertyKey) || {};
@@ -165,9 +167,14 @@ export function plainToClass(clazz: any, data: any, convert = false) {
  * @returns 
  */
 function assignDtoParams(clazz: any, data: any, convert = false) {
-  const cls: any = Reflect.construct(clazz, [])
+  const cls: any = Reflect.construct(clazz, []);
   if (convert) {
-    return convertAssignDtoParams(clazz, cls, data);
+    const mataData = getDtoParamsMata(clazz, cls);
+    for (const [key, type] of mataData) {
+      if (key && data[key] !== undefined) {
+        cls[key] = convertParamsType(data[key], type);
+      }
+    }
   } else {
     for (const key in cls) {
       if (Object.prototype.hasOwnProperty.call(data, key) &&
@@ -175,35 +182,29 @@ function assignDtoParams(clazz: any, data: any, convert = false) {
         cls[key] = data[key];
       }
     }
-    return cls;
   }
+  return cls;
 }
 
 /**
- * convert type and assign dto params 
+ * get class prototype type def.
  * @param clazz 
  * @param cls 
- * @param data 
  * @returns 
  */
-function convertAssignDtoParams(clazz: any, cls: any, data: any) {
-  if (Object.prototype.hasOwnProperty.call(cls, "_typeDef")) {
-    for (const key in cls) {
-      if (Object.prototype.hasOwnProperty.call(cls._typeDef, key) &&
-        data[key] !== undefined) {
-        cls[key] = convertParamsType(data[key], cls._typeDef[key]);
-      }
-    }
+function getDtoParamsMata(clazz: any, cls: any) {
+  if (!Object.prototype.hasOwnProperty.call(cls, "_typeDef") &&
+    ("_typeDef" in cls)) {
+    return cls._typeDef;
   }
-  else {
-    const originMap = getOriginMetadata(PARAM_TYPE_KEY, clazz);
-    for (const [key, type] of originMap) {
-      if (key && data[key] !== undefined) {
-        cls[key] = convertParamsType(data[key], type);
-      }
-    }
-  }
-  return cls;
+  const typeDef = getOriginMetadata(PARAM_TYPE_KEY, clazz);
+  Reflect.defineProperty(clazz.prototype, "_typeDef", {
+    enumerable: false,
+    configurable: false,
+    writable: false,
+    value: typeDef
+  });
+  return typeDef;
 }
 
 /**
