@@ -3,7 +3,7 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2021-11-25 10:47:04
- * @LastEditTime: 2022-08-19 14:21:20
+ * @LastEditTime: 2024-01-03 14:32:49
  */
 import * as helper from "koatty_lib";
 import { CountryCode } from 'libphonenumber-js';
@@ -104,7 +104,7 @@ export type ValidRules = "IsNotEmpty" | "IsDate" | "IsEmail" | "IsIP" |
 /**
  * Validator Functions
  */
-const ValidFuncs = {
+export const ValidFuncs = {
   /**
    * Checks value is not empty, undefined, null, '', NaN, [], {} and any empty string(including spaces, 
    * tabs, formfeeds, etc.), returns false
