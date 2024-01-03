@@ -3,7 +3,7 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2021-11-25 10:46:57
- * @LastEditTime: 2023-12-16 14:23:12
+ * @LastEditTime: 2024-01-03 11:30:55
  */
 import * as helper from "koatty_lib";
 import { CountryCode } from 'libphonenumber-js';
@@ -128,16 +128,12 @@ export function Validated(): MethodDecorator {
  */
 export function Expose(): PropertyDecorator {
   return function (object: Object, propertyName: string) {
-    const types = Reflect.getMetadata("design:type", object, propertyName);
-    if (types) {
-      const originMap = getOriginMetadata(PARAM_TYPE_KEY, object);
-      originMap.set(propertyName, types.name);
-    }
+    setExpose(object, propertyName);
   };
 }
 
 /**
- * Identifies that the field needs to be defined
+ * Alias of Expose
  *
  * @export
  * @returns {PropertyDecorator}
@@ -785,6 +781,33 @@ export function IsHash(algorithm: HashAlgorithm, validationOptions?: ValidationO
         },
         defaultMessage(args: ValidationArguments) {
           return `invalid parameter, ($property) must be is an ${algorithm} Hash string.`;
+        }
+      }
+    });
+  };
+}
+
+/**
+ * Use a custom function for validation
+ * @param func 
+ * @param validationOptions 
+ * @returns 
+ */
+export function CheckFunc(func: (value: unknown) => boolean, validationOptions?: ValidationOptions): PropertyDecorator {
+  return function (object: Object, propertyName: string) {
+    setExpose(object, propertyName);
+
+    registerDecorator({
+      name: "vCheckFunc",
+      target: object.constructor,
+      propertyName,
+      options: validationOptions,
+      validator: {
+        validate(value: any, args: ValidationArguments) {
+          return func(value);
+        },
+        defaultMessage(args: ValidationArguments) {
+          return `invalid parameter ($property).`;
         }
       }
     });
