@@ -63,6 +63,7 @@
 |  [PARAM\_CHECK\_KEY](./koatty_validation.param_check_key.md) |  |
 |  [PARAM\_RULE\_KEY](./koatty_validation.param_rule_key.md) |  |
 |  [PARAM\_TYPE\_KEY](./koatty_validation.param_type_key.md) |  |
+|  [ValidFuncs](./koatty_validation.validfuncs.md) | Validator Functions |
 
 ## Type Aliases
 

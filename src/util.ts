@@ -169,8 +169,8 @@ export function plainToClass(clazz: any, data: any, convert = false) {
 function assignDtoParams(clazz: any, data: any, convert = false) {
   const cls: any = Reflect.construct(clazz, []);
   if (convert) {
-    const mataData = getDtoParamsMata(clazz, cls);
-    for (const [key, type] of Object.entries(mataData)) {
+    const metaData = getDtoParamsMeta(clazz, cls);
+    for (const [key, type] of Object.entries(metaData)) {
       if (key && data[key] !== undefined) {
         cls[key] = convertParamsType(data[key], <string>type);
       }
@@ -192,14 +192,14 @@ function assignDtoParams(clazz: any, data: any, convert = false) {
  * @param cls 
  * @returns 
  */
-function getDtoParamsMata(clazz: any, cls: any) {
+function getDtoParamsMeta(clazz: any, cls: any) {
   if (!Object.prototype.hasOwnProperty.call(cls, "_typeDef") &&
     ("_typeDef" in cls)) {
     return cls._typeDef;
   }
   const typeDef = getOriginMetadata(PARAM_TYPE_KEY, clazz);
   Reflect.defineProperty(clazz.prototype, "_typeDef", {
-    enumerable: false,
+    enumerable: true,
     configurable: false,
     writable: false,
     value: typeDef
