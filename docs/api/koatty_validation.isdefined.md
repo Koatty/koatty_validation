@@ -4,7 +4,7 @@
 
 ## IsDefined() function
 
-Identifies that the field needs to be defined
+Alias of Expose
 
 
 **Signature:**

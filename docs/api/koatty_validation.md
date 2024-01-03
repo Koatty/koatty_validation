@@ -14,6 +14,7 @@
 
 |  Function | Description |
 |  --- | --- |
+|  [CheckFunc(func, validationOptions)](./koatty_validation.checkfunc.md) | Use a custom function for validation |
 |  [checkParamsType(value, type)](./koatty_validation.checkparamstype.md) | Check the base types. |
 |  [Contains(seed, validationOptions)](./koatty_validation.contains.md) | <p>Checks if the string contains the seed.</p> |
 |  [convertDtoParamsType(clazz, cls)](./koatty_validation.convertdtoparamstype.md) | convertDtoParamsType |
@@ -24,7 +25,7 @@
 |  [Gte(min, validationOptions)](./koatty_validation.gte.md) | <p>Checks if the first number is greater than or equal to the min value.</p> |
 |  [IsCnName(validationOptions)](./koatty_validation.iscnname.md) | <p>Checks if value is a chinese name.</p> |
 |  [IsDate(validationOptions)](./koatty_validation.isdate.md) | <p>Checks if a given value is a real date.</p> |
-|  [IsDefined()](./koatty_validation.isdefined.md) | <p>Identifies that the field needs to be defined</p> |
+|  [IsDefined()](./koatty_validation.isdefined.md) | <p>Alias of Expose</p> |
 |  [IsEmail(options, validationOptions)](./koatty_validation.isemail.md) | <p>Checks if the string is an email. If given value is not a string, then it returns false.</p> |
 |  [IsHash(algorithm, validationOptions)](./koatty_validation.ishash.md) | <p>check if the string is a hash of type algorithm. Algorithm is one of \['md4', 'md5', 'sha1', 'sha256', 'sha384', 'sha512', 'ripemd128', 'ripemd160', 'tiger128', 'tiger160', 'tiger192', 'crc32', 'crc32b'\]</p> |
 |  [IsIdNumber(validationOptions)](./koatty_validation.isidnumber.md) | <p>Checks if value is a idCard number(chinese).</p> |
