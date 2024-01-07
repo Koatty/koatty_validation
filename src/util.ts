@@ -193,18 +193,29 @@ function assignDtoParams(clazz: any, data: any, convert = false) {
  * @returns 
  */
 function getDtoParamsMeta(clazz: any, cls: any) {
+  // Non-own properties are inherited from the prototype chain,  
+  // ensure that properties are not polluted
   if (!Object.prototype.hasOwnProperty.call(cls, "_typeDef") &&
     ("_typeDef" in cls)) {
     return cls._typeDef;
   }
-  const typeDef = getOriginMetadata(PARAM_TYPE_KEY, clazz);
+  const typeDef: Map<string, string> = getOriginMetadata(PARAM_TYPE_KEY, clazz);
   Reflect.defineProperty(clazz.prototype, "_typeDef", {
     enumerable: true,
     configurable: false,
     writable: false,
-    value: typeDef
+    value: typeDef,
   });
   return typeDef;
+}
+/**
+ * @description:  map To Object
+ * @param {Map} map
+ * @param {*} any
+ * @return {*}
+ */
+export function mapToObject(map: Map<string, any>) {
+  return Object.fromEntries(map.entries())
 }
 
 /**
