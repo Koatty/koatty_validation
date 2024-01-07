@@ -170,7 +170,7 @@ function assignDtoParams(clazz: any, data: any, convert = false) {
   const cls: any = Reflect.construct(clazz, []);
   if (convert) {
     const metaData = getDtoParamsMeta(clazz, cls);
-    for (const [key, type] of Object.entries(metaData)) {
+    for (const [key, type] of metaData) {
       if (key && data[key] !== undefined) {
         cls[key] = convertParamsType(data[key], <string>type);
       }
@@ -192,7 +192,7 @@ function assignDtoParams(clazz: any, data: any, convert = false) {
  * @param cls 
  * @returns 
  */
-function getDtoParamsMeta(clazz: any, cls: any) {
+function getDtoParamsMeta(clazz: any, cls: any): Map<string, string> {
   // Non-own properties are inherited from the prototype chain,  
   // ensure that properties are not polluted
   if (!Object.prototype.hasOwnProperty.call(cls, "_typeDef") &&
