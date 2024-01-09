@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.1](https://github.com/koatty/koatty_validation/compare/v1.3.0...v1.3.1) (2024-01-07)
+
+
+### Bug Fixes
+
+* comment ([d898cf6](https://github.com/koatty/koatty_validation/commit/d898cf68bc8693f78155b7208b419dc4b11dffb4))
+* dto赋值类型 ([5a1d68d](https://github.com/koatty/koatty_validation/commit/5a1d68dea0b67e988427c54abae9bfe76a6eaf48))
+
 ## [1.3.0](https://github.com/koatty/koatty_validation/compare/v1.2.10...v1.3.0) (2024-01-03)
 
 
