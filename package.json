@@ -76,7 +76,7 @@
     "typescript": "^5.x.x"
   },
   "dependencies": {
-    "class-validator": "^0.14.0",
+    "class-validator": "^0.14.1",
     "koatty_container": "^1.x.x",
     "koatty_lib": "^1.x.x",
     "koatty_logger": "^2.x.x"
