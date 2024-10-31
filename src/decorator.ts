@@ -3,17 +3,17 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2021-11-25 10:46:57
- * @LastEditTime: 2024-01-03 11:30:55
+ * @LastEditTime: 2024-10-31 16:49:26
  */
-import * as helper from "koatty_lib";
-import { CountryCode } from 'libphonenumber-js';
-import { getOriginMetadata, IOCContainer } from 'koatty_container';
-import { PARAM_CHECK_KEY, PARAM_RULE_KEY, PARAM_TYPE_KEY, ValidRules } from "./rule";
-import { cnName, idNumber, mobile, plateNumber, setExpose, zipCode } from "./util";
 import {
   contains, equals, isDate, isEmail, isHash, isIn, isIP, IsIpVersion, isNotIn,
   isPhoneNumber, isURL, length, notEquals, registerDecorator, ValidationArguments, ValidationOptions
 } from "class-validator";
+import { IOCContainer } from 'koatty_container';
+import * as helper from "koatty_lib";
+import { CountryCode } from 'libphonenumber-js';
+import { PARAM_CHECK_KEY, PARAM_RULE_KEY, ValidRules } from "./rule";
+import { cnName, idNumber, mobile, plateNumber, setExpose, zipCode } from "./util";
 
 // options for isEmail
 export interface IsEmailOptions {
@@ -84,7 +84,7 @@ export function Valid(rule: ValidRules | ValidRules[] | Function, options?: stri
  * @returns {MethodDecorator}
  */
 export function Validated(): MethodDecorator {
-  return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
+  return (target: any, propertyKey: string, _descriptor: PropertyDescriptor) => {
     //
     IOCContainer.savePropertyData(PARAM_CHECK_KEY, {
       dtoCheck: 1
@@ -127,7 +127,7 @@ export function Validated(): MethodDecorator {
  * @returns {PropertyDecorator}
  */
 export function Expose(): PropertyDecorator {
-  return function (object: Object, propertyName: string) {
+  return function (object: object, propertyName: string) {
     setExpose(object, propertyName);
   };
 }
@@ -139,7 +139,7 @@ export function Expose(): PropertyDecorator {
  * @returns {PropertyDecorator}
  */
 export function IsDefined(): PropertyDecorator {
-  return function (object: Object, propertyName: string) {
+  return function (object: object, propertyName: string) {
     setExpose(object, propertyName);
   };
 }
@@ -153,7 +153,7 @@ export function IsDefined(): PropertyDecorator {
  * @returns {PropertyDecorator}
  */
 export function IsCnName(validationOptions?: ValidationOptions): PropertyDecorator {
-  return function (object: Object, propertyName: string) {
+  return function (object: object, propertyName: string) {
     setExpose(object, propertyName);
 
     registerDecorator({
@@ -162,10 +162,10 @@ export function IsCnName(validationOptions?: ValidationOptions): PropertyDecorat
       propertyName,
       options: validationOptions,
       validator: {
-        validate(value: any, args: ValidationArguments) {
+        validate(value: any, _args: ValidationArguments) {
           return cnName(value);
         },
-        defaultMessage(args: ValidationArguments) {
+        defaultMessage(_args: ValidationArguments) {
           return "invalid parameter ($property).";
         }
       }
@@ -182,7 +182,7 @@ export function IsCnName(validationOptions?: ValidationOptions): PropertyDecorat
  * @returns {PropertyDecorator}
  */
 export function IsIdNumber(validationOptions?: ValidationOptions): PropertyDecorator {
-  return function (object: Object, propertyName: string) {
+  return function (object: object, propertyName: string) {
     setExpose(object, propertyName);
 
     registerDecorator({
@@ -191,10 +191,10 @@ export function IsIdNumber(validationOptions?: ValidationOptions): PropertyDecor
       propertyName,
       options: validationOptions,
       validator: {
-        validate(value: any, args: ValidationArguments) {
+        validate(value: any, _args: ValidationArguments) {
           return idNumber(value);
         },
-        defaultMessage(args: ValidationArguments) {
+        defaultMessage(_args: ValidationArguments) {
           return "invalid parameter ($property).";
         }
       }
@@ -211,7 +211,7 @@ export function IsIdNumber(validationOptions?: ValidationOptions): PropertyDecor
  * @returns {PropertyDecorator}
  */
 export function IsZipCode(validationOptions?: ValidationOptions): PropertyDecorator {
-  return function (object: Object, propertyName: string) {
+  return function (object: object, propertyName: string) {
     setExpose(object, propertyName);
 
     registerDecorator({
@@ -220,10 +220,10 @@ export function IsZipCode(validationOptions?: ValidationOptions): PropertyDecora
       propertyName,
       options: validationOptions,
       validator: {
-        validate(value: any, args: ValidationArguments) {
+        validate(value: any, _args: ValidationArguments) {
           return zipCode(value);
         },
-        defaultMessage(args: ValidationArguments) {
+        defaultMessage(_args: ValidationArguments) {
           return "invalid parameter ($property).";
         }
       }
@@ -240,7 +240,7 @@ export function IsZipCode(validationOptions?: ValidationOptions): PropertyDecora
  * @returns {PropertyDecorator}
  */
 export function IsMobile(validationOptions?: ValidationOptions): PropertyDecorator {
-  return function (object: Object, propertyName: string) {
+  return function (object: object, propertyName: string) {
     setExpose(object, propertyName);
 
     registerDecorator({
@@ -249,10 +249,10 @@ export function IsMobile(validationOptions?: ValidationOptions): PropertyDecorat
       propertyName,
       options: validationOptions,
       validator: {
-        validate(value: any, args: ValidationArguments) {
+        validate(value: any, _args: ValidationArguments) {
           return mobile(value);
         },
-        defaultMessage(args: ValidationArguments) {
+        defaultMessage(_args: ValidationArguments) {
           return "invalid parameter ($property).";
         }
       }
@@ -269,7 +269,7 @@ export function IsMobile(validationOptions?: ValidationOptions): PropertyDecorat
  * @returns {PropertyDecorator}
  */
 export function IsPlateNumber(validationOptions?: ValidationOptions): PropertyDecorator {
-  return function (object: Object, propertyName: string) {
+  return function (object: object, propertyName: string) {
     setExpose(object, propertyName);
 
     registerDecorator({
@@ -278,10 +278,10 @@ export function IsPlateNumber(validationOptions?: ValidationOptions): PropertyDe
       propertyName,
       options: validationOptions,
       validator: {
-        validate(value: any, args: ValidationArguments) {
+        validate(value: any, _args: ValidationArguments) {
           return plateNumber(value);
         },
-        defaultMessage(args: ValidationArguments) {
+        defaultMessage(_args: ValidationArguments) {
           return "invalid parameter ($property).";
         }
       }
@@ -298,7 +298,7 @@ export function IsPlateNumber(validationOptions?: ValidationOptions): PropertyDe
  * @returns {PropertyDecorator}
  */
 export function IsNotEmpty(validationOptions?: ValidationOptions): PropertyDecorator {
-  return function (object: Object, propertyName: string) {
+  return function (object: object, propertyName: string) {
     setExpose(object, propertyName);
 
     registerDecorator({
@@ -307,10 +307,10 @@ export function IsNotEmpty(validationOptions?: ValidationOptions): PropertyDecor
       propertyName,
       options: validationOptions,
       validator: {
-        validate(value: any, args: ValidationArguments) {
+        validate(value: any, _args: ValidationArguments) {
           return !helper.isEmpty(value);
         },
-        defaultMessage(args: ValidationArguments) {
+        defaultMessage(_args: ValidationArguments) {
           return "invalid parameter ($property).";
         }
       }
@@ -327,7 +327,7 @@ export function IsNotEmpty(validationOptions?: ValidationOptions): PropertyDecor
  * @returns {PropertyDecorator}
  */
 export function Equals(comparison: any, validationOptions?: ValidationOptions): PropertyDecorator {
-  return function (object: Object, propertyName: string) {
+  return function (object: object, propertyName: string) {
     setExpose(object, propertyName);
 
     registerDecorator({
@@ -336,10 +336,10 @@ export function Equals(comparison: any, validationOptions?: ValidationOptions): 
       propertyName,
       options: validationOptions,
       validator: {
-        validate(value: any, args: ValidationArguments) {
+        validate(value: any, _args: ValidationArguments) {
           return equals(value, comparison);
         },
-        defaultMessage(args: ValidationArguments) {
+        defaultMessage(_args: ValidationArguments) {
           return `invalid parameter, ($property) must be equals ${comparison}.`;
         }
       }
@@ -356,7 +356,7 @@ export function Equals(comparison: any, validationOptions?: ValidationOptions): 
  * @returns {PropertyDecorator}
  */
 export function NotEquals(comparison: any, validationOptions?: ValidationOptions): PropertyDecorator {
-  return function (object: Object, propertyName: string) {
+  return function (object: object, propertyName: string) {
     setExpose(object, propertyName);
 
     registerDecorator({
@@ -365,10 +365,10 @@ export function NotEquals(comparison: any, validationOptions?: ValidationOptions
       propertyName,
       options: validationOptions,
       validator: {
-        validate(value: any, args: ValidationArguments) {
+        validate(value: any, _args: ValidationArguments) {
           return notEquals(value, comparison);
         },
-        defaultMessage(args: ValidationArguments) {
+        defaultMessage(_args: ValidationArguments) {
           return `invalid parameter, ($property) must be not equals ${comparison}.`;
         }
       }
@@ -385,7 +385,7 @@ export function NotEquals(comparison: any, validationOptions?: ValidationOptions
  * @returns {PropertyDecorator}
  */
 export function Contains(seed: string, validationOptions?: ValidationOptions): PropertyDecorator {
-  return function (object: Object, propertyName: string) {
+  return function (object: object, propertyName: string) {
     setExpose(object, propertyName);
 
     registerDecorator({
@@ -394,11 +394,11 @@ export function Contains(seed: string, validationOptions?: ValidationOptions): P
       propertyName,
       options: validationOptions,
       validator: {
-        validate(value: any, args: ValidationArguments) {
+        validate(value: any, _args: ValidationArguments) {
           return contains(value, seed);
           // return typeof value === "string" && (value.indexOf(seed) > -1);
         },
-        defaultMessage(args: ValidationArguments) {
+        defaultMessage(_args: ValidationArguments) {
           return `invalid parameter, ($property) must be contains ${seed}.`;
         }
       }
@@ -415,7 +415,7 @@ export function Contains(seed: string, validationOptions?: ValidationOptions): P
  * @returns {PropertyDecorator}
  */
 export function IsIn(possibleValues: any[], validationOptions?: ValidationOptions): PropertyDecorator {
-  return function (object: Object, propertyName: string) {
+  return function (object: object, propertyName: string) {
     setExpose(object, propertyName);
 
     registerDecorator({
@@ -424,10 +424,10 @@ export function IsIn(possibleValues: any[], validationOptions?: ValidationOption
       propertyName,
       options: validationOptions,
       validator: {
-        validate(value: any, args: ValidationArguments) {
+        validate(value: any, _args: ValidationArguments) {
           return isIn(value, possibleValues);
         },
-        defaultMessage(args: ValidationArguments) {
+        defaultMessage(_args: ValidationArguments) {
           return `invalid parameter ($property).`;
         }
       }
@@ -444,7 +444,7 @@ export function IsIn(possibleValues: any[], validationOptions?: ValidationOption
  * @returns {PropertyDecorator}
  */
 export function IsNotIn(possibleValues: any[], validationOptions?: ValidationOptions): PropertyDecorator {
-  return function (object: Object, propertyName: string) {
+  return function (object: object, propertyName: string) {
     setExpose(object, propertyName);
 
     registerDecorator({
@@ -453,10 +453,10 @@ export function IsNotIn(possibleValues: any[], validationOptions?: ValidationOpt
       propertyName,
       options: validationOptions,
       validator: {
-        validate(value: any, args: ValidationArguments) {
+        validate(value: any, _args: ValidationArguments) {
           return isNotIn(value, possibleValues);
         },
-        defaultMessage(args: ValidationArguments) {
+        defaultMessage(_args: ValidationArguments) {
           return `invalid parameter ($property).`;
         }
       }
@@ -472,7 +472,7 @@ export function IsNotIn(possibleValues: any[], validationOptions?: ValidationOpt
  * @returns {PropertyDecorator}
  */
 export function IsDate(validationOptions?: ValidationOptions): PropertyDecorator {
-  return function (object: Object, propertyName: string) {
+  return function (object: object, propertyName: string) {
     setExpose(object, propertyName);
 
     registerDecorator({
@@ -481,10 +481,10 @@ export function IsDate(validationOptions?: ValidationOptions): PropertyDecorator
       propertyName,
       options: validationOptions,
       validator: {
-        validate(value: any, args: ValidationArguments) {
+        validate(value: any, _args: ValidationArguments) {
           return isDate(value);
         },
-        defaultMessage(args: ValidationArguments) {
+        defaultMessage(_args: ValidationArguments) {
           return `invalid parameter ($property).`;
         }
       }
@@ -501,7 +501,7 @@ export function IsDate(validationOptions?: ValidationOptions): PropertyDecorator
  * @returns {PropertyDecorator}
  */
 export function Gt(min: number, validationOptions?: ValidationOptions): PropertyDecorator {
-  return function (object: Object, propertyName: string) {
+  return function (object: object, propertyName: string) {
     setExpose(object, propertyName);
 
     registerDecorator({
@@ -510,10 +510,10 @@ export function Gt(min: number, validationOptions?: ValidationOptions): Property
       propertyName,
       options: validationOptions,
       validator: {
-        validate(value: any, args: ValidationArguments) {
+        validate(value: any, _args: ValidationArguments) {
           return helper.toNumber(value) > min;
         },
-        defaultMessage(args: ValidationArguments) {
+        defaultMessage(_args: ValidationArguments) {
           return `invalid parameter ($property).`;
         }
       }
@@ -530,7 +530,7 @@ export function Gt(min: number, validationOptions?: ValidationOptions): Property
  * @returns {PropertyDecorator}
  */
 export function Lt(max: number, validationOptions?: ValidationOptions): PropertyDecorator {
-  return function (object: Object, propertyName: string) {
+  return function (object: object, propertyName: string) {
     setExpose(object, propertyName);
 
     registerDecorator({
@@ -539,10 +539,10 @@ export function Lt(max: number, validationOptions?: ValidationOptions): Property
       propertyName,
       options: validationOptions,
       validator: {
-        validate(value: any, args: ValidationArguments) {
+        validate(value: any, _args: ValidationArguments) {
           return helper.toNumber(value) < max;
         },
-        defaultMessage(args: ValidationArguments) {
+        defaultMessage(_args: ValidationArguments) {
           return `invalid parameter ($property).`;
         }
       }
@@ -558,7 +558,7 @@ export function Lt(max: number, validationOptions?: ValidationOptions): Property
  * @returns {PropertyDecorator}
  */
 export function Gte(min: number, validationOptions?: ValidationOptions): PropertyDecorator {
-  return function (object: Object, propertyName: string) {
+  return function (object: object, propertyName: string) {
     setExpose(object, propertyName);
 
     registerDecorator({
@@ -567,10 +567,10 @@ export function Gte(min: number, validationOptions?: ValidationOptions): Propert
       propertyName,
       options: validationOptions,
       validator: {
-        validate(value: any, args: ValidationArguments) {
+        validate(value: any, _args: ValidationArguments) {
           return helper.toNumber(value) >= min;
         },
-        defaultMessage(args: ValidationArguments) {
+        defaultMessage(_args: ValidationArguments) {
           return `invalid parameter ($property).`;
         }
       }
@@ -587,7 +587,7 @@ export function Gte(min: number, validationOptions?: ValidationOptions): Propert
  * @returns {PropertyDecorator}
  */
 export function Lte(max: number, validationOptions?: ValidationOptions): PropertyDecorator {
-  return function (object: Object, propertyName: string) {
+  return function (object: object, propertyName: string) {
     setExpose(object, propertyName);
 
     registerDecorator({
@@ -596,10 +596,10 @@ export function Lte(max: number, validationOptions?: ValidationOptions): Propert
       propertyName,
       options: validationOptions,
       validator: {
-        validate(value: any, args: ValidationArguments) {
+        validate(value: any, _args: ValidationArguments) {
           return helper.toNumber(value) <= max;
         },
-        defaultMessage(args: ValidationArguments) {
+        defaultMessage(_args: ValidationArguments) {
           return `invalid parameter ($property).`;
         }
       }
@@ -618,7 +618,7 @@ export function Lte(max: number, validationOptions?: ValidationOptions): Propert
  * @returns {PropertyDecorator}
  */
 export function Length(min: number, max?: number, validationOptions?: ValidationOptions): PropertyDecorator {
-  return function (object: Object, propertyName: string) {
+  return function (object: object, propertyName: string) {
     setExpose(object, propertyName);
 
     registerDecorator({
@@ -627,10 +627,10 @@ export function Length(min: number, max?: number, validationOptions?: Validation
       propertyName,
       options: validationOptions,
       validator: {
-        validate(value: any, args: ValidationArguments) {
+        validate(value: any, _args: ValidationArguments) {
           return length(value, min, max);
         },
-        defaultMessage(args: ValidationArguments) {
+        defaultMessage(_args: ValidationArguments) {
           return `invalid parameter ($property).`;
         }
       }
@@ -647,7 +647,7 @@ export function Length(min: number, max?: number, validationOptions?: Validation
  * @returns {PropertyDecorator}
  */
 export function IsEmail(options?: IsEmailOptions, validationOptions?: ValidationOptions): PropertyDecorator {
-  return function (object: Object, propertyName: string) {
+  return function (object: object, propertyName: string) {
     setExpose(object, propertyName);
 
     registerDecorator({
@@ -656,10 +656,10 @@ export function IsEmail(options?: IsEmailOptions, validationOptions?: Validation
       propertyName,
       options: validationOptions,
       validator: {
-        validate(value: any, args: ValidationArguments) {
+        validate(value: any, _args: ValidationArguments) {
           return isEmail(value);
         },
-        defaultMessage(args: ValidationArguments) {
+        defaultMessage(_args: ValidationArguments) {
           return `invalid parameter ($property).`;
         }
       }
@@ -676,7 +676,7 @@ export function IsEmail(options?: IsEmailOptions, validationOptions?: Validation
  * @returns {PropertyDecorator}
  */
 export function IsIP(version?: IsIpVersion, validationOptions?: ValidationOptions): PropertyDecorator {
-  return function (object: Object, propertyName: string) {
+  return function (object: object, propertyName: string) {
     setExpose(object, propertyName);
 
     registerDecorator({
@@ -685,10 +685,10 @@ export function IsIP(version?: IsIpVersion, validationOptions?: ValidationOption
       propertyName,
       options: validationOptions,
       validator: {
-        validate(value: any, args: ValidationArguments) {
+        validate(value: any, _args: ValidationArguments) {
           return isIP(value, version);
         },
-        defaultMessage(args: ValidationArguments) {
+        defaultMessage(_args: ValidationArguments) {
           return `invalid parameter ($property).`;
         }
       }
@@ -708,7 +708,7 @@ export function IsIP(version?: IsIpVersion, validationOptions?: ValidationOption
  * @returns {PropertyDecorator}
  */
 export function IsPhoneNumber(region?: CountryCode, validationOptions?: ValidationOptions): PropertyDecorator {
-  return function (object: Object, propertyName: string) {
+  return function (object: object, propertyName: string) {
     setExpose(object, propertyName);
 
     registerDecorator({
@@ -717,10 +717,10 @@ export function IsPhoneNumber(region?: CountryCode, validationOptions?: Validati
       propertyName,
       options: validationOptions,
       validator: {
-        validate(value: any, args: ValidationArguments) {
+        validate(value: any, _args: ValidationArguments) {
           return isPhoneNumber(value, region);
         },
-        defaultMessage(args: ValidationArguments) {
+        defaultMessage(_args: ValidationArguments) {
           return `invalid parameter ($property).`;
         }
       }
@@ -737,7 +737,7 @@ export function IsPhoneNumber(region?: CountryCode, validationOptions?: Validati
  * @returns {PropertyDecorator}
  */
 export function IsUrl(options?: IsURLOptions, validationOptions?: ValidationOptions): PropertyDecorator {
-  return function (object: Object, propertyName: string) {
+  return function (object: object, propertyName: string) {
     setExpose(object, propertyName);
 
     registerDecorator({
@@ -746,10 +746,10 @@ export function IsUrl(options?: IsURLOptions, validationOptions?: ValidationOpti
       propertyName,
       options: validationOptions,
       validator: {
-        validate(value: any, args: ValidationArguments) {
+        validate(value: any, _args: ValidationArguments) {
           return isURL(value, options);
         },
-        defaultMessage(args: ValidationArguments) {
+        defaultMessage(_args: ValidationArguments) {
           return `invalid parameter ($property).`;
         }
       }
@@ -767,7 +767,7 @@ export function IsUrl(options?: IsURLOptions, validationOptions?: ValidationOpti
  * @returns {PropertyDecorator}
  */
 export function IsHash(algorithm: HashAlgorithm, validationOptions?: ValidationOptions): PropertyDecorator {
-  return function (object: Object, propertyName: string) {
+  return function (object: object, propertyName: string) {
     setExpose(object, propertyName);
 
     registerDecorator({
@@ -776,10 +776,10 @@ export function IsHash(algorithm: HashAlgorithm, validationOptions?: ValidationO
       propertyName,
       options: validationOptions,
       validator: {
-        validate(value: any, args: ValidationArguments) {
+        validate(value: any, _args: ValidationArguments) {
           return isHash(value, algorithm);
         },
-        defaultMessage(args: ValidationArguments) {
+        defaultMessage(_args: ValidationArguments) {
           return `invalid parameter, ($property) must be is an ${algorithm} Hash string.`;
         }
       }
@@ -794,7 +794,7 @@ export function IsHash(algorithm: HashAlgorithm, validationOptions?: ValidationO
  * @returns 
  */
 export function CheckFunc(func: (value: unknown) => boolean, validationOptions?: ValidationOptions): PropertyDecorator {
-  return function (object: Object, propertyName: string) {
+  return function (object: object, propertyName: string) {
     setExpose(object, propertyName);
 
     registerDecorator({
@@ -803,10 +803,10 @@ export function CheckFunc(func: (value: unknown) => boolean, validationOptions?:
       propertyName,
       options: validationOptions,
       validator: {
-        validate(value: any, args: ValidationArguments) {
+        validate(value: any, _args: ValidationArguments) {
           return func(value);
         },
-        defaultMessage(args: ValidationArguments) {
+        defaultMessage(_args: ValidationArguments) {
           return `invalid parameter ($property).`;
         }
       }

@@ -3,16 +3,16 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2021-11-25 10:47:04
- * @LastEditTime: 2024-01-03 14:32:49
+ * @LastEditTime: 2024-10-31 16:57:28
  */
-import * as helper from "koatty_lib";
-import { CountryCode } from 'libphonenumber-js';
-import { IsEmailOptions, IsURLOptions, HashAlgorithm, ValidOtpions } from "./decorator";
-import { cnName, idNumber, mobile, plainToClass, plateNumber, zipCode } from "./util";
 import {
   contains, equals, isEmail, isHash, isIn, isIP, isNotIn, isPhoneNumber,
-  isURL, notEquals, validate, ValidationError
+  isURL, notEquals, validate
 } from "class-validator";
+import * as helper from "koatty_lib";
+import { CountryCode } from 'libphonenumber-js';
+import { HashAlgorithm, IsEmailOptions, IsURLOptions, ValidOtpions } from "./decorator";
+import { cnName, idNumber, mobile, plainToClass, plateNumber, zipCode } from "./util";
 
 // constant
 export const PARAM_TYPE_KEY = 'PARAM_TYPE_KEY';
@@ -67,18 +67,10 @@ class ValidateClass {
    * @memberof ValidateClass
    */
   async valid(Clazz: any, data: any, convert = false): Promise<any> {
-    let obj: any = {};
-    if (data instanceof Clazz) {
-      obj = data;
-    } else {
-      obj = plainToClass(Clazz, data, convert);
-    }
-    let errors: ValidationError[] = [];
-    if (convert) {
-      errors = await validate(obj);
-    } else {
-      errors = await validate(obj, { skipMissingProperties: true });
-    }
+    const obj = data instanceof Clazz ? data : plainToClass(Clazz, data, convert);
+    const errors = convert
+      ? await validate(obj)
+      : await validate(obj, { skipMissingProperties: true });
     if (errors.length > 0) {
       throw new Error(Object.values(errors[0].constraints)[0]);
     }
@@ -266,71 +258,8 @@ export const ValidFuncs = {
  */
 const FunctionValidator: {
   [key in ValidRules]: (value: unknown, options?: string | ValidOtpions) => void;
-} = {
-  IsNotEmpty: function (value: unknown, options?: string | ValidOtpions): void {
-    throw new Error("Function not implemented.");
-  },
-  IsDate: function (value: unknown, options?: string | ValidOtpions): void {
-    throw new Error("Function not implemented.");
-  },
-  IsEmail: function (value: unknown, options?: string | ValidOtpions): void {
-    throw new Error("Function not implemented.");
-  },
-  IsIP: function (value: unknown, options?: string | ValidOtpions): void {
-    throw new Error("Function not implemented.");
-  },
-  IsPhoneNumber: function (value: unknown, options?: string | ValidOtpions): void {
-    throw new Error("Function not implemented.");
-  },
-  IsUrl: function (value: unknown, options?: string | ValidOtpions): void {
-    throw new Error("Function not implemented.");
-  },
-  IsHash: function (value: unknown, options?: string | ValidOtpions): void {
-    throw new Error("Function not implemented.");
-  },
-  IsCnName: function (value: unknown, options?: string | ValidOtpions): void {
-    throw new Error("Function not implemented.");
-  },
-  IsIdNumber: function (value: unknown, options?: string | ValidOtpions): void {
-    throw new Error("Function not implemented.");
-  },
-  IsZipCode: function (value: unknown, options?: string | ValidOtpions): void {
-    throw new Error("Function not implemented.");
-  },
-  IsMobile: function (value: unknown, options?: string | ValidOtpions): void {
-    throw new Error("Function not implemented.");
-  },
-  IsPlateNumber: function (value: unknown, options?: string | ValidOtpions): void {
-    throw new Error("Function not implemented.");
-  },
-  Equals: function (value: unknown, options?: string | ValidOtpions): void {
-    throw new Error("Function not implemented.");
-  },
-  NotEquals: function (value: unknown, options?: string | ValidOtpions): void {
-    throw new Error("Function not implemented.");
-  },
-  Contains: function (value: unknown, options?: string | ValidOtpions): void {
-    throw new Error("Function not implemented.");
-  },
-  IsIn: function (value: unknown, options?: string | ValidOtpions): void {
-    throw new Error("Function not implemented.");
-  },
-  IsNotIn: function (value: unknown, options?: string | ValidOtpions): void {
-    throw new Error("Function not implemented.");
-  },
-  Gt: function (value: unknown, options?: string | ValidOtpions): void {
-    throw new Error("Function not implemented.");
-  },
-  Lt: function (value: unknown, options?: string | ValidOtpions): void {
-    throw new Error("Function not implemented.");
-  },
-  Gte: function (value: unknown, options?: string | ValidOtpions): void {
-    throw new Error("Function not implemented.");
-  },
-  Lte: function (value: unknown, options?: string | ValidOtpions): void {
-    throw new Error("Function not implemented.");
-  }
-};
+} = {} as any;
+
 Object.keys(ValidFuncs).forEach((key: ValidRules) => {
   FunctionValidator[key] = (value: unknown, options?: string | ValidOtpions) => {
     if (helper.isString(options)) {

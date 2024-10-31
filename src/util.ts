@@ -5,9 +5,9 @@
  * @ version: 2020-03-20 11:34:38
  */
 // tslint:disable-next-line: no-import-side-effect
-import "reflect-metadata";
+import { getOriginMetadata } from "koatty_container";
 import * as helper from "koatty_lib";
-import { IOCContainer, getOriginMetadata } from "koatty_container";
+import "reflect-metadata";
 import { PARAM_TYPE_KEY } from "./rule";
 
 /**
@@ -17,7 +17,7 @@ import { PARAM_TYPE_KEY } from "./rule";
  * @param {Object} object
  * @param {(string | symbol)} propertyName
  */
-export function setExpose(object: Object, propertyName: string | symbol) {
+export function setExpose(object: object, propertyName: string | symbol) {
   const types = Reflect.getMetadata("design:type", object, propertyName);
   if (types) {
     const originMap = getOriginMetadata(PARAM_TYPE_KEY, object);
@@ -300,6 +300,7 @@ export function convertParamsType(param: any, type: string) {
       default: //any
         return param;
     }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (err) {
     return param;
   }
