@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.4.0](https://github.com/koatty/koatty_validation/compare/v1.3.2...v1.4.0) (2025-06-10)
+
+
+### Features
+
+* add validation examples and decorator factory ([d448709](https://github.com/koatty/koatty_validation/commit/d44870987a808cd43c5a7ed5fabd5ca43162d0b6))
+
 ### [1.3.2](https://github.com/koatty/koatty_validation/compare/v1.3.1...v1.3.2) (2024-01-14)
 
 
