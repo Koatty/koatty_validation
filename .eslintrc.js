@@ -22,7 +22,6 @@ module.exports = {
   },
   rules: {
     "@typescript-eslint/no-explicit-any": "off",
-    // "@typescript-eslint/no-require-imports": "off",
     "@typescript-eslint/no-var-requires": "off",
     "@typescript-eslint/member-ordering": "off",
     "@typescript-eslint/consistent-type-assertions": "off",
@@ -31,14 +30,7 @@ module.exports = {
     "@typescript-eslint/no-empty-interface": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-unused-vars": "warn",
-    "@typescript-eslint/ban-types": ["error",
-      {
-        "types": {
-          "Object": false,
-          "Function": false,
-        },
-        "extendDefaults": true
-      }
-    ],
+    "@typescript-eslint/no-wrapper-object-types": "off",
+    "@typescript-eslint/no-unsafe-function-type": "off",
   },
 };
