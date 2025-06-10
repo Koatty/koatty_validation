@@ -11,7 +11,7 @@ Validator Functions
 ```typescript
 ValidFuncs: {
     IsNotEmpty: (value: unknown) => boolean;
-    IsDate: (value: unknown) => boolean;
+    IsDate: (value: unknown) => value is Date;
     IsEmail: (value: unknown, options?: IsEmailOptions) => boolean;
     IsIP: (value: unknown, version?: any) => boolean;
     IsPhoneNumber: (value: string, region?: CountryCode) => boolean;

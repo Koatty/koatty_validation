@@ -4,25 +4,62 @@
 
 ## IsHash() function
 
-check if the string is a hash of type algorithm. Algorithm is one of \['md4', 'md5', 'sha1', 'sha256', 'sha384', 'sha512', 'ripemd128', 'ripemd160', 'tiger128', 'tiger160', 'tiger192', 'crc32', 'crc32b'\]
-
-
 **Signature:**
 
 ```typescript
-export declare function IsHash(algorithm: HashAlgorithm, validationOptions?: ValidationOptions): PropertyDecorator;
+export declare function IsHash(algorithm: HashAlgorithm, validationOptions?: ValidationOptions): (object: Object, propertyName: string) => void;
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  algorithm | [HashAlgorithm](./koatty_validation.hashalgorithm.md) |  |
-|  validationOptions | ValidationOptions | _(Optional)_ |
+<table><thead><tr><th>
 
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+algorithm
+
+
+</td><td>
+
+[HashAlgorithm](./koatty_validation.hashalgorithm.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+validationOptions
+
+
+</td><td>
+
+ValidationOptions
+
+
+</td><td>
+
+_(Optional)_
+
+
+</td></tr>
+</tbody></table>
 **Returns:**
 
-PropertyDecorator
-
-{<!-- -->PropertyDecorator<!-- -->}
+(object: Object, propertyName: string) =&gt; void
 

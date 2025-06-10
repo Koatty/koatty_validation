@@ -4,6 +4,8 @@
 
 ## ValidOtpions type
 
+验证选项
+
 **Signature:**
 
 ```typescript

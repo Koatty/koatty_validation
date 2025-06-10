@@ -4,6 +4,8 @@
 
 ## IsEmailOptions interface
 
+邮箱验证选项
+
 **Signature:**
 
 ```typescript
@@ -12,10 +14,101 @@ export interface IsEmailOptions
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [allow\_display\_name?](./koatty_validation.isemailoptions.allow_display_name.md) |  | boolean | _(Optional)_ |
-|  [allow\_utf8\_local\_part?](./koatty_validation.isemailoptions.allow_utf8_local_part.md) |  | boolean | _(Optional)_ |
-|  [require\_display\_name?](./koatty_validation.isemailoptions.require_display_name.md) |  | boolean | _(Optional)_ |
-|  [require\_tld?](./koatty_validation.isemailoptions.require_tld.md) |  | boolean | _(Optional)_ |
+<table><thead><tr><th>
 
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[allow\_display\_name?](./koatty_validation.isemailoptions.allow_display_name.md)
+
+
+</td><td>
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+_(Optional)_
+
+
+</td></tr>
+<tr><td>
+
+[allow\_utf8\_local\_part?](./koatty_validation.isemailoptions.allow_utf8_local_part.md)
+
+
+</td><td>
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+_(Optional)_
+
+
+</td></tr>
+<tr><td>
+
+[require\_display\_name?](./koatty_validation.isemailoptions.require_display_name.md)
+
+
+</td><td>
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+_(Optional)_
+
+
+</td></tr>
+<tr><td>
+
+[require\_tld?](./koatty_validation.isemailoptions.require_tld.md)
+
+
+</td><td>
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+_(Optional)_
+
+
+</td></tr>
+</tbody></table>

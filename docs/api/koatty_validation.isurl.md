@@ -4,25 +4,64 @@
 
 ## IsUrl() function
 
-Checks if the string is an url.
-
-
 **Signature:**
 
 ```typescript
-export declare function IsUrl(options?: IsURLOptions, validationOptions?: ValidationOptions): PropertyDecorator;
+export declare function IsUrl(options?: IsURLOptions, validationOptions?: ValidationOptions): (object: Object, propertyName: string) => void;
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  options | [IsURLOptions](./koatty_validation.isurloptions.md) | _(Optional)_ |
-|  validationOptions | ValidationOptions | _(Optional)_ |
+<table><thead><tr><th>
 
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+options
+
+
+</td><td>
+
+[IsURLOptions](./koatty_validation.isurloptions.md)
+
+
+</td><td>
+
+_(Optional)_
+
+
+</td></tr>
+<tr><td>
+
+validationOptions
+
+
+</td><td>
+
+ValidationOptions
+
+
+</td><td>
+
+_(Optional)_
+
+
+</td></tr>
+</tbody></table>
 **Returns:**
 
-PropertyDecorator
-
-{<!-- -->PropertyDecorator<!-- -->}
+(object: Object, propertyName: string) =&gt; void
 

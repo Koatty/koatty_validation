@@ -4,25 +4,46 @@
 
 ## NotEquals() function
 
-Checks if value does not match ("!==") the comparison.
-
-
 **Signature:**
 
 ```typescript
-export declare function NotEquals(comparison: any, validationOptions?: ValidationOptions): PropertyDecorator;
+NotEquals: (...args: any[]) => (object: Object, propertyName: string) => void
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  comparison | any |  |
-|  validationOptions | ValidationOptions | _(Optional)_ |
+<table><thead><tr><th>
 
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+args
+
+
+</td><td>
+
+any\[\]
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 **Returns:**
 
-PropertyDecorator
-
-{<!-- -->PropertyDecorator<!-- -->}
+(object: Object, propertyName: string) =&gt; void
 

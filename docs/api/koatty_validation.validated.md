@@ -4,8 +4,7 @@
 
 ## Validated() function
 
-Validation parameter's type and values from DTO class.
-
+方法验证装饰器
 
 **Signature:**
 
@@ -15,6 +14,4 @@ export declare function Validated(): MethodDecorator;
 **Returns:**
 
 MethodDecorator
-
-{<!-- -->MethodDecorator<!-- -->}
 

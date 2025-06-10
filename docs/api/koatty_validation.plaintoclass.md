@@ -15,12 +15,67 @@ export declare function plainToClass(clazz: any, data: any, convert?: boolean): 
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  clazz | any |  |
-|  data | any |  |
-|  convert | boolean | _(Optional)_ |
+<table><thead><tr><th>
 
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+clazz
+
+
+</td><td>
+
+any
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+data
+
+
+</td><td>
+
+any
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+convert
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+_(Optional)_
+
+
+</td></tr>
+</tbody></table>
 **Returns:**
 
 any

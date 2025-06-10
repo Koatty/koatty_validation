@@ -4,8 +4,7 @@
 
 ## IsDefined() function
 
-Alias of Expose
-
+Expose的别名
 
 **Signature:**
 
@@ -15,6 +14,4 @@ export declare function IsDefined(): PropertyDecorator;
 **Returns:**
 
 PropertyDecorator
-
-{<!-- -->PropertyDecorator<!-- -->}
 

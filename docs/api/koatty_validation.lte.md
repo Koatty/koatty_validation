@@ -4,25 +4,46 @@
 
 ## Lte() function
 
-Checks if the first number is less than or equal to the max value.
-
-
 **Signature:**
 
 ```typescript
-export declare function Lte(max: number, validationOptions?: ValidationOptions): PropertyDecorator;
+Lte: (...args: any[]) => (object: Object, propertyName: string) => void
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  max | number |  |
-|  validationOptions | ValidationOptions | _(Optional)_ |
+<table><thead><tr><th>
 
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+args
+
+
+</td><td>
+
+any\[\]
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 **Returns:**
 
-PropertyDecorator
-
-{<!-- -->PropertyDecorator<!-- -->}
+(object: Object, propertyName: string) =&gt; void
 

@@ -4,8 +4,7 @@
 
 ## Valid() function
 
-Validation parameter's type and values.
-
+参数验证装饰器
 
 **Signature:**
 
@@ -15,14 +14,54 @@ export declare function Valid(rule: ValidRules | ValidRules[] | Function, option
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  rule | [ValidRules](./koatty_validation.validrules.md) \| [ValidRules](./koatty_validation.validrules.md)<!-- -->\[\] \| Function |  |
-|  options | string \| [ValidOtpions](./koatty_validation.validotpions.md) | _(Optional)_ If the options type is a string, the value is the error message of the validation rule. Some validation rules require additional parameters, ext: @<!-- -->Valid("Gte", {<!-- -->message:"Requires value greater than or equal to 100", value: 100<!-- -->}<!-- -->) |
+<table><thead><tr><th>
 
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+rule
+
+
+</td><td>
+
+[ValidRules](./koatty_validation.validrules.md) \| [ValidRules](./koatty_validation.validrules.md)<!-- -->\[\] \| Function
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+options
+
+
+</td><td>
+
+string \| [ValidOtpions](./koatty_validation.validotpions.md)
+
+
+</td><td>
+
+_(Optional)_
+
+
+</td></tr>
+</tbody></table>
 **Returns:**
 
 ParameterDecorator
-
-{<!-- -->\*<!-- -->} {<!-- -->ParameterDecorator<!-- -->}
 

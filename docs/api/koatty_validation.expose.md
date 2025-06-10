@@ -4,8 +4,7 @@
 
 ## Expose() function
 
-Marks property as included in the process of transformation.
-
+标记属性为可导出
 
 **Signature:**
 
@@ -15,6 +14,4 @@ export declare function Expose(): PropertyDecorator;
 **Returns:**
 
 PropertyDecorator
-
-{<!-- -->PropertyDecorator<!-- -->}
 

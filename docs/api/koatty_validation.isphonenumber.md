@@ -4,25 +4,64 @@
 
 ## IsPhoneNumber() function
 
-Checks if the string is a valid phone number.
-
-
 **Signature:**
 
 ```typescript
-export declare function IsPhoneNumber(region?: CountryCode, validationOptions?: ValidationOptions): PropertyDecorator;
+export declare function IsPhoneNumber(region?: CountryCode, validationOptions?: ValidationOptions): (object: Object, propertyName: string) => void;
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  region | CountryCode | _(Optional)_ |
-|  validationOptions | ValidationOptions | _(Optional)_ |
+<table><thead><tr><th>
 
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+region
+
+
+</td><td>
+
+CountryCode
+
+
+</td><td>
+
+_(Optional)_
+
+
+</td></tr>
+<tr><td>
+
+validationOptions
+
+
+</td><td>
+
+ValidationOptions
+
+
+</td><td>
+
+_(Optional)_
+
+
+</td></tr>
+</tbody></table>
 **Returns:**
 
-PropertyDecorator
-
-{<!-- -->PropertyDecorator<!-- -->}
+(object: Object, propertyName: string) =&gt; void
 

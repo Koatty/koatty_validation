@@ -4,24 +4,46 @@
 
 ## IsZipCode() function
 
-Checks if value is a zipCode(chinese).
-
-
 **Signature:**
 
 ```typescript
-export declare function IsZipCode(validationOptions?: ValidationOptions): PropertyDecorator;
+IsZipCode: (...args: any[]) => (object: Object, propertyName: string) => void
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  validationOptions | ValidationOptions | _(Optional)_ |
+<table><thead><tr><th>
 
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+args
+
+
+</td><td>
+
+any\[\]
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 **Returns:**
 
-PropertyDecorator
-
-{<!-- -->PropertyDecorator<!-- -->}
+(object: Object, propertyName: string) =&gt; void
 

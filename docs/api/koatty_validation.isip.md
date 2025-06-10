@@ -4,25 +4,64 @@
 
 ## IsIP() function
 
-Checks if the string is an IP (version 4 or 6). If given value is not a string, then it returns false.
-
-
 **Signature:**
 
 ```typescript
-export declare function IsIP(version?: IsIpVersion, validationOptions?: ValidationOptions): PropertyDecorator;
+export declare function IsIP(version?: any, validationOptions?: ValidationOptions): (object: Object, propertyName: string) => void;
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  version | IsIpVersion | _(Optional)_ |
-|  validationOptions | ValidationOptions | _(Optional)_ |
+<table><thead><tr><th>
 
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+version
+
+
+</td><td>
+
+any
+
+
+</td><td>
+
+_(Optional)_
+
+
+</td></tr>
+<tr><td>
+
+validationOptions
+
+
+</td><td>
+
+ValidationOptions
+
+
+</td><td>
+
+_(Optional)_
+
+
+</td></tr>
+</tbody></table>
 **Returns:**
 
-PropertyDecorator
-
-{<!-- -->PropertyDecorator<!-- -->}
+(object: Object, propertyName: string) =&gt; void
 

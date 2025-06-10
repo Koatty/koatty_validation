@@ -14,11 +14,51 @@ export declare function convertParamsType(param: any, type: string): any;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  param | any |  |
-|  type | string |  |
+<table><thead><tr><th>
 
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+param
+
+
+</td><td>
+
+any
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+type
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 **Returns:**
 
 any

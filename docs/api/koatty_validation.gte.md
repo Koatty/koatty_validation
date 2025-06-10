@@ -4,25 +4,46 @@
 
 ## Gte() function
 
-Checks if the first number is greater than or equal to the min value.
-
-
 **Signature:**
 
 ```typescript
-export declare function Gte(min: number, validationOptions?: ValidationOptions): PropertyDecorator;
+Gte: (...args: any[]) => (object: Object, propertyName: string) => void
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  min | number |  |
-|  validationOptions | ValidationOptions | _(Optional)_ |
+<table><thead><tr><th>
 
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+args
+
+
+</td><td>
+
+any\[\]
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 **Returns:**
 
-PropertyDecorator
-
-{<!-- -->PropertyDecorator<!-- -->}
+(object: Object, propertyName: string) =&gt; void
 

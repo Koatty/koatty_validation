@@ -4,25 +4,46 @@
 
 ## IsIn() function
 
-Checks if given value is in a array of allowed values.
-
-
 **Signature:**
 
 ```typescript
-export declare function IsIn(possibleValues: any[], validationOptions?: ValidationOptions): PropertyDecorator;
+IsIn: (...args: any[]) => (object: Object, propertyName: string) => void
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  possibleValues | any\[\] |  |
-|  validationOptions | ValidationOptions | _(Optional)_ |
+<table><thead><tr><th>
 
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+args
+
+
+</td><td>
+
+any\[\]
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 **Returns:**
 
-PropertyDecorator
-
-{<!-- -->PropertyDecorator<!-- -->}
+(object: Object, propertyName: string) =&gt; void
 

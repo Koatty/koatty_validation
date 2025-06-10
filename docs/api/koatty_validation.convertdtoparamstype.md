@@ -14,11 +14,51 @@ export declare function convertDtoParamsType(clazz: any, cls: any): any;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  clazz | any |  |
-|  cls | any |  |
+<table><thead><tr><th>
 
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+clazz
+
+
+</td><td>
+
+any
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+cls
+
+
+</td><td>
+
+any
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 **Returns:**
 
 any

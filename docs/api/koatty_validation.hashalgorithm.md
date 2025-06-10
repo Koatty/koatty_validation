@@ -4,6 +4,8 @@
 
 ## HashAlgorithm type
 
+哈希算法类型
+
 **Signature:**
 
 ```typescript

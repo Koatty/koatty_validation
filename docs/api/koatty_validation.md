@@ -4,72 +4,757 @@
 
 ## koatty\_validation package
 
+## Classes
+
+<table><thead><tr><th>
+
+Class
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[ErrorMessageFormatter](./koatty_validation.errormessageformatter.md)
+
+
+</td><td>
+
+错误信息格式化器
+
+
+</td></tr>
+<tr><td>
+
+[KoattyValidationError](./koatty_validation.koattyvalidationerror.md)
+
+
+</td><td>
+
+增强的验证错误类
+
+
+</td></tr>
+</tbody></table>
+
 ## Enumerations
 
-|  Enumeration | Description |
-|  --- | --- |
-|  [paramterTypes](./koatty_validation.paramtertypes.md) | <p>paramterTypes</p><p>  {<!-- -->number<!-- -->}</p> |
+<table><thead><tr><th>
+
+Enumeration
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[paramterTypes](./koatty_validation.paramtertypes.md)
+
+
+</td><td>
+
+paramterTypes
+
+  {<!-- -->number<!-- -->}
+
+
+</td></tr>
+</tbody></table>
 
 ## Functions
 
-|  Function | Description |
-|  --- | --- |
-|  [CheckFunc(func, validationOptions)](./koatty_validation.checkfunc.md) | Use a custom function for validation |
-|  [checkParamsType(value, type)](./koatty_validation.checkparamstype.md) | Check the base types. |
-|  [Contains(seed, validationOptions)](./koatty_validation.contains.md) | <p>Checks if the string contains the seed.</p> |
-|  [convertDtoParamsType(clazz, cls)](./koatty_validation.convertdtoparamstype.md) | convertDtoParamsType |
-|  [convertParamsType(param, type)](./koatty_validation.convertparamstype.md) | 绑定参数类型转换 |
-|  [Equals(comparison, validationOptions)](./koatty_validation.equals.md) | <p>Checks if value matches ("===") the comparison.</p> |
-|  [Expose()](./koatty_validation.expose.md) | <p>Marks property as included in the process of transformation.</p> |
-|  [Gt(min, validationOptions)](./koatty_validation.gt.md) | <p>Checks if the first number is greater than or equal to the min value.</p> |
-|  [Gte(min, validationOptions)](./koatty_validation.gte.md) | <p>Checks if the first number is greater than or equal to the min value.</p> |
-|  [IsCnName(validationOptions)](./koatty_validation.iscnname.md) | <p>Checks if value is a chinese name.</p> |
-|  [IsDate(validationOptions)](./koatty_validation.isdate.md) | <p>Checks if a given value is a real date.</p> |
-|  [IsDefined()](./koatty_validation.isdefined.md) | <p>Alias of Expose</p> |
-|  [IsEmail(options, validationOptions)](./koatty_validation.isemail.md) | <p>Checks if the string is an email. If given value is not a string, then it returns false.</p> |
-|  [IsHash(algorithm, validationOptions)](./koatty_validation.ishash.md) | <p>check if the string is a hash of type algorithm. Algorithm is one of \['md4', 'md5', 'sha1', 'sha256', 'sha384', 'sha512', 'ripemd128', 'ripemd160', 'tiger128', 'tiger160', 'tiger192', 'crc32', 'crc32b'\]</p> |
-|  [IsIdNumber(validationOptions)](./koatty_validation.isidnumber.md) | <p>Checks if value is a idCard number(chinese).</p> |
-|  [IsIn(possibleValues, validationOptions)](./koatty_validation.isin.md) | <p>Checks if given value is in a array of allowed values.</p> |
-|  [IsIP(version, validationOptions)](./koatty_validation.isip.md) | <p>Checks if the string is an IP (version 4 or 6). If given value is not a string, then it returns false.</p> |
-|  [IsMobile(validationOptions)](./koatty_validation.ismobile.md) | <p>Checks if value is a mobile phone number(chinese).</p> |
-|  [IsNotEmpty(validationOptions)](./koatty_validation.isnotempty.md) | <p>Checks value is not empty, undefined, null, '', NaN, \[\], {<!-- -->} and any empty string(including spaces, tabs, formfeeds, etc.), returns false.</p> |
-|  [IsNotIn(possibleValues, validationOptions)](./koatty_validation.isnotin.md) | <p>Checks if given value not in a array of allowed values.</p> |
-|  [IsPhoneNumber(region, validationOptions)](./koatty_validation.isphonenumber.md) | <p>Checks if the string is a valid phone number.</p> |
-|  [IsPlateNumber(validationOptions)](./koatty_validation.isplatenumber.md) | <p>Checks if value is a plate number(chinese).</p> |
-|  [IsUrl(options, validationOptions)](./koatty_validation.isurl.md) | <p>Checks if the string is an url.</p> |
-|  [IsZipCode(validationOptions)](./koatty_validation.iszipcode.md) | <p>Checks if value is a zipCode(chinese).</p> |
-|  [Length(min, max, validationOptions)](./koatty_validation.length.md) | <p>Checks if the string's length falls in a range. Note: this function takes into account surrogate pairs. If given value is not a string, then it returns false.</p> |
-|  [Lt(max, validationOptions)](./koatty_validation.lt.md) | <p>Checks if the first number is less than or equal to the max value.</p> |
-|  [Lte(max, validationOptions)](./koatty_validation.lte.md) | <p>Checks if the first number is less than or equal to the max value.</p> |
-|  [NotEquals(comparison, validationOptions)](./koatty_validation.notequals.md) | <p>Checks if value does not match ("!==") the comparison.</p> |
-|  [plainToClass(clazz, data, convert)](./koatty_validation.plaintoclass.md) | <p>plain object convert to class instance</p> |
-|  [Valid(rule, options)](./koatty_validation.valid.md) | <p>Validation parameter's type and values.</p> |
-|  [Validated()](./koatty_validation.validated.md) | <p>Validation parameter's type and values from DTO class.</p> |
+<table><thead><tr><th>
+
+Function
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[cached(validator, ttl)](./koatty_validation.cached.md)
+
+
+</td><td>
+
+缓存装饰器 - 用于缓存验证函数结果
+
+
+</td></tr>
+<tr><td>
+
+[checkParamsType(value, type)](./koatty_validation.checkparamstype.md)
+
+
+</td><td>
+
+Check the base types.
+
+
+</td></tr>
+<tr><td>
+
+[clearAllCaches()](./koatty_validation.clearallcaches.md)
+
+
+</td><td>
+
+清空所有缓存
+
+
+</td></tr>
+<tr><td>
+
+[configureCaches(options)](./koatty_validation.configurecaches.md)
+
+
+</td><td>
+
+配置缓存设置
+
+
+</td></tr>
+<tr><td>
+
+[Contains(args)](./koatty_validation.contains.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[convertDtoParamsType(clazz, cls)](./koatty_validation.convertdtoparamstype.md)
+
+
+</td><td>
+
+convertDtoParamsType
+
+
+</td></tr>
+<tr><td>
+
+[convertParamsType(param, type)](./koatty_validation.convertparamstype.md)
+
+
+</td><td>
+
+绑定参数类型转换
+
+
+</td></tr>
+<tr><td>
+
+[createParameterizedDecorator(name, validator, defaultMessage)](./koatty_validation.createparameterizeddecorator.md)
+
+
+</td><td>
+
+创建带参数的验证装饰器
+
+
+</td></tr>
+<tr><td>
+
+[createSimpleDecorator(name, validator, defaultMessage)](./koatty_validation.createsimpledecorator.md)
+
+
+</td><td>
+
+创建简单验证装饰器（不需要额外参数）
+
+
+</td></tr>
+<tr><td>
+
+[createValidationDecorator(options)](./koatty_validation.createvalidationdecorator.md)
+
+
+</td><td>
+
+创建验证装饰器的工厂函数
+
+
+</td></tr>
+<tr><td>
+
+[createValidationError(field, value, constraint, customMessage, context)](./koatty_validation.createvalidationerror.md)
+
+
+</td><td>
+
+创建验证错误
+
+
+</td></tr>
+<tr><td>
+
+[createValidationErrors(errors)](./koatty_validation.createvalidationerrors.md)
+
+
+</td><td>
+
+批量创建验证错误
+
+
+</td></tr>
+<tr><td>
+
+[Equals(args)](./koatty_validation.equals.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[Expose()](./koatty_validation.expose.md)
+
+
+</td><td>
+
+标记属性为可导出
+
+
+</td></tr>
+<tr><td>
+
+[getAllCacheStats()](./koatty_validation.getallcachestats.md)
+
+
+</td><td>
+
+获取所有缓存统计信息
+
+
+</td></tr>
+<tr><td>
+
+[Gt(args)](./koatty_validation.gt.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[Gte(args)](./koatty_validation.gte.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[IsCnName(args)](./koatty_validation.iscnname.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[IsDate(args)](./koatty_validation.isdate.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[IsDefined()](./koatty_validation.isdefined.md)
+
+
+</td><td>
+
+Expose的别名
+
+
+</td></tr>
+<tr><td>
+
+[IsEmail(options, validationOptions)](./koatty_validation.isemail.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[IsHash(algorithm, validationOptions)](./koatty_validation.ishash.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[IsIdNumber(args)](./koatty_validation.isidnumber.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[IsIn(args)](./koatty_validation.isin.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[IsIP(version, validationOptions)](./koatty_validation.isip.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[IsMobile(args)](./koatty_validation.ismobile.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[IsNotEmpty(args)](./koatty_validation.isnotempty.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[IsNotIn(args)](./koatty_validation.isnotin.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[IsPhoneNumber(region, validationOptions)](./koatty_validation.isphonenumber.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[IsPlateNumber(args)](./koatty_validation.isplatenumber.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[IsUrl(options, validationOptions)](./koatty_validation.isurl.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[IsZipCode(args)](./koatty_validation.iszipcode.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[Lt(args)](./koatty_validation.lt.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[Lte(args)](./koatty_validation.lte.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[NotEquals(args)](./koatty_validation.notequals.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[plainToClass(clazz, data, convert)](./koatty_validation.plaintoclass.md)
+
+
+</td><td>
+
+plain object convert to class instance
+
+
+
+</td></tr>
+<tr><td>
+
+[setValidationLanguage(language)](./koatty_validation.setvalidationlanguage.md)
+
+
+</td><td>
+
+设置全局语言
+
+
+</td></tr>
+<tr><td>
+
+[Valid(rule, options)](./koatty_validation.valid.md)
+
+
+</td><td>
+
+参数验证装饰器
+
+
+</td></tr>
+<tr><td>
+
+[Validated()](./koatty_validation.validated.md)
+
+
+</td><td>
+
+方法验证装饰器
+
+
+</td></tr>
+<tr><td>
+
+[warmupCaches()](./koatty_validation.warmupcaches.md)
+
+
+</td><td>
+
+预热缓存 - 预编译常用正则表达式
+
+
+</td></tr>
+</tbody></table>
 
 ## Interfaces
 
-|  Interface | Description |
-|  --- | --- |
-|  [IsEmailOptions](./koatty_validation.isemailoptions.md) |  |
-|  [IsURLOptions](./koatty_validation.isurloptions.md) |  |
+<table><thead><tr><th>
+
+Interface
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[CacheOptions](./koatty_validation.cacheoptions.md)
+
+
+</td><td>
+
+缓存配置选项
+
+
+</td></tr>
+<tr><td>
+
+[DecoratorOptions](./koatty_validation.decoratoroptions.md)
+
+
+</td><td>
+
+装饰器选项
+
+
+</td></tr>
+<tr><td>
+
+[IsEmailOptions](./koatty_validation.isemailoptions.md)
+
+
+</td><td>
+
+邮箱验证选项
+
+
+</td></tr>
+<tr><td>
+
+[IsURLOptions](./koatty_validation.isurloptions.md)
+
+
+</td><td>
+
+URL验证选项
+
+
+</td></tr>
+<tr><td>
+
+[ValidationErrorDetail](./koatty_validation.validationerrordetail.md)
+
+
+</td><td>
+
+验证错误详情
+
+
+</td></tr>
+</tbody></table>
 
 ## Variables
 
-|  Variable | Description |
-|  --- | --- |
-|  [ClassValidator](./koatty_validation.classvalidator.md) | ClassValidator for manual |
-|  [ENABLE\_VALIDATED](./koatty_validation.enable_validated.md) |  |
-|  [FunctionValidator](./koatty_validation.functionvalidator.md) | <p>Use functions or built-in rules for validation.</p> |
-|  [PARAM\_CHECK\_KEY](./koatty_validation.param_check_key.md) |  |
-|  [PARAM\_RULE\_KEY](./koatty_validation.param_rule_key.md) |  |
-|  [PARAM\_TYPE\_KEY](./koatty_validation.param_type_key.md) |  |
-|  [ValidFuncs](./koatty_validation.validfuncs.md) | Validator Functions |
+<table><thead><tr><th>
+
+Variable
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[ClassValidator](./koatty_validation.classvalidator.md)
+
+
+</td><td>
+
+ClassValidator for manual
+
+
+</td></tr>
+<tr><td>
+
+[ENABLE\_VALIDATED](./koatty_validation.enable_validated.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[ERROR\_MESSAGES](./koatty_validation.error_messages.md)
+
+
+</td><td>
+
+错误信息国际化
+
+
+</td></tr>
+<tr><td>
+
+[errorFormatter](./koatty_validation.errorformatter.md)
+
+
+</td><td>
+
+全局错误信息格式化器实例
+
+
+</td></tr>
+<tr><td>
+
+[FunctionValidator](./koatty_validation.functionvalidator.md)
+
+
+</td><td>
+
+Use functions or built-in rules for validation.
+
+
+
+</td></tr>
+<tr><td>
+
+[metadataCache](./koatty_validation.metadatacache.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[PARAM\_CHECK\_KEY](./koatty_validation.param_check_key.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[PARAM\_RULE\_KEY](./koatty_validation.param_rule_key.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[performanceMonitor](./koatty_validation.performancemonitor.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[regexCache](./koatty_validation.regexcache.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[validationCache](./koatty_validation.validationcache.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[ValidFuncs](./koatty_validation.validfuncs.md)
+
+
+</td><td>
+
+Validator Functions
+
+
+</td></tr>
+</tbody></table>
 
 ## Type Aliases
 
-|  Type Alias | Description |
-|  --- | --- |
-|  [HashAlgorithm](./koatty_validation.hashalgorithm.md) |  |
-|  [ValidOtpions](./koatty_validation.validotpions.md) |  |
-|  [ValidRules](./koatty_validation.validrules.md) | <p>type checked rules</p><p>  {<!-- -->number<!-- -->}</p> |
+<table><thead><tr><th>
 
+Type Alias
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[HashAlgorithm](./koatty_validation.hashalgorithm.md)
+
+
+</td><td>
+
+哈希算法类型
+
+
+</td></tr>
+<tr><td>
+
+[SupportedLanguage](./koatty_validation.supportedlanguage.md)
+
+
+</td><td>
+
+支持的语言
+
+
+</td></tr>
+<tr><td>
+
+[ValidatorFunction](./koatty_validation.validatorfunction.md)
+
+
+</td><td>
+
+验证函数类型定义
+
+
+</td></tr>
+<tr><td>
+
+[ValidOtpions](./koatty_validation.validotpions.md)
+
+
+</td><td>
+
+验证选项
+
+
+</td></tr>
+<tr><td>
+
+[ValidRules](./koatty_validation.validrules.md)
+
+
+</td><td>
+
+type checked rules
+
+  {<!-- -->number<!-- -->}
+
+
+</td></tr>
+</tbody></table>
