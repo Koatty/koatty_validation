@@ -7,7 +7,7 @@
  */
 import * as helper from "koatty_lib";
 import { CountryCode } from 'libphonenumber-js';
-import { IsEmailOptions, IsURLOptions, HashAlgorithm, ValidOtpions } from "./decorator";
+import { IsEmailOptions, IsURLOptions, HashAlgorithm, ValidOtpions } from "./types";
 import { cnName, idNumber, mobile, plainToClass, plateNumber, zipCode } from "./util";
 import {
   contains, equals, isEmail, isHash, isIn, isIP, isNotIn, isPhoneNumber,
@@ -333,11 +333,14 @@ const FunctionValidator: {
 };
 Object.keys(ValidFuncs).forEach((key: ValidRules) => {
   FunctionValidator[key] = (value: unknown, options?: string | ValidOtpions) => {
-    if (helper.isString(options)) {
-      options = { message: options, value: null };
+    let validOptions: ValidOtpions;
+    if (typeof options === 'string') {
+      validOptions = { message: options, value: null };
+    } else {
+      validOptions = options || { message: `ValidatorError: invalid arguments.`, value: null };
     }
-    if (!(<any>ValidFuncs)[key](value, options.value)) {
-      throw new Error(options.message || `ValidatorError: invalid arguments.`);
+    if (!(<any>ValidFuncs)[key](value, validOptions.value)) {
+      throw new Error(validOptions.message || `ValidatorError: invalid arguments.`);
     }
   }
 });
