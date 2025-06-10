@@ -220,7 +220,8 @@ class RegexCache {
       try {
         regex = new RegExp(pattern, flags);
         this.cache.set(key, regex);
-      } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      } catch (_error) {
         // 如果正则表达式无效，抛出错误
         throw new Error(`Invalid regex pattern: ${pattern}`);
       }

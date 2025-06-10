@@ -7,7 +7,7 @@
 import { 
   IsCnName, IsIdNumber, IsMobile, IsNotEmpty, 
   Gt, Contains, IsEmail 
-} from '../src/decorators-refactored';
+} from '../src/decorators';
 
 // 2. 使用错误处理机制
 import { 

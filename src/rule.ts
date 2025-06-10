@@ -15,7 +15,7 @@ import {
 } from "class-validator";
 
 // constant
-export const PARAM_TYPE_KEY = 'PARAM_TYPE_KEY';
+
 export const PARAM_RULE_KEY = 'PARAM_RULE_KEY';
 export const PARAM_CHECK_KEY = 'PARAM_CHECK_KEY';
 export const ENABLE_VALIDATED = "ENABLE_VALIDATED";
@@ -264,73 +264,75 @@ export const ValidFuncs = {
  * @param {(string | ValidOtpions)} [options]
  * @returns {*}  
  */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 const FunctionValidator: {
   [key in ValidRules]: (value: unknown, options?: string | ValidOtpions) => void;
 } = {
-  IsNotEmpty: function (value: unknown, options?: string | ValidOtpions): void {
+  IsNotEmpty: function (_value: unknown, _options?: string | ValidOtpions): void {
     throw new Error("Function not implemented.");
   },
-  IsDate: function (value: unknown, options?: string | ValidOtpions): void {
+  IsDate: function (_value: unknown, _options?: string | ValidOtpions): void {
     throw new Error("Function not implemented.");
   },
-  IsEmail: function (value: unknown, options?: string | ValidOtpions): void {
+  IsEmail: function (_value: unknown, _options?: string | ValidOtpions): void {
     throw new Error("Function not implemented.");
   },
-  IsIP: function (value: unknown, options?: string | ValidOtpions): void {
+  IsIP: function (_value: unknown, _options?: string | ValidOtpions): void {
     throw new Error("Function not implemented.");
   },
-  IsPhoneNumber: function (value: unknown, options?: string | ValidOtpions): void {
+  IsPhoneNumber: function (_value: unknown, _options?: string | ValidOtpions): void {
     throw new Error("Function not implemented.");
   },
-  IsUrl: function (value: unknown, options?: string | ValidOtpions): void {
+  IsUrl: function (_value: unknown, _options?: string | ValidOtpions): void {
     throw new Error("Function not implemented.");
   },
-  IsHash: function (value: unknown, options?: string | ValidOtpions): void {
+  IsHash: function (_value: unknown, _options?: string | ValidOtpions): void {
     throw new Error("Function not implemented.");
   },
-  IsCnName: function (value: unknown, options?: string | ValidOtpions): void {
+  IsCnName: function (_value: unknown, _options?: string | ValidOtpions): void {
     throw new Error("Function not implemented.");
   },
-  IsIdNumber: function (value: unknown, options?: string | ValidOtpions): void {
+  IsIdNumber: function (_value: unknown, _options?: string | ValidOtpions): void {
     throw new Error("Function not implemented.");
   },
-  IsZipCode: function (value: unknown, options?: string | ValidOtpions): void {
+  IsZipCode: function (_value: unknown, _options?: string | ValidOtpions): void {
     throw new Error("Function not implemented.");
   },
-  IsMobile: function (value: unknown, options?: string | ValidOtpions): void {
+  IsMobile: function (_value: unknown, _options?: string | ValidOtpions): void {
     throw new Error("Function not implemented.");
   },
-  IsPlateNumber: function (value: unknown, options?: string | ValidOtpions): void {
+  IsPlateNumber: function (_value: unknown, _options?: string | ValidOtpions): void {
     throw new Error("Function not implemented.");
   },
-  Equals: function (value: unknown, options?: string | ValidOtpions): void {
+  Equals: function (_value: unknown, _options?: string | ValidOtpions): void {
     throw new Error("Function not implemented.");
   },
-  NotEquals: function (value: unknown, options?: string | ValidOtpions): void {
+  NotEquals: function (_value: unknown, _options?: string | ValidOtpions): void {
     throw new Error("Function not implemented.");
   },
-  Contains: function (value: unknown, options?: string | ValidOtpions): void {
+  Contains: function (_value: unknown, _options?: string | ValidOtpions): void {
     throw new Error("Function not implemented.");
   },
-  IsIn: function (value: unknown, options?: string | ValidOtpions): void {
+  IsIn: function (_value: unknown, _options?: string | ValidOtpions): void {
     throw new Error("Function not implemented.");
   },
-  IsNotIn: function (value: unknown, options?: string | ValidOtpions): void {
+  IsNotIn: function (_value: unknown, _options?: string | ValidOtpions): void {
     throw new Error("Function not implemented.");
   },
-  Gt: function (value: unknown, options?: string | ValidOtpions): void {
+  Gt: function (_value: unknown, _options?: string | ValidOtpions): void {
     throw new Error("Function not implemented.");
   },
-  Lt: function (value: unknown, options?: string | ValidOtpions): void {
+  Lt: function (_value: unknown, _options?: string | ValidOtpions): void {
     throw new Error("Function not implemented.");
   },
-  Gte: function (value: unknown, options?: string | ValidOtpions): void {
+  Gte: function (_value: unknown, _options?: string | ValidOtpions): void {
     throw new Error("Function not implemented.");
   },
-  Lte: function (value: unknown, options?: string | ValidOtpions): void {
+  Lte: function (_value: unknown, _options?: string | ValidOtpions): void {
     throw new Error("Function not implemented.");
   }
 };
+/* eslint-enable @typescript-eslint/no-unused-vars */
 Object.keys(ValidFuncs).forEach((key: ValidRules) => {
   FunctionValidator[key] = (value: unknown, options?: string | ValidOtpions) => {
     let validOptions: ValidOtpions;

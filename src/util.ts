@@ -7,8 +7,10 @@
 // tslint:disable-next-line: no-import-side-effect
 import "reflect-metadata";
 import * as helper from "koatty_lib";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { IOCContainer, getOriginMetadata } from "koatty_container";
-import { PARAM_TYPE_KEY } from "./rule";
+// 参数类型键常量
+export const PARAM_TYPE_KEY = 'PARAM_TYPE_KEY';
 
 /**
  * Set property as included in the process of transformation.
@@ -300,7 +302,8 @@ export function convertParamsType(param: any, type: string) {
       default: //any
         return param;
     }
-  } catch (err) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  } catch (_err) {
     return param;
   }
 }
