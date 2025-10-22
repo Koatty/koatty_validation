@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.6.0](https://github.com/koatty/koatty_validation/compare/v1.5.0...v1.6.0) (2025-10-22)
+
+
+### Features
+
+* improve validation with instance conversion and caching ([9865b93](https://github.com/koatty/koatty_validation/commit/9865b93e469a7df16fe67e0b85dab3191437b0a8))
+
 ## [1.5.0](https://github.com/koatty/koatty_validation/compare/v1.4.0...v1.5.0) (2025-10-22)
 
 
