@@ -18,8 +18,14 @@ describe('FunctionValidator', () => {
       expect(() => FunctionValidator.IsNotEmpty('', 'Custom error message')).toThrow('Custom error message');
     });
 
-    test('should use default message when no message provided', () => {
-      expect(() => FunctionValidator.IsNotEmpty('', { message: '', value: null })).toThrow('ValidatorError: invalid arguments.');
+    test('should use default message when message is empty string', () => {
+      // When message is empty, should use the function's defaultMessage
+      expect(() => FunctionValidator.IsNotEmpty('', { message: '', value: null })).toThrow('Value should not be empty');
+    });
+
+    test('should use fallback error when no options provided', () => {
+      // When no options are provided, should use defaultMessage
+      expect(() => FunctionValidator.IsNotEmpty('')).toThrow('Value should not be empty');
     });
   });
 

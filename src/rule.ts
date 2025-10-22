@@ -13,6 +13,7 @@ import {
   contains, equals, isEmail, isHash, isIn, isIP, isNotIn, isPhoneNumber,
   isURL, notEquals, validate, ValidationError
 } from "class-validator";
+import { validationCache } from "./performance-cache";
 
 // constant
 
@@ -102,6 +103,30 @@ export type ValidRules = "IsNotEmpty" | "IsDate" | "IsEmail" | "IsIP" |
   "Equals" | "NotEquals" | "Contains" | "IsIn" | "IsNotIn" | "Gt" | "Lt" | "Gte" | "Lte";
 
 /**
+ * Helper function to wrap validation with cache
+ */
+function withCache<T extends any[]>(
+  validatorName: string,
+  validatorFunc: (value: unknown, ...args: T) => boolean
+): (value: unknown, ...args: T) => boolean {
+  return (value: unknown, ...args: T): boolean => {
+    // Check cache first
+    const cached = validationCache.get(validatorName, value, ...args);
+    if (cached !== undefined) {
+      return cached;
+    }
+    
+    // Execute validation
+    const result = validatorFunc(value, ...args);
+    
+    // Cache the result
+    validationCache.set(validatorName, value, result, ...args);
+    
+    return result;
+  };
+}
+
+/**
  * Validator Functions
  */
 export const ValidFuncs = {
@@ -109,27 +134,27 @@ export const ValidFuncs = {
    * Checks value is not empty, undefined, null, '', NaN, [], {} and any empty string(including spaces, 
    * tabs, formfeeds, etc.), returns false
    */
-  IsNotEmpty: (value: unknown) => {
+  IsNotEmpty: withCache('IsNotEmpty', (value: unknown) => {
     return !helper.isEmpty(value);
-  },
+  }),
   /**
    * Checks if a given value is a real date.
    */
-  IsDate: (value: unknown) => {
+  IsDate: withCache('IsDate', (value: unknown) => {
     return helper.isDate(value);
-  },
+  }),
   /**
    * Checks if the string is an email. If given value is not a string, then it returns false.
    */
-  IsEmail: (value: unknown, options?: IsEmailOptions) => {
+  IsEmail: withCache('IsEmail', (value: unknown, options?: IsEmailOptions) => {
     return isEmail(value, options);
-  },
+  }),
   /**
    * Checks if the string is an IP (version 4 or 6). If given value is not a string, then it returns false.
    */
-  IsIP: (value: unknown, version?: any) => {
+  IsIP: withCache('IsIP', (value: unknown, version?: any) => {
     return isIP(value, version);
-  },
+  }),
   /**
    * Checks if the string is a valid phone number.
    * @param value — the potential phone number string to test
@@ -138,121 +163,121 @@ export const ValidFuncs = {
    * See [google-libphonenumber, metadata.js:countryCodeToRegionCodeMap on github]
    * {@link https://github.com/ruimarinho/google-libphonenumber/blob/1e46138878cff479aafe2ce62175c6c49cb58720/src/metadata.js#L33}
    */
-  IsPhoneNumber: (value: string, region?: CountryCode) => {
+  IsPhoneNumber: withCache('IsPhoneNumber', (value: string, region?: CountryCode) => {
     return isPhoneNumber(value, region);
-  },
+  }),
   /**
    * Checks if the string is an url. If given value is not a string, then it returns false.
    */
-  IsUrl: (value: string, options?: IsURLOptions) => {
+  IsUrl: withCache('IsUrl', (value: string, options?: IsURLOptions) => {
     return isURL(value, options);
-  },
+  }),
   /**
    * check if the string is a hash of type algorithm. Algorithm is one of 
    * ['md4', 'md5', 'sha1', 'sha256', 'sha384', 'sha512', 'ripemd128', 'ripemd160', 'tiger128', 'tiger160', 'tiger192', 'crc32', 'crc32b']
    */
-  IsHash: (value: unknown, algorithm: HashAlgorithm) => {
+  IsHash: withCache('IsHash', (value: unknown, algorithm: HashAlgorithm) => {
     return isHash(value, algorithm);
-  },
+  }),
   /**
    * Checks if value is a chinese name.
    */
-  IsCnName: (value: any) => {
+  IsCnName: withCache('IsCnName', (value: any) => {
     if (!helper.isString(value)) {
       return false;
     }
     return cnName(value);
-  },
+  }),
   /**
    * Checks if value is a idcard number.
    */
-  IsIdNumber: (value: any) => {
+  IsIdNumber: withCache('IsIdNumber', (value: any) => {
     if (!helper.isString(value)) {
       return false;
     }
     return idNumber(value);
-  },
+  }),
   /**
    * Checks if value is a zipCode.
    */
-  IsZipCode: (value: any) => {
+  IsZipCode: withCache('IsZipCode', (value: any) => {
     if (!helper.isString(value)) {
       return false;
     }
     return zipCode(value);
-  },
+  }),
   /**
    * Checks if value is a mobile phone number.
    */
-  IsMobile: (value: any) => {
+  IsMobile: withCache('IsMobile', (value: any) => {
     if (!helper.isString(value)) {
       return false;
     }
     return mobile(value);
-  },
+  }),
   /**
    * Checks if value is a plateNumber.
    */
-  IsPlateNumber: (value: any) => {
+  IsPlateNumber: withCache('IsPlateNumber', (value: any) => {
     if (!helper.isString(value)) {
       return false;
     }
     return plateNumber(value);
-  },
+  }),
   /** 
    * Checks if value matches ("===") the comparison.
    */
-  Equals: (value: unknown, comparison: unknown) => {
+  Equals: withCache('Equals', (value: unknown, comparison: unknown) => {
     return equals(value, comparison);
-  },
+  }),
   /**
    * Checks if value does not match ("!==") the comparison.
    */
-  NotEquals: (value: unknown, comparison: unknown) => {
+  NotEquals: withCache('NotEquals', (value: unknown, comparison: unknown) => {
     return notEquals(value, comparison);
-  },
+  }),
   /**
    * Checks if the string contains the seed. If given value is not a string, then it returns false.
    */
-  Contains: (value: unknown, seed: string) => {
+  Contains: withCache('Contains', (value: unknown, seed: string) => {
     return contains(value, seed);
-  },
+  }),
   /**
    * Checks if given value is in a array of allowed values.
    */
-  IsIn: (value: unknown, possibleValues: unknown[]) => {
+  IsIn: withCache('IsIn', (value: unknown, possibleValues: unknown[]) => {
     return isIn(value, possibleValues);
-  },
+  }),
   /**
    * Checks if given value not in a array of allowed values.
    */
-  IsNotIn: (value: unknown, possibleValues: unknown[]) => {
+  IsNotIn: withCache('IsNotIn', (value: unknown, possibleValues: unknown[]) => {
     return isNotIn(value, possibleValues);
-  },
+  }),
   /**
    * Checks if the first number is greater than or equal to the second.
    */
-  Gt: (num: unknown, min: number) => {
+  Gt: withCache('Gt', (num: unknown, min: number) => {
     return helper.toNumber(num) > min;
-  },
+  }),
   /**
    * Checks if the first number is less than or equal to the second.
    */
-  Lt: (num: unknown, max: number) => {
+  Lt: withCache('Lt', (num: unknown, max: number) => {
     return helper.toNumber(num) < max;
-  },
+  }),
   /**
    * Checks if the first number is greater than or equal to the second.
    */
-  Gte: (num: unknown, min: number) => {
+  Gte: withCache('Gte', (num: unknown, min: number) => {
     return helper.toNumber(num) >= min;
-  },
+  }),
   /**
    * Checks if the first number is less than or equal to the second.
    */
-  Lte: (num: unknown, max: number) => {
+  Lte: withCache('Lte', (num: unknown, max: number) => {
     return helper.toNumber(num) <= max;
-  },
+  }),
 }
 
 /**
@@ -271,7 +296,20 @@ function createValidatorFunction(
     }
     
     if (!validatorFunc(value, validOptions.value)) {
-      throw new Error(validOptions.message || defaultMessage);
+      // Priority: validOptions.message -> defaultMessage -> fallback error
+      let errorMessage = validOptions.message;
+      
+      // If message is empty or whitespace, use defaultMessage
+      if (!errorMessage || !errorMessage.trim()) {
+        errorMessage = defaultMessage;
+      }
+      
+      // If defaultMessage is also empty, use fallback
+      if (!errorMessage || !errorMessage.trim()) {
+        errorMessage = 'ValidatorError: invalid arguments.';
+      }
+      
+      throw new Error(errorMessage);
     }
   };
 }

@@ -208,7 +208,13 @@ export function Validated(): MethodDecorator {
             paramType !== Object && paramType !== Date) {
           
           try {
-            const errors = await validate(arg);
+            // 如果参数不是目标类型的实例，转换为实例
+            let validationTarget = arg;
+            if (!(arg instanceof paramType)) {
+              validationTarget = Object.assign(new paramType(), arg);
+            }
+            
+            const errors = await validate(validationTarget);
             
             if (errors.length > 0) {
               throw createValidationErrors(
