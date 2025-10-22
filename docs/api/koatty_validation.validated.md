@@ -4,7 +4,7 @@
 
 ## Validated() function
 
-方法验证装饰器
+方法验证装饰器 自动验证方法参数中的 DTO 对象
 
 **Signature:**
 

@@ -11,25 +11,25 @@ Validator Functions
 ```typescript
 ValidFuncs: {
     IsNotEmpty: (value: unknown) => boolean;
-    IsDate: (value: unknown) => value is Date;
+    IsDate: (value: unknown) => boolean;
     IsEmail: (value: unknown, options?: IsEmailOptions) => boolean;
     IsIP: (value: unknown, version?: any) => boolean;
-    IsPhoneNumber: (value: string, region?: CountryCode) => boolean;
-    IsUrl: (value: string, options?: IsURLOptions) => boolean;
+    IsPhoneNumber: (value: unknown, region?: CountryCode) => boolean;
+    IsUrl: (value: unknown, options?: IsURLOptions) => boolean;
     IsHash: (value: unknown, algorithm: HashAlgorithm) => boolean;
-    IsCnName: (value: any) => boolean;
-    IsIdNumber: (value: any) => boolean;
-    IsZipCode: (value: any) => boolean;
-    IsMobile: (value: any) => boolean;
-    IsPlateNumber: (value: any) => boolean;
+    IsCnName: (value: unknown) => boolean;
+    IsIdNumber: (value: unknown) => boolean;
+    IsZipCode: (value: unknown) => boolean;
+    IsMobile: (value: unknown) => boolean;
+    IsPlateNumber: (value: unknown) => boolean;
     Equals: (value: unknown, comparison: unknown) => boolean;
     NotEquals: (value: unknown, comparison: unknown) => boolean;
     Contains: (value: unknown, seed: string) => boolean;
     IsIn: (value: unknown, possibleValues: unknown[]) => boolean;
     IsNotIn: (value: unknown, possibleValues: unknown[]) => boolean;
-    Gt: (num: unknown, min: number) => boolean;
-    Lt: (num: unknown, max: number) => boolean;
-    Gte: (num: unknown, min: number) => boolean;
-    Lte: (num: unknown, max: number) => boolean;
+    Gt: (value: unknown, min: number) => boolean;
+    Lt: (value: unknown, max: number) => boolean;
+    Gte: (value: unknown, min: number) => boolean;
+    Lte: (value: unknown, max: number) => boolean;
 }
 ```

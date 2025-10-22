@@ -15,6 +15,10 @@ export declare function getAllCacheStats(): {
         max: number;
         calculatedSize: number;
         keyCount: number;
+        hits: number;
+        misses: number;
+        hitRate: number;
+        totalRequests: number;
     };
     regex: {
         size: number;
@@ -31,5 +35,5 @@ export declare function getAllCacheStats(): {
 ```
 **Returns:**
 
-{ validation: { size: number; max: number; calculatedSize: number; keyCount: number; }; regex: { size: number; max: number; calculatedSize: number; }; performance: Record&lt;string, any&gt;; hotspots: { name: string; avgTime: number; count: number; }\[\]; }
+{ validation: { size: number; max: number; calculatedSize: number; keyCount: number; hits: number; misses: number; hitRate: number; totalRequests: number; }; regex: { size: number; max: number; calculatedSize: number; }; performance: Record&lt;string, any&gt;; hotspots: { name: string; avgTime: number; count: number; }\[\]; }
 

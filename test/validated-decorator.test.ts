@@ -101,7 +101,7 @@ describe('Validated Decorator', () => {
 
     it('should throw validation error with invalid Chinese name', async () => {
       const invalidUser = Object.assign(new UserDTO(), {
-        name: 'John',  // Not a valid Chinese name
+        name: 'John@Smith#123',  // Contains invalid characters
         phone: '13812345678'
       });
 

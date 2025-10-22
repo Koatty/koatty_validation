@@ -466,7 +466,7 @@ plain object convert to class instance
 
 </td><td>
 
-方法验证装饰器
+方法验证装饰器 自动验证方法参数中的 DTO 对象
 
 
 </td></tr>
@@ -615,7 +615,7 @@ ClassValidator for manual
 
 </td><td>
 
-Use functions or built-in rules for validation.
+Use functions or built-in rules for validation. Throws error if validation fails.
 
 
 
@@ -644,6 +644,17 @@ Use functions or built-in rules for validation.
 
 
 </td><td>
+
+
+</td></tr>
+<tr><td>
+
+[PARAM\_TYPE\_KEY](./koatty_validation.param_type_key.md)
+
+
+</td><td>
+
+参数类型键常量
 
 
 </td></tr>

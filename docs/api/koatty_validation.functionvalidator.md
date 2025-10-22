@@ -4,13 +4,33 @@
 
 ## FunctionValidator variable
 
-Use functions or built-in rules for validation.
+Use functions or built-in rules for validation. Throws error if validation fails.
 
 
 **Signature:**
 
 ```typescript
 FunctionValidator: {
-    [key in ValidRules]: (value: unknown, options?: string | ValidOtpions) => void;
+    readonly IsNotEmpty: (value: unknown, options?: string | ValidOtpions) => void;
+    readonly IsDate: (value: unknown, options?: string | ValidOtpions) => void;
+    readonly IsEmail: (value: unknown, options?: string | ValidOtpions) => void;
+    readonly IsIP: (value: unknown, options?: string | ValidOtpions) => void;
+    readonly IsPhoneNumber: (value: unknown, options?: string | ValidOtpions) => void;
+    readonly IsUrl: (value: unknown, options?: string | ValidOtpions) => void;
+    readonly IsHash: (value: unknown, options?: string | ValidOtpions) => void;
+    readonly IsCnName: (value: unknown, options?: string | ValidOtpions) => void;
+    readonly IsIdNumber: (value: unknown, options?: string | ValidOtpions) => void;
+    readonly IsZipCode: (value: unknown, options?: string | ValidOtpions) => void;
+    readonly IsMobile: (value: unknown, options?: string | ValidOtpions) => void;
+    readonly IsPlateNumber: (value: unknown, options?: string | ValidOtpions) => void;
+    readonly Equals: (value: unknown, options?: string | ValidOtpions) => void;
+    readonly NotEquals: (value: unknown, options?: string | ValidOtpions) => void;
+    readonly Contains: (value: unknown, options?: string | ValidOtpions) => void;
+    readonly IsIn: (value: unknown, options?: string | ValidOtpions) => void;
+    readonly IsNotIn: (value: unknown, options?: string | ValidOtpions) => void;
+    readonly Gt: (value: unknown, options?: string | ValidOtpions) => void;
+    readonly Lt: (value: unknown, options?: string | ValidOtpions) => void;
+    readonly Gte: (value: unknown, options?: string | ValidOtpions) => void;
+    readonly Lte: (value: unknown, options?: string | ValidOtpions) => void;
 }
 ```
