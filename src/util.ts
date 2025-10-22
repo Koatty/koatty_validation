@@ -9,8 +9,8 @@ import "reflect-metadata";
 import * as helper from "koatty_lib";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { IOCContainer, getOriginMetadata } from "koatty_container";
-// 参数类型键常量
-export const PARAM_TYPE_KEY = 'PARAM_TYPE_KEY';
+import { PARAM_TYPE_KEY } from "./types";
+import { regexCache } from "./performance-cache";
 
 /**
  * Set property as included in the process of transformation.
@@ -262,10 +262,18 @@ export function convertParamsType(param: any, type: string) {
           return NaN;
         }
         if (helper.isNumber(param)) {
+          // Check for safe integer range
+          if (Number.isInteger(param) && !Number.isSafeInteger(param)) {
+            console.warn(`[koatty_validation] Number ${param} exceeds safe integer range`);
+          }
           return param;
         }
         if (helper.isNumberString(param)) {
-          return helper.toNumber(param);
+          const num = helper.toNumber(param);
+          if (Number.isInteger(num) && !Number.isSafeInteger(num)) {
+            console.warn(`[koatty_validation] Number ${param} exceeds safe integer range`);
+          }
+          return num;
         }
         return NaN;
       case "Boolean":
@@ -302,8 +310,9 @@ export function convertParamsType(param: any, type: string) {
       default: //any
         return param;
     }
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  } catch (_err) {
+  } catch (error) {
+    // Log conversion errors for debugging
+    console.warn(`[koatty_validation] Type conversion error for type "${type}":`, error instanceof Error ? error.message : String(error));
     return param;
   }
 }
@@ -381,7 +390,13 @@ export function checkParamsType(value: any, type: string): any {
  * @returns {boolean}
  */
 export function cnName(value: string): boolean {
-  const reg = /^([a-zA-Z0-9\u4e00-\u9fa5\·]{1,10})$/;
+  // Add length limit for security
+  if (value.length > 50) {
+    return false;
+  }
+  
+  // Use regex cache for better performance
+  const reg = regexCache.get('^([a-zA-Z0-9\\u4e00-\\u9fa5\\·]{1,10})$');
   return reg.test(value);
 }
 
@@ -392,10 +407,20 @@ export function cnName(value: string): boolean {
  * @returns
  */
 export function idNumber(value: string): boolean {
-  if (/^\d{15}$/.test(value)) {
+  // Add length limit for security
+  if (!value || value.length > 20) {
+    return false;
+  }
+  
+  // Check 15-digit ID
+  const reg15 = regexCache.get('^\\d{15}$');
+  if (reg15.test(value)) {
     return true;
   }
-  if ((/^\d{17}[0-9X]$/).test(value)) {
+  
+  // Check 18-digit ID with validation
+  const reg18 = regexCache.get('^\\d{17}[0-9X]$');
+  if (reg18.test(value)) {
     const vs = '1,0,x,9,8,7,6,5,4,3,2'.split(',');
     const ps: any[] = '7,9,10,5,8,4,2,1,6,3,7,9,10,5,8,4,2'.split(',');
     const ss: any[] = value.toLowerCase().split('');
@@ -406,6 +431,7 @@ export function idNumber(value: string): boolean {
     const isOk = (vs[r % 11] === ss[17]);
     return isOk;
   }
+  
   return false;
 }
 
@@ -416,7 +442,12 @@ export function idNumber(value: string): boolean {
  * @returns {boolean}
  */
 export function mobile(value: string): boolean {
-  const reg = /^(13|14|15|16|17|18|19)\d{9}$/;
+  // Add length limit for security (prevent ReDoS)
+  if (!value || value.length > 20) {
+    return false;
+  }
+  
+  const reg = regexCache.get('^(13|14|15|16|17|18|19)\\d{9}$');
   return reg.test(value);
 }
 
@@ -427,7 +458,12 @@ export function mobile(value: string): boolean {
  * @returns {boolean}
  */
 export function zipCode(value: string): boolean {
-  const reg = /^\d{6}$/;
+  // Add length limit for security
+  if (!value || value.length > 10) {
+    return false;
+  }
+  
+  const reg = regexCache.get('^\\d{6}$');
   return reg.test(value);
 }
 
@@ -438,15 +474,21 @@ export function zipCode(value: string): boolean {
  * @returns {boolean}
  */
 export function plateNumber(value: string): boolean {
-  // let reg = new RegExp('^(([\u4e00-\u9fa5][a-zA-Z]|[\u4e00-\u9fa5]{2}\d{2}|[\u4e00-\u9fa5]{2}[a-zA-Z])[-]?|([wW][Jj][\u4e00-\u9fa5]{1}[-]?)|([a-zA-Z]{2}))([A-Za-z0-9]{5}|[DdFf][A-HJ-NP-Za-hj-np-z0-9][0-9]{4}|[0-9]{5}[DdFf])$');
-  // let xReg = /^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领A-Z]{1}[A-Z]{1}(([0-9]{5}[DF]$)|([DF][A-HJ-NP-Z0-9][0-9]{4}$))/;
-  const xReg = /^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领]{1}[A-Z]{1}(([0-9]{5}[DF]$)|([DF][A-HJ-NP-Z0-9][0-9]{4}$))/;
-  // let cReg = /^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领A-Z]{1}[A-Z]{1}[A-HJ-NP-Z0-9]{4}[A-HJ-NP-Z0-9挂学警港澳]{1}$/;
-  const cReg = /^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领]{1}[A-Z]{1}[A-HJ-NP-Z0-9]{4}[A-HJ-NP-Z0-9挂学警港澳]{1}$/;
+  // Add length limit for security
+  if (!value || value.length > 15) {
+    return false;
+  }
+  
+  // New energy vehicle plate number (8 characters)
+  const xReg = regexCache.get('^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领]{1}[A-Z]{1}(([0-9]{5}[DF]$)|([DF][A-HJ-NP-Z0-9][0-9]{4}$))');
+  
+  // Traditional vehicle plate number (7 characters)
+  const cReg = regexCache.get('^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领]{1}[A-Z]{1}[A-HJ-NP-Z0-9]{4}[A-HJ-NP-Z0-9挂学警港澳]{1}$');
+  
   if (value.length === 7) {
     return cReg.test(value);
   } else {
-    //新能源车牌
+    // New energy vehicle plate
     return xReg.test(value);
   }
 }

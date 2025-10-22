@@ -256,95 +256,135 @@ export const ValidFuncs = {
 }
 
 /**
- * Use functions or built-in rules for validation.
- *
- * @export
- * @param {ValidRules} rule
- * @param {unknown} value
- * @param {(string | ValidOtpions)} [options]
- * @returns {*}  
+ * Helper function to create validator function
  */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-const FunctionValidator: {
-  [key in ValidRules]: (value: unknown, options?: string | ValidOtpions) => void;
-} = {
-  IsNotEmpty: function (_value: unknown, _options?: string | ValidOtpions): void {
-    throw new Error("Function not implemented.");
-  },
-  IsDate: function (_value: unknown, _options?: string | ValidOtpions): void {
-    throw new Error("Function not implemented.");
-  },
-  IsEmail: function (_value: unknown, _options?: string | ValidOtpions): void {
-    throw new Error("Function not implemented.");
-  },
-  IsIP: function (_value: unknown, _options?: string | ValidOtpions): void {
-    throw new Error("Function not implemented.");
-  },
-  IsPhoneNumber: function (_value: unknown, _options?: string | ValidOtpions): void {
-    throw new Error("Function not implemented.");
-  },
-  IsUrl: function (_value: unknown, _options?: string | ValidOtpions): void {
-    throw new Error("Function not implemented.");
-  },
-  IsHash: function (_value: unknown, _options?: string | ValidOtpions): void {
-    throw new Error("Function not implemented.");
-  },
-  IsCnName: function (_value: unknown, _options?: string | ValidOtpions): void {
-    throw new Error("Function not implemented.");
-  },
-  IsIdNumber: function (_value: unknown, _options?: string | ValidOtpions): void {
-    throw new Error("Function not implemented.");
-  },
-  IsZipCode: function (_value: unknown, _options?: string | ValidOtpions): void {
-    throw new Error("Function not implemented.");
-  },
-  IsMobile: function (_value: unknown, _options?: string | ValidOtpions): void {
-    throw new Error("Function not implemented.");
-  },
-  IsPlateNumber: function (_value: unknown, _options?: string | ValidOtpions): void {
-    throw new Error("Function not implemented.");
-  },
-  Equals: function (_value: unknown, _options?: string | ValidOtpions): void {
-    throw new Error("Function not implemented.");
-  },
-  NotEquals: function (_value: unknown, _options?: string | ValidOtpions): void {
-    throw new Error("Function not implemented.");
-  },
-  Contains: function (_value: unknown, _options?: string | ValidOtpions): void {
-    throw new Error("Function not implemented.");
-  },
-  IsIn: function (_value: unknown, _options?: string | ValidOtpions): void {
-    throw new Error("Function not implemented.");
-  },
-  IsNotIn: function (_value: unknown, _options?: string | ValidOtpions): void {
-    throw new Error("Function not implemented.");
-  },
-  Gt: function (_value: unknown, _options?: string | ValidOtpions): void {
-    throw new Error("Function not implemented.");
-  },
-  Lt: function (_value: unknown, _options?: string | ValidOtpions): void {
-    throw new Error("Function not implemented.");
-  },
-  Gte: function (_value: unknown, _options?: string | ValidOtpions): void {
-    throw new Error("Function not implemented.");
-  },
-  Lte: function (_value: unknown, _options?: string | ValidOtpions): void {
-    throw new Error("Function not implemented.");
-  }
-};
-/* eslint-enable @typescript-eslint/no-unused-vars */
-Object.keys(ValidFuncs).forEach((key: ValidRules) => {
-  FunctionValidator[key] = (value: unknown, options?: string | ValidOtpions) => {
+function createValidatorFunction(
+  validatorFunc: Function,
+  defaultMessage: string
+): (value: unknown, options?: string | ValidOtpions) => void {
+  return (value: unknown, options?: string | ValidOtpions): void => {
     let validOptions: ValidOtpions;
     if (typeof options === 'string') {
       validOptions = { message: options, value: null };
     } else {
-      validOptions = options || { message: `ValidatorError: invalid arguments.`, value: null };
+      validOptions = options || { message: defaultMessage, value: null };
     }
-    if (!(<any>ValidFuncs)[key](value, validOptions.value)) {
-      throw new Error(validOptions.message || `ValidatorError: invalid arguments.`);
+    
+    if (!validatorFunc(value, validOptions.value)) {
+      throw new Error(validOptions.message || defaultMessage);
     }
-  }
-});
+  };
+}
 
-export { FunctionValidator };
+/**
+ * Use functions or built-in rules for validation.
+ * Throws error if validation fails.
+ *
+ * @export
+ */
+export const FunctionValidator = {
+  IsNotEmpty: createValidatorFunction(
+    ValidFuncs.IsNotEmpty,
+    'Value should not be empty'
+  ),
+  
+  IsDate: createValidatorFunction(
+    ValidFuncs.IsDate,
+    'Must be a valid date'
+  ),
+  
+  IsEmail: createValidatorFunction(
+    ValidFuncs.IsEmail,
+    'Must be a valid email'
+  ),
+  
+  IsIP: createValidatorFunction(
+    ValidFuncs.IsIP,
+    'Must be a valid IP address'
+  ),
+  
+  IsPhoneNumber: createValidatorFunction(
+    ValidFuncs.IsPhoneNumber,
+    'Must be a valid phone number'
+  ),
+  
+  IsUrl: createValidatorFunction(
+    ValidFuncs.IsUrl,
+    'Must be a valid URL'
+  ),
+  
+  IsHash: createValidatorFunction(
+    ValidFuncs.IsHash,
+    'Must be a valid hash'
+  ),
+  
+  IsCnName: createValidatorFunction(
+    ValidFuncs.IsCnName,
+    'Must be a valid Chinese name'
+  ),
+  
+  IsIdNumber: createValidatorFunction(
+    ValidFuncs.IsIdNumber,
+    'Must be a valid ID number'
+  ),
+  
+  IsZipCode: createValidatorFunction(
+    ValidFuncs.IsZipCode,
+    'Must be a valid zip code'
+  ),
+  
+  IsMobile: createValidatorFunction(
+    ValidFuncs.IsMobile,
+    'Must be a valid mobile number'
+  ),
+  
+  IsPlateNumber: createValidatorFunction(
+    ValidFuncs.IsPlateNumber,
+    'Must be a valid plate number'
+  ),
+  
+  Equals: createValidatorFunction(
+    ValidFuncs.Equals,
+    'Values must be equal'
+  ),
+  
+  NotEquals: createValidatorFunction(
+    ValidFuncs.NotEquals,
+    'Values must not be equal'
+  ),
+  
+  Contains: createValidatorFunction(
+    ValidFuncs.Contains,
+    'Value must contain specified substring'
+  ),
+  
+  IsIn: createValidatorFunction(
+    ValidFuncs.IsIn,
+    'Value must be in the allowed list'
+  ),
+  
+  IsNotIn: createValidatorFunction(
+    ValidFuncs.IsNotIn,
+    'Value must not be in the forbidden list'
+  ),
+  
+  Gt: createValidatorFunction(
+    ValidFuncs.Gt,
+    'Value must be greater than threshold'
+  ),
+  
+  Lt: createValidatorFunction(
+    ValidFuncs.Lt,
+    'Value must be less than threshold'
+  ),
+  
+  Gte: createValidatorFunction(
+    ValidFuncs.Gte,
+    'Value must be greater than or equal to threshold'
+  ),
+  
+  Lte: createValidatorFunction(
+    ValidFuncs.Lte,
+    'Value must be less than or equal to threshold'
+  ),
+} as const;

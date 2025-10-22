@@ -78,6 +78,8 @@ class MetadataCache {
 class ValidationCache {
   private static instance: ValidationCache;
   private cache: LRUCache<string, boolean>;
+  private hits = 0;
+  private misses = 0;
 
   constructor(options?: CacheOptions) {
     this.cache = new LRUCache<string, boolean>({
@@ -123,7 +125,16 @@ class ValidationCache {
    */
   get(validator: string, value: any, ...args: any[]): boolean | undefined {
     const key = this.generateKey(validator, value, ...args);
-    return this.cache.get(key);
+    const result = this.cache.get(key);
+    
+    // Track cache hits and misses
+    if (result !== undefined) {
+      this.hits++;
+    } else {
+      this.misses++;
+    }
+    
+    return result;
   }
 
   /**
@@ -155,6 +166,8 @@ class ValidationCache {
    */
   clear(): void {
     this.cache.clear();
+    this.hits = 0;
+    this.misses = 0;
   }
 
   /**
@@ -165,12 +178,23 @@ class ValidationCache {
     max: number;
     calculatedSize: number;
     keyCount: number;
+    hits: number;
+    misses: number;
+    hitRate: number;
+    totalRequests: number;
   } {
+    const totalRequests = this.hits + this.misses;
+    const hitRate = totalRequests > 0 ? this.hits / totalRequests : 0;
+    
     return {
       size: this.cache.size,
       max: this.cache.max,
       calculatedSize: this.cache.calculatedSize,
       keyCount: this.cache.size,
+      hits: this.hits,
+      misses: this.misses,
+      hitRate: Math.round(hitRate * 10000) / 100, // Percentage with 2 decimal places
+      totalRequests,
     };
   }
 

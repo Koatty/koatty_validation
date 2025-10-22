@@ -45,3 +45,8 @@ export type ValidOtpions = {
   message: string; 
   value: any; 
 }; 
+
+/**
+ * 参数类型键常量
+ */
+export const PARAM_TYPE_KEY = 'PARAM_TYPE_KEY';

@@ -4,11 +4,12 @@
  */
 import * as helper from "koatty_lib";
 import { CountryCode } from 'libphonenumber-js';
-import { ValidationOptions, isEmail, isIP, isPhoneNumber, isURL, isHash } from "class-validator";
+import { ValidationOptions, isEmail, isIP, isPhoneNumber, isURL, isHash, validate } from "class-validator";
 import { createSimpleDecorator, createParameterizedDecorator } from "./decorator-factory";
 import { cnName, idNumber, mobile, plateNumber, zipCode, setExpose } from "./util";
 import { IsEmailOptions, IsURLOptions, HashAlgorithm, ValidOtpions } from "./types";
 import { ValidRules } from "./rule";
+import { createValidationErrors } from "./error-handler";
 
 // 中国本土化验证装饰器
 export const IsCnName = createSimpleDecorator(
@@ -185,13 +186,49 @@ export function Valid(rule: ValidRules | ValidRules[] | Function, options?: stri
 
 /**
  * 方法验证装饰器
+ * 自动验证方法参数中的 DTO 对象
  */
 export function Validated(): MethodDecorator {
   return function (object: any, propertyName: string | symbol, descriptor: PropertyDescriptor) {
     const originalMethod = descriptor.value;
     
-    descriptor.value = function (...args: any[]) {
-      // 这里可以添加验证逻辑
+    descriptor.value = async function (...args: any[]) {
+      // 获取参数类型元数据
+      const paramTypes = Reflect.getMetadata('design:paramtypes', object, propertyName) || [];
+      
+      // 验证每个参数
+      for (let i = 0; i < args.length; i++) {
+        const arg = args[i];
+        const paramType = paramTypes[i];
+        
+        // 如果是类类型且不是基础类型，执行验证
+        if (paramType && typeof paramType === 'function' && 
+            paramType !== String && paramType !== Number && 
+            paramType !== Boolean && paramType !== Array && 
+            paramType !== Object && paramType !== Date) {
+          
+          try {
+            const errors = await validate(arg);
+            
+            if (errors.length > 0) {
+              throw createValidationErrors(
+                errors.map(e => ({
+                  field: e.property,
+                  value: e.value,
+                  constraint: Object.keys(e.constraints || {})[0] || 'unknown',
+                  message: Object.values(e.constraints || {})[0] || 'Validation failed',
+                  context: e.constraints
+                }))
+              );
+            }
+          } catch (error) {
+            // 如果验证失败，重新抛出错误
+            throw error;
+          }
+        }
+      }
+      
+      // 执行原始方法
       return originalMethod.apply(this, args);
     };
     
