@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.5.0](https://github.com/koatty/koatty_validation/compare/v1.4.0...v1.5.0) (2025-10-22)
+
+
+### Features
+
+* comprehensive code optimization and enhancements ([f7ac738](https://github.com/koatty/koatty_validation/commit/f7ac7381a75a12365aee2a83530a12044c5e1d44))
+
 ## [1.4.0](https://github.com/koatty/koatty_validation/compare/v1.3.2...v1.4.0) (2025-06-10)
 
 
