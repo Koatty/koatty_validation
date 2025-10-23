@@ -4,7 +4,7 @@
 
 ## ErrorMessageFormatter.setLanguage() method
 
-设置语言
+Set language
 
 **Signature:**
 

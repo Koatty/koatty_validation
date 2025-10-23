@@ -4,7 +4,7 @@
 
 ## ErrorMessageFormatter.formatMessage() method
 
-格式化错误消息
+Format error message
 
 **Signature:**
 

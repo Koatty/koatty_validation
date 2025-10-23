@@ -4,7 +4,7 @@
 
 ## ErrorMessageFormatter class
 
-错误信息格式化器
+Error message formatter
 
 **Signature:**
 
@@ -74,7 +74,7 @@ Description
 
 </td><td>
 
-格式化错误消息
+Format error message
 
 
 </td></tr>
@@ -88,7 +88,7 @@ Description
 
 </td><td>
 
-设置语言
+Set language
 
 
 </td></tr>

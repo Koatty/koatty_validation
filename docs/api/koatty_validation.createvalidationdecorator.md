@@ -4,7 +4,7 @@
 
 ## createValidationDecorator() function
 
-创建验证装饰器的工厂函数
+Factory function to create validation decorators
 
 **Signature:**
 
@@ -42,7 +42,7 @@ options
 
 </td><td>
 
-装饰器配置选项
+Decorator configuration options
 
 
 </td></tr>
@@ -51,5 +51,5 @@ options
 
 (...args: any\[\]) =&gt; (object: Object, propertyName: string) =&gt; void
 
-装饰器工厂函数
+Decorator factory function
 

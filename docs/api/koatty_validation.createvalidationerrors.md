@@ -4,7 +4,7 @@
 
 ## createValidationErrors() function
 
-批量创建验证错误
+Create validation errors in batch
 
 **Signature:**
 

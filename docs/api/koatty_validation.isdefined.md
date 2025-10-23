@@ -4,7 +4,7 @@
 
 ## IsDefined() function
 
-Expose的别名
+Alias for Expose
 
 **Signature:**
 

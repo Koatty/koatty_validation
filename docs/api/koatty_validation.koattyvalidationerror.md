@@ -4,7 +4,7 @@
 
 ## KoattyValidationError class
 
-增强的验证错误类
+Enhanced validation error class
 
 **Signature:**
 
@@ -157,7 +157,7 @@ Description
 
 </td><td>
 
-获取指定字段的错误
+Get errors for a specific field
 
 
 </td></tr>
@@ -171,7 +171,7 @@ Description
 
 </td><td>
 
-获取第一个错误信息
+Get the first error message
 
 
 </td></tr>
@@ -185,7 +185,7 @@ Description
 
 </td><td>
 
-转换为JSON格式
+Convert to JSON format
 
 
 </td></tr>

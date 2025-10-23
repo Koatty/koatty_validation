@@ -4,7 +4,7 @@
 
 ## KoattyValidationError.toJSON() method
 
-转换为JSON格式
+Convert to JSON format
 
 **Signature:**
 

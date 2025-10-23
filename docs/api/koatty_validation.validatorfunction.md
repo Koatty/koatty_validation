@@ -4,7 +4,7 @@
 
 ## ValidatorFunction type
 
-验证函数类型定义
+Validator function type definition
 
 **Signature:**
 

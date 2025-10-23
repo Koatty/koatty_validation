@@ -4,7 +4,7 @@
 
 ## Expose() function
 
-标记属性为可导出
+Mark property as exportable
 
 **Signature:**
 

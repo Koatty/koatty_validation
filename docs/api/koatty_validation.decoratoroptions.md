@@ -4,7 +4,7 @@
 
 ## DecoratorOptions interface
 
-装饰器选项
+Decorator options
 
 **Signature:**
 

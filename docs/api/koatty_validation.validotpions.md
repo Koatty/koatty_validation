@@ -4,7 +4,7 @@
 
 ## ValidOtpions type
 
-验证选项
+Validation options
 
 **Signature:**
 

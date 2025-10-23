@@ -4,7 +4,7 @@
 
 ## Valid() function
 
-参数验证装饰器
+Parameter validation decorator
 
 **Signature:**
 

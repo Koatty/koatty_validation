@@ -4,7 +4,7 @@
 
 ## KoattyValidationError.getFieldErrors() method
 
-获取指定字段的错误
+Get errors for a specific field
 
 **Signature:**
 

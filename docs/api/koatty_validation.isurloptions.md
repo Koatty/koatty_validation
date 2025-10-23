@@ -4,7 +4,7 @@
 
 ## IsURLOptions interface
 
-URL验证选项
+URL validation options
 
 **Signature:**
 

@@ -4,7 +4,7 @@
 
 ## ValidationErrorDetail interface
 
-验证错误详情
+Validation error details
 
 **Signature:**
 

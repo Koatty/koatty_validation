@@ -4,7 +4,7 @@
 
 ## KoattyValidationError.getFirstError() method
 
-获取第一个错误信息
+Get the first error message
 
 **Signature:**
 

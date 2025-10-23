@@ -4,7 +4,7 @@
 
 ## PARAM\_TYPE\_KEY variable
 
-参数类型键常量
+Parameter type key constant
 
 **Signature:**
 

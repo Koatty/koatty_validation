@@ -4,7 +4,7 @@
 
 ## CacheOptions interface
 
-缓存配置选项
+Cache configuration options
 
 **Signature:**
 

@@ -4,13 +4,49 @@
 
 ## Validated() function
 
-方法验证装饰器 自动验证方法参数中的 DTO 对象
+Method validation decorator Automatically validates DTO objects in method parameters
 
 **Signature:**
 
 ```typescript
-export declare function Validated(): MethodDecorator;
+export declare function Validated(isAsync?: boolean): MethodDecorator;
 ```
+
+## Parameters
+
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+isAsync
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+_(Optional)_ Whether to use async validation mode, default is true - true: Async mode, validation is handled by IOC container in the framework (suitable for scenarios where parameter values need to be obtained asynchronously) - false: Sync mode, validation is performed immediately when the method is called (suitable for scenarios where parameter values are already prepared)
+
+
+</td></tr>
+</tbody></table>
 **Returns:**
 
 MethodDecorator

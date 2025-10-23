@@ -4,7 +4,7 @@
 
 ## errorFormatter variable
 
-全局错误信息格式化器实例
+Global error message formatter instance
 
 **Signature:**
 

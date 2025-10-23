@@ -4,7 +4,7 @@
 
 ## setValidationLanguage() function
 
-设置全局语言
+Set global language
 
 **Signature:**
 

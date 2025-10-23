@@ -4,7 +4,7 @@
 
 ## IsEmailOptions interface
 
-邮箱验证选项
+Email validation options
 
 **Signature:**
 

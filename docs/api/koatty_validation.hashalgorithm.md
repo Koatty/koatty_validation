@@ -4,7 +4,7 @@
 
 ## HashAlgorithm type
 
-哈希算法类型
+Hash algorithm type
 
 **Signature:**
 

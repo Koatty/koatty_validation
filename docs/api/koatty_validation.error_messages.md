@@ -4,7 +4,7 @@
 
 ## ERROR\_MESSAGES variable
 
-错误信息国际化
+Error message internationalization
 
 **Signature:**
 

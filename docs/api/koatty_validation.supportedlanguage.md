@@ -4,7 +4,7 @@
 
 ## SupportedLanguage type
 
-支持的语言
+Supported languages
 
 **Signature:**
 

@@ -24,7 +24,7 @@ Description
 
 </td><td>
 
-错误信息格式化器
+Error message formatter
 
 
 </td></tr>
@@ -35,7 +35,7 @@ Description
 
 </td><td>
 
-增强的验证错误类
+Enhanced validation error class
 
 
 </td></tr>
@@ -106,6 +106,17 @@ Check the base types.
 </td></tr>
 <tr><td>
 
+[checkValidated(args, paramTypes)](./koatty_validation.checkvalidated.md)
+
+
+</td><td>
+
+Synchronous validation function - Executes the actual validation logic
+
+
+</td></tr>
+<tr><td>
+
 [clearAllCaches()](./koatty_validation.clearallcaches.md)
 
 
@@ -164,7 +175,7 @@ convertDtoParamsType
 
 </td><td>
 
-创建带参数的验证装饰器
+Create parameterized validation decorator
 
 
 </td></tr>
@@ -175,7 +186,7 @@ convertDtoParamsType
 
 </td><td>
 
-创建简单验证装饰器（不需要额外参数）
+Create simple validation decorator (no additional parameters required)
 
 
 </td></tr>
@@ -186,7 +197,7 @@ convertDtoParamsType
 
 </td><td>
 
-创建验证装饰器的工厂函数
+Factory function to create validation decorators
 
 
 </td></tr>
@@ -197,7 +208,7 @@ convertDtoParamsType
 
 </td><td>
 
-创建验证错误
+Create validation error
 
 
 </td></tr>
@@ -208,7 +219,7 @@ convertDtoParamsType
 
 </td><td>
 
-批量创建验证错误
+Create validation errors in batch
 
 
 </td></tr>
@@ -228,7 +239,7 @@ convertDtoParamsType
 
 </td><td>
 
-标记属性为可导出
+Mark property as exportable
 
 
 </td></tr>
@@ -286,7 +297,7 @@ convertDtoParamsType
 
 </td><td>
 
-Expose的别名
+Alias for Expose
 
 
 </td></tr>
@@ -444,7 +455,7 @@ plain object convert to class instance
 
 </td><td>
 
-设置全局语言
+Set global language
 
 
 </td></tr>
@@ -455,18 +466,18 @@ plain object convert to class instance
 
 </td><td>
 
-参数验证装饰器
+Parameter validation decorator
 
 
 </td></tr>
 <tr><td>
 
-[Validated()](./koatty_validation.validated.md)
+[Validated(isAsync)](./koatty_validation.validated.md)
 
 
 </td><td>
 
-方法验证装饰器 自动验证方法参数中的 DTO 对象
+Method validation decorator Automatically validates DTO objects in method parameters
 
 
 </td></tr>
@@ -503,7 +514,7 @@ Description
 
 </td><td>
 
-缓存配置选项
+Cache configuration options
 
 
 </td></tr>
@@ -514,7 +525,7 @@ Description
 
 </td><td>
 
-装饰器选项
+Decorator options
 
 
 </td></tr>
@@ -525,7 +536,7 @@ Description
 
 </td><td>
 
-邮箱验证选项
+Email validation options
 
 
 </td></tr>
@@ -536,7 +547,7 @@ Description
 
 </td><td>
 
-URL验证选项
+URL validation options
 
 
 </td></tr>
@@ -547,7 +558,7 @@ URL验证选项
 
 </td><td>
 
-验证错误详情
+Validation error details
 
 
 </td></tr>
@@ -593,7 +604,7 @@ ClassValidator for manual
 
 </td><td>
 
-错误信息国际化
+Error message internationalization
 
 
 </td></tr>
@@ -604,7 +615,7 @@ ClassValidator for manual
 
 </td><td>
 
-全局错误信息格式化器实例
+Global error message formatter instance
 
 
 </td></tr>
@@ -654,7 +665,7 @@ Use functions or built-in rules for validation. Throws error if validation fails
 
 </td><td>
 
-参数类型键常量
+Parameter type key constant
 
 
 </td></tr>
@@ -718,7 +729,7 @@ Description
 
 </td><td>
 
-哈希算法类型
+Hash algorithm type
 
 
 </td></tr>
@@ -729,7 +740,7 @@ Description
 
 </td><td>
 
-支持的语言
+Supported languages
 
 
 </td></tr>
@@ -740,7 +751,7 @@ Description
 
 </td><td>
 
-验证函数类型定义
+Validator function type definition
 
 
 </td></tr>
@@ -751,7 +762,7 @@ Description
 
 </td><td>
 
-验证选项
+Validation options
 
 
 </td></tr>

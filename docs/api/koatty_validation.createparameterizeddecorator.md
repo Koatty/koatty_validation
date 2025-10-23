@@ -4,7 +4,7 @@
 
 ## createParameterizedDecorator() function
 
-创建带参数的验证装饰器
+Create parameterized validation decorator
 
 **Signature:**
 
@@ -42,7 +42,7 @@ string
 
 </td><td>
 
-装饰器名称
+Decorator name
 
 
 </td></tr>
@@ -58,7 +58,7 @@ validator
 
 </td><td>
 
-验证函数
+Validation function
 
 
 </td></tr>
@@ -74,7 +74,7 @@ string
 
 </td><td>
 
-_(Optional)_ 默认错误信息
+_(Optional)_ Default error message
 
 
 </td></tr>
@@ -83,5 +83,5 @@ _(Optional)_ 默认错误信息
 
 (...args: any\[\]) =&gt; (object: Object, propertyName: string) =&gt; void
 
-装饰器工厂函数
+Decorator factory function
 
