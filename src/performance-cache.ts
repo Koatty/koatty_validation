@@ -1,11 +1,11 @@
 /**
- * 性能缓存模块 - 提供多层次缓存和性能监控
+ * Performance cache module - Provides multi-level caching and performance monitoring
  * @author richen
  */
 import { LRUCache } from 'lru-cache';
 
 /**
- * 缓存配置选项
+ * Cache configuration options
  */
 interface CacheOptions {
   max?: number;
@@ -15,7 +15,7 @@ interface CacheOptions {
 }
 
 /**
- * 元数据缓存
+ * Metadata cache
  */
 class MetadataCache {
   private static instance: MetadataCache;
@@ -29,7 +29,7 @@ class MetadataCache {
   }
 
   /**
-   * 获取类的元数据缓存
+   * Get metadata cache for a class
    */
   getClassCache(target: Function): Map<string, any> {
     if (!this.cache.has(target)) {
@@ -39,7 +39,7 @@ class MetadataCache {
   }
 
   /**
-   * 缓存元数据
+   * Cache metadata
    */
   setMetadata(target: Function, key: string, value: any): void {
     const classCache = this.getClassCache(target);
@@ -47,7 +47,7 @@ class MetadataCache {
   }
 
   /**
-   * 获取缓存的元数据
+   * Get cached metadata
    */
   getMetadata(target: Function, key: string): any {
     const classCache = this.getClassCache(target);
@@ -55,7 +55,7 @@ class MetadataCache {
   }
 
   /**
-   * 检查是否已缓存
+   * Check if metadata is cached
    */
   hasMetadata(target: Function, key: string): boolean {
     const classCache = this.getClassCache(target);
@@ -63,7 +63,7 @@ class MetadataCache {
   }
 
   /**
-   * 清空指定类的缓存
+   * Clear cache for a specific class
    */
   clearClassCache(target: Function): void {
     if (this.cache.has(target)) {
@@ -73,7 +73,7 @@ class MetadataCache {
 }
 
 /**
- * 验证结果缓存
+ * Validation result cache
  */
 class ValidationCache {
   private static instance: ValidationCache;
@@ -84,7 +84,7 @@ class ValidationCache {
   constructor(options?: CacheOptions) {
     this.cache = new LRUCache<string, boolean>({
       max: options?.max || 5000,
-      ttl: options?.ttl || 1000 * 60 * 10, // 10分钟
+      ttl: options?.ttl || 1000 * 60 * 10, // 10 minutes
       allowStale: options?.allowStale || false,
       updateAgeOnGet: options?.updateAgeOnGet || true,
     });
@@ -220,7 +220,7 @@ class RegexCache {
   constructor(options?: CacheOptions) {
     this.cache = new LRUCache({
       max: options?.max || 200,
-      ttl: options?.ttl || 1000 * 60 * 30, // 30分钟
+      ttl: options?.ttl || 1000 * 60 * 30, // 30 minutes
       allowStale: options?.allowStale || false,
       updateAgeOnGet: options?.updateAgeOnGet || true,
     });
@@ -435,7 +435,7 @@ export function cached(validator: string, ttl?: number) {
         const result = originalMethod.apply(this, args);
         validationCache.set(validator, value, result, ...additionalArgs);
         
-        // 如果指定了TTL，设置过期时间
+        // If TTL is specified, set expiration time
         if (ttl && ttl > 0) {
           validationCache.setTTL(validator, value, ttl, ...additionalArgs);
         }

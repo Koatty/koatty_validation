@@ -1,26 +1,26 @@
 /**
- * 改进的错误处理机制
+ * Improved error handling mechanism
  * @author richen
  */
 
 /**
- * 支持的语言
+ * Supported languages
  */
 export type SupportedLanguage = 'zh' | 'en';
 
 /**
- * 错误信息国际化
+ * Error message internationalization
  */
 export const ERROR_MESSAGES = {
   zh: {
-    // 中国本土化验证
+    // Chinese localization validation
     IsCnName: '必须是有效的中文姓名',
     IsIdNumber: '必须是有效的身份证号码',
     IsZipCode: '必须是有效的邮政编码',
     IsMobile: '必须是有效的手机号码',
     IsPlateNumber: '必须是有效的车牌号码',
     
-    // 基础验证
+    // Basic validation
     IsNotEmpty: '不能为空',
     IsDate: '必须是有效的日期',
     IsEmail: '必须是有效的邮箱地址',
@@ -29,7 +29,7 @@ export const ERROR_MESSAGES = {
     IsUrl: '必须是有效的URL地址',
     IsHash: '必须是有效的哈希值',
     
-    // 比较验证
+    // Comparison validation
     Equals: '必须等于 {comparison}',
     NotEquals: '不能等于 {comparison}',
     Contains: '必须包含 {seed}',
@@ -40,7 +40,7 @@ export const ERROR_MESSAGES = {
     Lt: '必须小于 {max}',
     Lte: '必须小于或等于 {max}',
     
-    // 通用错误
+    // Common errors
     invalidParameter: '参数 {field} 无效',
     validationFailed: '验证失败',
   },
@@ -79,7 +79,7 @@ export const ERROR_MESSAGES = {
 } as const;
 
 /**
- * 验证错误详情
+ * Validation error details
  */
 export interface ValidationErrorDetail {
   field: string;
@@ -90,7 +90,7 @@ export interface ValidationErrorDetail {
 }
 
 /**
- * 增强的验证错误类
+ * Enhanced validation error class
  */
 export class KoattyValidationError extends Error {
   public readonly errors: ValidationErrorDetail[];
@@ -106,26 +106,26 @@ export class KoattyValidationError extends Error {
     this.statusCode = 400;
     this.timestamp = new Date();
     
-    // 确保正确的原型链
+    // Ensure correct prototype chain
     Object.setPrototypeOf(this, KoattyValidationError.prototype);
   }
 
   /**
-   * 获取第一个错误信息
+   * Get the first error message
    */
   public getFirstError(): ValidationErrorDetail | undefined {
     return this.errors[0];
   }
 
   /**
-   * 获取指定字段的错误
+   * Get errors for a specific field
    */
   public getFieldErrors(field: string): ValidationErrorDetail[] {
     return this.errors.filter(error => error.field === field);
   }
 
   /**
-   * 转换为JSON格式
+   * Convert to JSON format
    */
   public toJSON() {
     return {
@@ -139,7 +139,7 @@ export class KoattyValidationError extends Error {
 }
 
 /**
- * 错误信息格式化器
+ * Error message formatter
  */
 export class ErrorMessageFormatter {
   private language: SupportedLanguage = 'zh';
@@ -149,30 +149,30 @@ export class ErrorMessageFormatter {
   }
 
   /**
-   * 设置语言
+   * Set language
    */
   public setLanguage(language: SupportedLanguage): void {
     this.language = language;
   }
 
   /**
-   * 格式化错误消息
+   * Format error message
    */
   public formatMessage(constraint: string, field: string, value?: any, context?: Record<string, any>): string {
     const messages = ERROR_MESSAGES[this.language];
     let template: string = (messages as any)[constraint] || messages.invalidParameter;
     
-    // 替换占位符
+    // Replace placeholders
     template = template.replace('{field}', field);
     
-    // 优先使用上下文中的值，然后是传入的value
+    // Prioritize values from context, then use passed value
     if (context) {
       Object.entries(context).forEach(([key, val]) => {
         template = template.replace(`{${key}}`, this.formatValue(val));
       });
     }
     
-    // 如果还有{value}占位符且传入了value，则替换
+    // If there's still a {value} placeholder and value was passed, replace it
     if (value !== undefined && template.includes('{value}')) {
       template = template.replace('{value}', this.formatValue(value));
     }
@@ -181,7 +181,7 @@ export class ErrorMessageFormatter {
   }
 
   /**
-   * 格式化值用于消息显示
+   * Format value for message display
    * @private
    */
   private formatValue(value: any): string {
@@ -194,7 +194,7 @@ export class ErrorMessageFormatter {
       try {
         return JSON.stringify(value);
       } catch {
-        // 处理循环引用
+        // Handle circular references
         return '[Circular Reference]';
       }
     }
@@ -203,19 +203,19 @@ export class ErrorMessageFormatter {
 }
 
 /**
- * 全局错误信息格式化器实例
+ * Global error message formatter instance
  */
 export const errorFormatter = new ErrorMessageFormatter();
 
 /**
- * 设置全局语言
+ * Set global language
  */
 export function setValidationLanguage(language: SupportedLanguage): void {
   errorFormatter.setLanguage(language);
 }
 
 /**
- * 创建验证错误
+ * Create validation error
  */
 export function createValidationError(
   field: string,
@@ -236,7 +236,7 @@ export function createValidationError(
 }
 
 /**
- * 批量创建验证错误
+ * Create validation errors in batch
  */
 export function createValidationErrors(
   errors: Array<{

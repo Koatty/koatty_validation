@@ -1,17 +1,18 @@
 /**
- * 重构后的装饰器定义 - 使用工厂函数消除重复
+ * Refactored decorator definitions - Using factory functions to eliminate duplication
  * @author richen
  */
 import * as helper from "koatty_lib";
 import { CountryCode } from 'libphonenumber-js';
 import { ValidationOptions, isEmail, isIP, isPhoneNumber, isURL, isHash, validate } from "class-validator";
+import { IOCContainer } from "koatty_container";
 import { createSimpleDecorator, createParameterizedDecorator } from "./decorator-factory";
 import { cnName, idNumber, mobile, plateNumber, zipCode, setExpose } from "./util";
 import { IsEmailOptions, IsURLOptions, HashAlgorithm, ValidOtpions } from "./types";
-import { ValidRules } from "./rule";
+import { ValidRules, PARAM_CHECK_KEY } from "./rule";
 import { createValidationErrors } from "./error-handler";
 
-// 中国本土化验证装饰器
+// Chinese localization validation decorators
 export const IsCnName = createSimpleDecorator(
   'IsCnName',
   (value: any) => helper.isString(value) && cnName(value),
@@ -42,7 +43,7 @@ export const IsPlateNumber = createSimpleDecorator(
   'must be a valid plate number'
 );
 
-// 基础验证装饰器
+// Basic validation decorators
 export const IsNotEmpty = createSimpleDecorator(
   'IsNotEmpty',
   (value: any) => !helper.isEmpty(value),
@@ -55,7 +56,7 @@ export const IsDate = createSimpleDecorator(
   'must be a valid date'
 );
 
-// 带参数的验证装饰器
+// Parameterized validation decorators
 export const Equals = createParameterizedDecorator(
   'Equals',
   (value: any, comparison: any) => value === comparison,
@@ -152,10 +153,10 @@ export function IsHash(algorithm: HashAlgorithm, validationOptions?: ValidationO
   )(validationOptions);
 }
 
-// 基础工具装饰器（从原始decorator.ts移植）
+// Basic utility decorators (migrated from original decorator.ts)
 
 /**
- * 标记属性为可导出
+ * Mark property as exportable
  */
 export function Expose(): PropertyDecorator {
   return function (object: Object, propertyName: string) {
@@ -164,7 +165,7 @@ export function Expose(): PropertyDecorator {
 }
 
 /**
- * Expose的别名
+ * Alias for Expose
  */
 export function IsDefined(): PropertyDecorator {
   return function (object: Object, propertyName: string) {
@@ -173,11 +174,11 @@ export function IsDefined(): PropertyDecorator {
 }
 
 /**
- * 参数验证装饰器
+ * Parameter validation decorator
  */
 export function Valid(rule: ValidRules | ValidRules[] | Function, options?: string | ValidOtpions): ParameterDecorator {
   return function (object: any, propertyName: string | symbol | undefined, parameterIndex: number) {
-    // 这里保持与原始实现一致
+    // Keep consistent with original implementation
     const existingRules = Reflect.getOwnMetadata("validate", object, propertyName) || {};
     existingRules[parameterIndex] = { rule, options };
     Reflect.defineMetadata("validate", existingRules, object, propertyName);
@@ -185,58 +186,91 @@ export function Valid(rule: ValidRules | ValidRules[] | Function, options?: stri
 }
 
 /**
- * 方法验证装饰器
- * 自动验证方法参数中的 DTO 对象
+ * Synchronous validation function - Executes the actual validation logic
+ * @param args Method parameters
+ * @param paramTypes Parameter type metadata
+ * @returns Validated parameters and validation targets
  */
-export function Validated(): MethodDecorator {
-  return function (object: any, propertyName: string | symbol, descriptor: PropertyDescriptor) {
-    const originalMethod = descriptor.value;
+export async function checkValidated(
+  args: any[],
+  paramTypes: any[]
+): Promise<{ validatedArgs: any[]; validationTargets: any[] }> {
+  const validationTargets: any[] = [];
+  
+  // Validate each parameter
+  for (let i = 0; i < args.length; i++) {
+    const arg = args[i];
+    const paramType = paramTypes[i];
     
-    descriptor.value = async function (...args: any[]) {
-      // 获取参数类型元数据
-      const paramTypes = Reflect.getMetadata('design:paramtypes', object, propertyName) || [];
+    // If it's a class type and not a basic type, perform validation
+    if (paramType && typeof paramType === 'function' && 
+        paramType !== String && paramType !== Number && 
+        paramType !== Boolean && paramType !== Array && 
+        paramType !== Object && paramType !== Date) {
       
-      // 验证每个参数
-      for (let i = 0; i < args.length; i++) {
-        const arg = args[i];
-        const paramType = paramTypes[i];
-        
-        // 如果是类类型且不是基础类型，执行验证
-        if (paramType && typeof paramType === 'function' && 
-            paramType !== String && paramType !== Number && 
-            paramType !== Boolean && paramType !== Array && 
-            paramType !== Object && paramType !== Date) {
-          
-          try {
-            // 如果参数不是目标类型的实例，转换为实例
-            let validationTarget = arg;
-            if (!(arg instanceof paramType)) {
-              validationTarget = Object.assign(new paramType(), arg);
-            }
-            
-            const errors = await validate(validationTarget);
-            
-            if (errors.length > 0) {
-              throw createValidationErrors(
-                errors.map(e => ({
-                  field: e.property,
-                  value: e.value,
-                  constraint: Object.keys(e.constraints || {})[0] || 'unknown',
-                  message: Object.values(e.constraints || {})[0] || 'Validation failed',
-                  context: e.constraints
-                }))
-              );
-            }
-          } catch (error) {
-            // 如果验证失败，重新抛出错误
-            throw error;
-          }
+      try {
+        // If parameter is not an instance of the target type, convert it to an instance
+        let validationTarget = arg;
+        if (!(arg instanceof paramType)) {
+          validationTarget = Object.assign(new paramType(), arg);
         }
+        
+        const errors = await validate(validationTarget);
+        
+        if (errors.length > 0) {
+          throw createValidationErrors(
+            errors.map(e => ({
+              field: e.property,
+              value: e.value,
+              constraint: Object.keys(e.constraints || {})[0] || 'unknown',
+              message: Object.values(e.constraints || {})[0] || 'Validation failed',
+              context: e.constraints
+            }))
+          );
+        }
+        
+        validationTargets.push(validationTarget);
+      } catch (error) {
+        // If validation fails, rethrow the error
+        throw error;
       }
+    } else {
+      validationTargets.push(arg);
+    }
+  }
+  
+  return { validatedArgs: args, validationTargets };
+}
+
+/**
+ * Method validation decorator
+ * Automatically validates DTO objects in method parameters
+ * @param isAsync Whether to use async validation mode, default is true
+ *   - true: Async mode, validation is handled by IOC container in the framework (suitable for scenarios where parameter values need to be obtained asynchronously)
+ *   - false: Sync mode, validation is performed immediately when the method is called (suitable for scenarios where parameter values are already prepared)
+ */
+export function Validated(isAsync: boolean = true): MethodDecorator {
+  return function (target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor) {
+    if (isAsync) {
+      // Async mode: Save metadata, validation will be performed by the framework after async parameter retrieval
+      IOCContainer.savePropertyData(PARAM_CHECK_KEY, {
+        dtoCheck: 1
+      }, target, propertyKey);
+    } else {
+      // Sync mode: Perform validation immediately when the method is called
+      const originalMethod = descriptor.value;
       
-      // 执行原始方法
-      return originalMethod.apply(this, args);
-    };
+      descriptor.value = async function (...args: any[]) {
+        // Get parameter type metadata
+        const paramTypes = Reflect.getMetadata('design:paramtypes', target, propertyKey) || [];
+        
+        // Execute validation
+        await checkValidated(args, paramTypes);
+        
+        // Execute original method
+        return originalMethod.apply(this, args);
+      };
+    }
     
     return descriptor;
   };

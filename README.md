@@ -36,10 +36,16 @@ export class Controller {
         // 业务逻辑
     }
 
-    // DTO 验证
+    // DTO 验证 - 异步模式（默认，适用于 Koatty 框架）
     @Validated()
     TestDto(user: UserDTO) {
-        // 自动验证 UserDTO
+        // 框架会在异步获取参数后自动验证 UserDTO
+    }
+    
+    // DTO 验证 - 同步模式（适用于参数已准备好的场景）
+    @Validated(false)
+    TestDtoSync(user: UserDTO) {
+        // 方法执行前立即验证 UserDTO
     }
 }
 
@@ -101,10 +107,106 @@ export class UserDTO {
 
 ```typescript
 @Valid(rule, options)   // 参数验证
-@Validated()           // DTO验证
+@Validated()           // DTO验证 (默认异步模式)
+@Validated(true)       // DTO验证 (异步模式)
+@Validated(false)      // DTO验证 (同步模式)
 @Expose()             // 暴露属性
 @IsDefined()          // 已定义（Expose别名）
 ```
+
+## 🎭 Validated 装饰器
+
+`@Validated` 装饰器支持同步和异步两种验证模式，以适应不同的应用场景。
+
+### 异步模式（默认）
+
+适用于 **Koatty 框架**中，控制器方法的参数需要异步获取的场景。
+
+```typescript
+import { Validated, checkValidated } from 'koatty_validation';
+
+class UserController {
+  // 默认异步模式
+  @Validated()
+  async register(user: UserDTO) {
+    // 框架流程：
+    // 1. 框架接收 HTTP 请求
+    // 2. 框架异步解析请求体，构造 UserDTO 实例
+    // 3. 框架检测到 @Validated() 元数据
+    // 4. 框架调用 checkValidated() 验证参数
+    // 5. 验证通过后调用此方法
+    return { success: true };
+  }
+  
+  // 显式指定异步模式
+  @Validated(true)
+  async update(id: number, user: UserDTO) {
+    return { success: true };
+  }
+}
+```
+
+**异步模式特点：**
+- ✅ 装饰器保存验证元数据到 IOC 容器
+- ✅ 由框架在异步获取参数后执行验证
+- ✅ 适用于参数值需要异步获取的场景
+- ✅ 是 Koatty 框架的推荐模式
+
+### 同步模式
+
+适用于**单元测试**或参数值已经准备好的场景。
+
+```typescript
+class UserService {
+  // 同步模式 - 立即验证
+  @Validated(false)
+  async createUser(user: UserDTO) {
+    // 方法执行前已经完成验证
+    return { success: true };
+  }
+  
+  // 适用于多个参数的场景
+  @Validated(false)
+  async updateUser(id: number, user: UserDTO) {
+    // 只验证类类型参数（UserDTO），基础类型（number）不验证
+    return { success: true };
+  }
+}
+```
+
+**同步模式特点：**
+- ✅ 装饰器包装原方法，在调用时立即执行验证
+- ✅ 适用于单元测试场景
+- ✅ 适用于参数已准备好的场景
+- ✅ 验证失败立即抛出错误
+
+### 手动调用 checkValidated
+
+在框架拦截器或中间件中，可以手动调用 `checkValidated` 函数：
+
+```typescript
+import { checkValidated } from 'koatty_validation';
+
+async function validateInMiddleware(args: any[], paramTypes: any[]) {
+  try {
+    const { validatedArgs, validationTargets } = await checkValidated(args, paramTypes);
+    console.log('验证通过');
+    return validationTargets;
+  } catch (error) {
+    console.error('验证失败:', error);
+    throw error;
+  }
+}
+```
+
+### 选择合适的模式
+
+| 场景 | 推荐模式 | 原因 |
+|------|---------|------|
+| Koatty 框架控制器 | 异步 `@Validated()` | 参数需要异步获取 |
+| 单元测试 | 同步 `@Validated(false)` | 参数已准备好，立即验证 |
+| 独立服务/工具 | 同步 `@Validated(false)` | 不依赖框架，立即验证 |
+| 框架拦截器 | 手动 `checkValidated()` | 完全控制验证时机 |
 
 ## 🔧 自定义装饰器
 
@@ -310,6 +412,7 @@ const validatedData = await ClassValidator.valid(UserSchema, rawData, true);
 - [基础用法示例](./examples/basic-usage.ts)
 - [自定义装饰器示例](./examples/custom-decorators-example.ts)
 - [完整使用示例](./examples/usage-example.ts)
+- [Validated 异步/同步模式示例](./examples/validated-async-sync-example.ts)
 
 ## 🔍 可用验证函数
 

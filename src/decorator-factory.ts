@@ -1,17 +1,17 @@
 /**
- * 装饰器工厂 - 消除装饰器代码重复
+ * Decorator Factory - Eliminate decorator code duplication
  * @author richen
  */
 import { registerDecorator, ValidationArguments, ValidationOptions } from "class-validator";
 import { setExpose } from "./util";
 
 /**
- * 验证函数类型定义
+ * Validator function type definition
  */
 export type ValidatorFunction = (value: any, ...args: any[]) => boolean;
 
 /**
- * 装饰器选项
+ * Decorator options
  */
 export interface DecoratorOptions {
   name: string;
@@ -21,23 +21,23 @@ export interface DecoratorOptions {
 }
 
 /**
- * 创建验证装饰器的工厂函数
- * @param options 装饰器配置选项
- * @returns 装饰器工厂函数
+ * Factory function to create validation decorators
+ * @param options Decorator configuration options
+ * @returns Decorator factory function
  */
 export function createValidationDecorator(options: DecoratorOptions) {
   const { name, validator, defaultMessage, requiresValue = false } = options;
   
   return function decoratorFactory(...args: any[]) {
-    // 处理参数：最后一个参数是ValidationOptions，前面是验证函数的参数
+    // Handle parameters: last parameter is ValidationOptions, previous ones are validator function parameters
     const validationOptions = args[args.length - 1] as ValidationOptions;
     const validatorArgs = requiresValue ? args.slice(0, -1) : [];
     
     return function propertyDecorator(object: Object, propertyName: string) {
-      // 设置属性为可导出
+      // Set property as exportable
       setExpose(object, propertyName);
       
-      // 注册验证装饰器
+      // Register validation decorator
       registerDecorator({
         name,
         target: object.constructor,
@@ -65,11 +65,11 @@ export function createValidationDecorator(options: DecoratorOptions) {
 }
 
 /**
- * 创建简单验证装饰器（不需要额外参数）
- * @param name 装饰器名称
- * @param validator 验证函数
- * @param defaultMessage 默认错误信息
- * @returns 装饰器函数
+ * Create simple validation decorator (no additional parameters required)
+ * @param name Decorator name
+ * @param validator Validation function
+ * @param defaultMessage Default error message
+ * @returns Decorator function
  */
 export function createSimpleDecorator(
   name: string, 
@@ -85,11 +85,11 @@ export function createSimpleDecorator(
 }
 
 /**
- * 创建带参数的验证装饰器
- * @param name 装饰器名称
- * @param validator 验证函数
- * @param defaultMessage 默认错误信息
- * @returns 装饰器工厂函数
+ * Create parameterized validation decorator
+ * @param name Decorator name
+ * @param validator Validation function
+ * @param defaultMessage Default error message
+ * @returns Decorator factory function
  */
 export function createParameterizedDecorator(
   name: string,

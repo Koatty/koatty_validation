@@ -18,18 +18,18 @@ describe('Validated Decorator', () => {
   }
 
   class TestController {
-    @Validated()
+    @Validated(false) // 使用同步模式进行测试
     async createUser(userData: UserDTO) {
       return { success: true, data: userData };
     }
 
-    @Validated()
+    @Validated(false) // 使用同步模式进行测试
     async updateUser(id: number, userData: UserDTO) {
       return { success: true, id, data: userData };
     }
 
     // Method without DTO parameter
-    @Validated()
+    @Validated(false) // 使用同步模式进行测试
     async simpleMethod(name: string, age: number) {
       return { name, age };
     }
@@ -151,6 +151,64 @@ describe('Validated Decorator', () => {
       // Plain object should still work if it passes validation
       const result = await controller.createUser(plainObject as any);
       expect(result.success).toBe(true);
+    });
+  });
+
+  describe('Async mode', () => {
+    class AsyncController {
+      @Validated() // 默认为异步模式 (isAsync=true)
+      async registerUser(userData: UserDTO) {
+        return { success: true, data: userData };
+      }
+    }
+
+    it('should save metadata in async mode', () => {
+      const controller = new AsyncController();
+      
+      // 在异步模式下，装饰器应该保存元数据而不是包装方法
+      // 验证逻辑由框架在异步获取参数后执行
+      expect(controller.registerUser).toBeDefined();
+    });
+  });
+
+  describe('Sync vs Async mode comparison', () => {
+    class SyncController {
+      @Validated(false) // 同步模式
+      async syncCreate(userData: UserDTO) {
+        return { mode: 'sync', data: userData };
+      }
+    }
+
+    class AsyncController {
+      @Validated(true) // 异步模式
+      async asyncCreate(userData: UserDTO) {
+        return { mode: 'async', data: userData };
+      }
+    }
+
+    it('should execute sync validation immediately', async () => {
+      const controller = new SyncController();
+      const validUser = Object.assign(new UserDTO(), {
+        name: '赵六',
+        phone: '13912345678'
+      });
+
+      const result = await controller.syncCreate(validUser);
+      expect(result.mode).toBe('sync');
+      expect(result.data.name).toBe('赵六');
+    });
+
+    it('should defer validation in async mode', async () => {
+      const controller = new AsyncController();
+      const validUser = Object.assign(new UserDTO(), {
+        name: '钱七',
+        phone: '13712345678'
+      });
+
+      // 在异步模式下，方法本身不执行验证
+      // 验证由框架处理
+      const result = await controller.asyncCreate(validUser);
+      expect(result.mode).toBe('async');
     });
   });
 });

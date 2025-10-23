@@ -1,12 +1,12 @@
 /**
- * koatty_validation 类型定义
+ * koatty_validation type definitions
  * @author richen
  * @copyright Copyright (c) - <richenlin(at)gmail.com>
  * @license MIT
  */
 
 /**
- * 邮箱验证选项
+ * Email validation options
  */
 export interface IsEmailOptions {
   allow_display_name?: boolean;
@@ -16,7 +16,7 @@ export interface IsEmailOptions {
 }
 
 /**
- * URL验证选项
+ * URL validation options
  */
 export interface IsURLOptions {
   protocols?: string[];
@@ -33,13 +33,13 @@ export interface IsURLOptions {
 }
 
 /**
- * 哈希算法类型
+ * Hash algorithm type
  */
 export type HashAlgorithm = "md4" | "md5" | "sha1" | "sha256" | "sha384" | "sha512"
   | "ripemd128" | "ripemd160" | "tiger128" | "tiger160" | "tiger192" | "crc32" | "crc32b";
 
-/**
- * 验证选项
+  /**
+   * Validation options
  */
 export type ValidOtpions = { 
   message: string; 
@@ -47,6 +47,6 @@ export type ValidOtpions = {
 }; 
 
 /**
- * 参数类型键常量
+ * Parameter type key constant
  */
 export const PARAM_TYPE_KEY = 'PARAM_TYPE_KEY';
