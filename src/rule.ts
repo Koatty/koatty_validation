@@ -7,8 +7,9 @@
  */
 import * as helper from "koatty_lib";
 import { CountryCode } from 'libphonenumber-js';
-import { IsEmailOptions, IsURLOptions, HashAlgorithm, ValidOtpions } from "./types";
+import { IsEmailOptions, IsURLOptions, HashAlgorithm, ValidOtpions, ValidationOptions } from "./types";
 import { cnName, idNumber, mobile, plainToClass, plateNumber, zipCode } from "./util";
+import { createValidationErrors } from "./error-handler";
 import {
   contains, equals, isEmail, isHash, isIn, isIP, isNotIn, isPhoneNumber,
   isURL, notEquals, validate, ValidationError
@@ -64,10 +65,11 @@ class ValidateClass {
    * @param {*} Clazz
    * @param {*} data
    * @param {boolean} [convert=false] auto convert parameters type
+   * @param {ValidationOptions} [options] validation options (returnAllErrors, errorSeparator)
    * @returns {Promise<any>}
    * @memberof ValidateClass
    */
-  async valid(Clazz: any, data: any, convert = false): Promise<any> {
+  async valid(Clazz: any, data: any, convert = false, options?: ValidationOptions): Promise<any> {
     let obj: any = {};
     if (data instanceof Clazz) {
       obj = data;
@@ -81,7 +83,22 @@ class ValidateClass {
       errors = await validate(obj, { skipMissingProperties: true });
     }
     if (errors.length > 0) {
-      throw new Error(Object.values(errors[0].constraints)[0]);
+      // Check if user wants all errors or just the first one
+      if (options?.returnAllErrors) {
+        // Throw KoattyValidationError with all error details
+        throw createValidationErrors(
+          errors.map(e => ({
+            field: e.property,
+            value: e.value,
+            constraint: Object.keys(e.constraints || {})[0] || 'unknown',
+            message: Object.values(e.constraints || {})[0] || 'Validation failed',
+            context: e.constraints
+          }))
+        );
+      } else {
+        // Default behavior (backward compatible): return only first error
+        throw new Error(Object.values(errors[0].constraints)[0]);
+      }
     }
     return obj;
   }

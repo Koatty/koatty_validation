@@ -49,4 +49,24 @@ export type ValidOtpions = {
 /**
  * Parameter type key constant
  */
+/**
+ * Validation options for ClassValidator.valid()
+ */
+export interface ValidationOptions {
+  /**
+   * Whether to return all validation errors or only the first one
+   * @default false (backward compatibility - returns only first error)
+   */
+  returnAllErrors?: boolean;
+
+  /**
+   * Separator for joining multiple error messages
+   * @default '; '
+   */
+  errorSeparator?: string;
+}
+
+/**
+ * Parameter type key constant
+ */
 export const PARAM_TYPE_KEY = 'PARAM_TYPE_KEY';
