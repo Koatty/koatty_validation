@@ -93,7 +93,8 @@ class ValidateClass {
             constraint: Object.keys(e.constraints || {})[0] || 'unknown',
             message: Object.values(e.constraints || {})[0] || 'Validation failed',
             context: e.constraints
-          }))
+          })),
+          options.errorSeparator || '; '
         );
       } else {
         // Default behavior (backward compatible): return only first error

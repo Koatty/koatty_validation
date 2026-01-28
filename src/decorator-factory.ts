@@ -54,8 +54,9 @@ export function createValidationDecorator(options: DecoratorOptions) {
           },
           defaultMessage(validationArguments: ValidationArguments) {
             const property = validationArguments.property;
-            return defaultMessage 
-              ? defaultMessage.replace('$property', property)
+            const customMessage = (validationOptions as any)?.message || defaultMessage;
+            return customMessage
+              ? customMessage.replace('$property', property)
               : `Invalid value for ${property}`;
           }
         }

@@ -245,9 +245,10 @@ export function createValidationErrors(
     constraint: string;
     message?: string;
     context?: Record<string, any>;
-  }>
+  }>,
+  separator: string = '; '
 ): KoattyValidationError {
-  const validationErrors = errors.map(error => 
+  const validationErrors = errors.map(error =>
     createValidationError(
       error.field,
       error.value,
@@ -256,6 +257,12 @@ export function createValidationErrors(
       error.context
     )
   );
-  
-  return new KoattyValidationError(validationErrors);
+
+  // Generate combined message from all errors
+  const combinedMessage = validationErrors
+    .map(err => err.message)
+    .filter(msg => msg && msg.trim())
+    .join(separator) || 'Validation failed';
+
+  return new KoattyValidationError(validationErrors, combinedMessage);
 } 

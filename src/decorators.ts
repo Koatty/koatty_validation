@@ -113,12 +113,16 @@ export const Lte = createParameterizedDecorator(
 );
 
 // 复杂验证装饰器（需要特殊处理）
-export function IsEmail(options?: IsEmailOptions, validationOptions?: ValidationOptions) {
+export function IsEmail(options?: IsEmailOptions | ValidationOptions, validationOptions?: ValidationOptions) {
+  // Handle case where options is actually ValidationOptions (message only)
+  const actualOptions: IsEmailOptions = (options as any)?.message ? {} : (options as IsEmailOptions);
+  const actualValidationOptions: ValidationOptions | undefined = (options as any)?.message ? (options as ValidationOptions) : validationOptions;
+
   return createParameterizedDecorator(
     'IsEmail',
-    (value: any) => isEmail(value, options),
+    (value: any) => isEmail(value, actualOptions),
     'must be a valid email'
-  )(validationOptions);
+  )(actualValidationOptions);
 }
 
 export function IsIP(version?: any, validationOptions?: ValidationOptions) {

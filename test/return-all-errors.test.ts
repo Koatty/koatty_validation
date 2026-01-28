@@ -44,7 +44,7 @@ describe('ClassValidator.valid - returnAllErrors option', () => {
   it('should return all errors when returnAllErrors=true', async () => {
     const testData = {
       phoneNum: "123",        // 无效手机号
-      userName: "123",        // 无效姓名
+      userName: "aaaaaaaaaaa", // 无效姓名（超过长度限制）
       email: "invalid-email" // 无效邮箱
     };
 
@@ -90,7 +90,7 @@ describe('ClassValidator.valid - returnAllErrors option', () => {
   it('should use custom error separator when specified', async () => {
     const testData = {
       phoneNum: "123",
-      userName: "123",
+      userName: "aaaaaaaaaaa",
       email: "invalid-email"
     };
 
