@@ -562,6 +562,17 @@ Validation error details
 
 
 </td></tr>
+<tr><td>
+
+[ValidationOptions](./koatty_validation.validationoptions.md)
+
+
+</td><td>
+
+Validation options for ClassValidator.valid()
+
+
+</td></tr>
 </tbody></table>
 
 ## Variables
@@ -780,3 +791,4 @@ type checked rules
 
 </td></tr>
 </tbody></table>
+

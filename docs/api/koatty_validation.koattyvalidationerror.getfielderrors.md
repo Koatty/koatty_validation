@@ -45,6 +45,7 @@ string
 
 </td></tr>
 </tbody></table>
+
 **Returns:**
 
 [ValidationErrorDetail](./koatty_validation.validationerrordetail.md)<!-- -->\[\]

@@ -66,6 +66,7 @@ Parameter type metadata
 
 </td></tr>
 </tbody></table>
+
 **Returns:**
 
 Promise&lt;{ validatedArgs: any\[\]; validationTargets: any\[\]; }&gt;

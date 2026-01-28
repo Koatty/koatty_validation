@@ -79,6 +79,7 @@ _(Optional)_ Default error message
 
 </td></tr>
 </tbody></table>
+
 **Returns:**
 
 (...args: any\[\]) =&gt; (object: Object, propertyName: string) =&gt; void

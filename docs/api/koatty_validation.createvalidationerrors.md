@@ -51,6 +51,7 @@ Array&lt;{ field: string; value: any; constraint: string; message?: string; cont
 
 </td></tr>
 </tbody></table>
+
 **Returns:**
 
 [KoattyValidationError](./koatty_validation.koattyvalidationerror.md)

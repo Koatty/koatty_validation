@@ -47,6 +47,7 @@ _(Optional)_ Whether to use async validation mode, default is true - true: Async
 
 </td></tr>
 </tbody></table>
+
 **Returns:**
 
 MethodDecorator

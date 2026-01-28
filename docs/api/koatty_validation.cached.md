@@ -61,6 +61,7 @@ _(Optional)_
 
 </td></tr>
 </tbody></table>
+
 **Returns:**
 
 (target: any, propertyName: string, descriptor: PropertyDescriptor) =&gt; PropertyDescriptor
