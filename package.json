@@ -1,6 +1,6 @@
 {
   "name": "koatty_validation",
-  "version": "1.6.1",
+  "version": "1.6.3",
   "description": "Validation Util for Koatty and ThinkORM.",
   "scripts": {
     "build": "npm run build:js && npm run build:dts && npm run build:doc && npm run build:cp",
@@ -12,10 +12,6 @@
     "lock": "npm i --package-lock-only",
     "prepublishOnly": "npm test && npm run build && git push --follow-tags origin",
     "prerelease": "npm test && npm run build",
-    "release": "standard-version",
-    "release:pre": "npm run release -- --prerelease",
-    "release:major": "npm run release -- --release-as major",
-    "release:minor": "npm run release -- --release-as minor",
     "test": "npm run eslint && jest --passWithNoTests"
   },
   "main": "./dist/index.js",
@@ -78,14 +74,14 @@
   },
   "dependencies": {
     "class-validator": "^0.14.2",
-    "koatty_container": "^1.x.x",
-    "koatty_lib": "^1.x.x",
-    "koatty_logger": "^2.x.x",
+    "koatty_container": "workspace:*",
+    "koatty_lib": "workspace:*",
+    "koatty_logger": "workspace:*",
     "lru-cache": "^11.2.2"
   },
   "peerDependencies": {
-    "koatty_container": "^1.x.x",
-    "koatty_lib": "^1.x.x",
-    "koatty_logger": "^2.x.x"
+    "koatty_container": "workspace:*",
+    "koatty_lib": "workspace:*",
+    "koatty_logger": "workspace:*"
   }
 }
