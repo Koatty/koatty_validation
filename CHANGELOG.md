@@ -1,5 +1,25 @@
 # Changelog
 
+## 1.6.6
+
+### Patch Changes
+
+- build
+- Updated dependencies
+  - koatty_container@1.17.4
+  - koatty_lib@1.4.5
+  - koatty_logger@2.3.4
+
+## 1.6.5
+
+### Patch Changes
+
+- build
+- Updated dependencies
+  - koatty_container@1.17.3
+  - koatty_lib@1.4.4
+  - koatty_logger@2.3.3
+
 ## 1.6.4
 
 ### Patch Changes
