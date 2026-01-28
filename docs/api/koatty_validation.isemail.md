@@ -7,7 +7,7 @@
 **Signature:**
 
 ```typescript
-export declare function IsEmail(options?: IsEmailOptions, validationOptions?: ValidationOptions): (object: Object, propertyName: string) => void;
+export declare function IsEmail(options?: IsEmailOptions | ValidationOptions, validationOptions?: ValidationOptions): (object: Object, propertyName: string) => void;
 ```
 
 ## Parameters
@@ -35,7 +35,7 @@ options
 
 </td><td>
 
-[IsEmailOptions](./koatty_validation.isemailoptions.md)
+[IsEmailOptions](./koatty_validation.isemailoptions.md) \| ValidationOptions
 
 
 </td><td>

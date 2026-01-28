@@ -73,11 +73,11 @@
     "typescript": "^5.x.x"
   },
   "dependencies": {
-    "class-validator": "^0.14.2",
+    "class-validator": "^0.14.3",
     "koatty_container": "workspace:*",
     "koatty_lib": "workspace:*",
     "koatty_logger": "workspace:*",
-    "lru-cache": "^11.2.2"
+    "lru-cache": "^11.2.5"
   },
   "peerDependencies": {
     "koatty_container": "workspace:*",

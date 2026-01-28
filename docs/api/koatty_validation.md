@@ -214,7 +214,7 @@ Create validation error
 </td></tr>
 <tr><td>
 
-[createValidationErrors(errors)](./koatty_validation.createvalidationerrors.md)
+[createValidationErrors(errors, separator)](./koatty_validation.createvalidationerrors.md)
 
 
 </td><td>

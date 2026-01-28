@@ -15,7 +15,7 @@ export declare function createValidationErrors(errors: Array<{
     constraint: string;
     message?: string;
     context?: Record<string, any>;
-}>): KoattyValidationError;
+}>, separator?: string): KoattyValidationError;
 ```
 
 ## Parameters
@@ -47,6 +47,22 @@ Array&lt;{ field: string; value: any; constraint: string; message?: string; cont
 
 
 </td><td>
+
+
+</td></tr>
+<tr><td>
+
+separator
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+_(Optional)_
 
 
 </td></tr>
