@@ -74,9 +74,9 @@
   },
   "dependencies": {
     "class-validator": "^0.14.3",
-    "koatty_container": "^1.17.4",
-    "koatty_lib": "^1.4.5",
-    "koatty_logger": "^2.3.4",
+    "koatty_container": "workspace:*",
+    "koatty_lib": "workspace:*",
+    "koatty_logger": "workspace:*",
     "lru-cache": "^11.2.5"
   },
   "peerDependencies": {
