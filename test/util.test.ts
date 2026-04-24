@@ -20,18 +20,23 @@ describe('Util Functions', () => {
 
     test('should convert to Boolean', () => {
       expect(convertParamsType('true', 'Boolean')).toBe(true);
-      expect(convertParamsType('false', 'boolean')).toBe(true); // !!param
+      expect(convertParamsType('false', 'boolean')).toBe(false);
       expect(convertParamsType(0, 'Boolean')).toBe(false);
       expect(convertParamsType(1, 'Boolean')).toBe(true);
       expect(convertParamsType('', 'Boolean')).toBe(false);
-      expect(convertParamsType(null, 'Boolean')).toBe(false);
+      expect(convertParamsType(null, 'Boolean')).toBe(null);
+      expect(convertParamsType(undefined, 'Boolean')).toBe(undefined);
+      expect(convertParamsType('0', 'Boolean')).toBe(false);
+      expect(convertParamsType('1', 'Boolean')).toBe(true);
     });
 
     test('should convert to Array', () => {
       expect(convertParamsType([1, 2, 3], 'Array')).toEqual([1, 2, 3]);
-      expect(convertParamsType('test', 'array')).toEqual(['t', 'e', 's', 't']); // string to character array
-      expect(convertParamsType(123, 'Tuple')).toEqual([]); // number to empty array
-      expect(convertParamsType(null, 'tuple')).toEqual([]); // null to empty array
+      expect(convertParamsType('test', 'array')).toEqual(['test']);
+      expect(convertParamsType('["a","b"]', 'array')).toEqual(['a', 'b']);
+      expect(convertParamsType(123, 'Tuple')).toEqual([123]);
+      expect(convertParamsType(null, 'tuple')).toBeNull();
+      expect(convertParamsType(undefined, 'tuple')).toBeUndefined();
     });
 
     test('should convert to String', () => {
@@ -68,6 +73,15 @@ describe('Util Functions', () => {
       expect(convertParamsType(obj, 'object')).toBe(obj);
       expect(convertParamsType(obj, 'enum')).toBe(obj);
       expect(convertParamsType(obj, 'anything')).toBe(obj);
+    });
+
+    test('should convert to Object', () => {
+      expect(convertParamsType('{"a":1,"b":2}', 'object')).toEqual({ a: 1, b: 2 });
+      expect(convertParamsType('invalid json', 'object')).toBe('invalid json');
+      expect(convertParamsType(null, 'object')).toBeNull();
+      expect(convertParamsType(undefined, 'object')).toBeUndefined();
+      const obj = { foo: 'bar' };
+      expect(convertParamsType(obj, 'object')).toBe(obj);
     });
   });
 

@@ -278,15 +278,29 @@ export function convertParamsType(param: any, type: string) {
         return NaN;
       case "Boolean":
       case "boolean":
-        return !!param;
+        if (typeof param === 'boolean') return param;
+        if (param === null || param === undefined) return param;
+        if (typeof param === 'string') {
+          const lower = param.toLowerCase();
+          if (lower === 'false' || lower === '0') return false;
+          if (lower === 'true' || lower === '1') return true;
+        }
+        return Boolean(param);
       case "Array":
       case "array":
       case "Tuple":
       case "tuple":
-        if (helper.isArray(param)) {
-          return param;
+        if (helper.isArray(param)) return param;
+        if (param === null || param === undefined) return param;
+        if (typeof param === 'string') {
+          try {
+            const parsed = JSON.parse(param);
+            return Array.isArray(parsed) ? parsed : [param];
+          } catch {
+            return [param];
+          }
         }
-        return helper.toArray(param);
+        return [param];
       case "String":
       case "string":
         if (helper.isString(param)) {
@@ -305,7 +319,18 @@ export function convertParamsType(param: any, type: string) {
           return param;
         }
         return BigInt(param);
-      // case "object":
+      case "Object":
+      case "object":
+        if (param === null || param === undefined) return param;
+        if (typeof param === 'object' && !Array.isArray(param)) return param;
+        if (typeof param === 'string') {
+          try {
+            return JSON.parse(param);
+          } catch {
+            return param;
+          }
+        }
+        return param;
       // case "enum":
       default: //any
         return param;
