@@ -162,23 +162,47 @@ export function plainToClass(clazz: any, data: any, convert = false) {
 }
 
 /**
- * assign dto params 
- * @param clazz 
- * @param data 
- * @param convert 
- * @returns 
+ * Keys that must never be copied into a DTO instance (prototype pollution).
+ */
+export const FORBIDDEN_DTO_KEYS = new Set(["__proto__", "constructor", "prototype"]);
+
+/**
+ * Return a shallow copy of `data` without prototype-pollution keys.
+ */
+export function sanitizeDtoInput(data: any): Record<string, any> {
+  if (!helper.isObject(data)) {
+    return data;
+  }
+  const out: Record<string, any> = {};
+  for (const key of Object.keys(data)) {
+    if (!FORBIDDEN_DTO_KEYS.has(key)) {
+      out[key] = data[key];
+    }
+  }
+  return out;
+}
+
+/**
+ * assign dto params
+ * @param clazz
+ * @param data
+ * @param convert
+ * @returns
  */
 function assignDtoParams(clazz: any, data: any, convert = false) {
   const cls: any = Reflect.construct(clazz, []);
   if (convert) {
     const metaData = getDtoParamsMeta(clazz, cls);
     for (const [key, type] of metaData) {
-      if (key && data[key] !== undefined) {
+      if (key && !FORBIDDEN_DTO_KEYS.has(key) && data[key] !== undefined) {
         cls[key] = convertParamsType(data[key], <string>type);
       }
     }
   } else {
     for (const key in cls) {
+      if (FORBIDDEN_DTO_KEYS.has(key)) {
+        continue;
+      }
       if (Object.prototype.hasOwnProperty.call(data, key) &&
         data[key] !== undefined) {
         cls[key] = data[key];

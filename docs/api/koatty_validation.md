@@ -450,6 +450,17 @@ plain object convert to class instance
 </td></tr>
 <tr><td>
 
+[resolveWhitelistPolicy()](./koatty_validation.resolvewhitelistpolicy.md)
+
+
+</td><td>
+
+Resolve the DTO whitelist policy (SEC-03 / B-3). The application security profile (`app.security.validation`<!-- -->) wins; the fail-closed fallback enables whitelist stripping but does not reject unknown fields (standard-profile semantics for library-level usage).
+
+
+</td></tr>
+<tr><td>
+
 [setValidationLanguage(language)](./koatty_validation.setvalidationlanguage.md)
 
 

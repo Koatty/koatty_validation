@@ -6,6 +6,7 @@
  * @LastEditTime: 2024-01-03 14:32:49
  */
 import * as helper from "koatty_lib";
+import { IOCContainer } from "koatty_container";
 import { CountryCode } from 'libphonenumber-js';
 import { IsEmailOptions, IsURLOptions, HashAlgorithm, ValidOtpions, ValidationOptions } from "./types";
 import { cnName, idNumber, mobile, plainToClass, plateNumber, zipCode } from "./util";
@@ -21,6 +22,28 @@ import { validationCache } from "./performance-cache";
 export const PARAM_RULE_KEY = 'PARAM_RULE_KEY';
 export const PARAM_CHECK_KEY = 'PARAM_CHECK_KEY';
 export const ENABLE_VALIDATED = "ENABLE_VALIDATED";
+
+/**
+ * Resolve the DTO whitelist policy (SEC-03 / B-3).
+ * The application security profile (`app.security.validation`) wins; the
+ * fail-closed fallback enables whitelist stripping but does not reject
+ * unknown fields (standard-profile semantics for library-level usage).
+ */
+export function resolveWhitelistPolicy(): { whitelist: boolean; forbidNonWhitelisted: boolean } {
+  try {
+    const app = (IOCContainer as any)?.getApp?.();
+    const policy = app?.security?.validation;
+    if (policy && typeof policy.whitelist === 'boolean') {
+      return {
+        whitelist: policy.whitelist,
+        forbidNonWhitelisted: policy.forbidNonWhitelisted === true,
+      };
+    }
+  } catch {
+    // application not reachable; use the fail-closed fallback
+  }
+  return { whitelist: true, forbidNonWhitelisted: false };
+}
 
 /**
  * paramterTypes
@@ -49,7 +72,7 @@ class ValidateClass {
   }
 
   /**
-   * 
+   *
    *
    * @static
    * @returns
@@ -76,11 +99,23 @@ class ValidateClass {
     } else {
       obj = plainToClass(Clazz, data, convert);
     }
+    // SEC-03: whitelist stripping is enabled by default — fields not declared
+    // on the DTO (without a validation decorator or @Allow) are removed
+    // before the value is returned. `forbidNonWhitelisted` additionally
+    // rejects them (strict profile).
+    const whitelistPolicy = resolveWhitelistPolicy();
+    const base = {
+      whitelist: whitelistPolicy.whitelist,
+      forbidNonWhitelisted: whitelistPolicy.forbidNonWhitelisted,
+    };
     let errors: ValidationError[] = [];
     if (convert) {
-      errors = await validate(obj);
+      errors = await validate(obj, base);
     } else {
-      errors = await validate(obj, { skipMissingProperties: true });
+      // Non-convert mode keeps the legacy "partial" semantics: missing
+      // properties are not validated (skipMissingProperties), but unknown
+      // properties are still stripped/forbidden by the whitelist policy.
+      errors = await validate(obj, { ...base, skipMissingProperties: true });
     }
     if (errors.length > 0) {
       // Check if user wants all errors or just the first one

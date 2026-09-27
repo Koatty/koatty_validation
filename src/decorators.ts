@@ -7,9 +7,9 @@ import { CountryCode } from 'libphonenumber-js';
 import { ValidationOptions, isEmail, isIP, isPhoneNumber, isURL, isHash, validate } from "class-validator";
 import { IOCContainer } from "koatty_container";
 import { createSimpleDecorator, createParameterizedDecorator } from "./decorator-factory";
-import { cnName, idNumber, mobile, plateNumber, zipCode, setExpose } from "./util";
+import { cnName, idNumber, mobile, plateNumber, sanitizeDtoInput, zipCode, setExpose } from "./util";
 import { IsEmailOptions, IsURLOptions, HashAlgorithm, ValidOtpions } from "./types";
-import { ValidRules, PARAM_CHECK_KEY } from "./rule";
+import { ValidRules, PARAM_CHECK_KEY, resolveWhitelistPolicy } from "./rule";
 import { createValidationErrors } from "./error-handler";
 
 // Chinese localization validation decorators
@@ -213,13 +213,22 @@ export async function checkValidated(
         paramType !== Object && paramType !== Date) {
       
       try {
-        // If parameter is not an instance of the target type, convert it to an instance
+        // If parameter is not an instance of the target type, copy onto a
+        // fresh instance — skipping `__proto__`/`constructor`/`prototype`
+        // keys so polluted payloads never reach the DTO (SEC-03).
+        // Unknown fields are then stripped/rejected by validate()'s
+        // whitelist option below.
         let validationTarget = arg;
         if (!(arg instanceof paramType)) {
-          validationTarget = Object.assign(new paramType(), arg);
+          validationTarget = Object.assign(new paramType(), sanitizeDtoInput(arg));
         }
-        
-        const errors = await validate(validationTarget);
+
+        // Same whitelist policy as ClassValidator.valid (SEC-03 / B-3)
+        const whitelistPolicy = resolveWhitelistPolicy();
+        const errors = await validate(validationTarget, {
+          whitelist: whitelistPolicy.whitelist,
+          forbidNonWhitelisted: whitelistPolicy.forbidNonWhitelisted,
+        });
         
         if (errors.length > 0) {
           throw createValidationErrors(
