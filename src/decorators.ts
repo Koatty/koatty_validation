@@ -4,7 +4,7 @@
  */
 import * as helper from "koatty_lib";
 import { CountryCode } from 'libphonenumber-js';
-import { ValidationOptions, isEmail, isIP, isPhoneNumber, isURL, isHash, validate } from "class-validator";
+import { ValidationOptions, isEmail, isIP, isPhoneNumber, isURL, isHash, validate, Allow } from "class-validator";
 import { IOCContainer } from "koatty_container";
 import { createSimpleDecorator, createParameterizedDecorator } from "./decorator-factory";
 import { cnName, idNumber, mobile, plateNumber, sanitizeDtoInput, zipCode, setExpose } from "./util";
@@ -118,7 +118,7 @@ export function IsEmail(options?: IsEmailOptions | ValidationOptions, validation
   const actualOptions: IsEmailOptions = (options as any)?.message ? {} : (options as IsEmailOptions);
   const actualValidationOptions: ValidationOptions | undefined = (options as any)?.message ? (options as ValidationOptions) : validationOptions;
 
-  return createParameterizedDecorator(
+  return createSimpleDecorator(
     'IsEmail',
     (value: any) => isEmail(value, actualOptions),
     'must be a valid email'
@@ -126,7 +126,7 @@ export function IsEmail(options?: IsEmailOptions | ValidationOptions, validation
 }
 
 export function IsIP(version?: any, validationOptions?: ValidationOptions) {
-  return createParameterizedDecorator(
+  return createSimpleDecorator(
     'IsIP',
     (value: any) => isIP(value, version),
     'must be a valid IP address'
@@ -134,7 +134,7 @@ export function IsIP(version?: any, validationOptions?: ValidationOptions) {
 }
 
 export function IsPhoneNumber(region?: CountryCode, validationOptions?: ValidationOptions) {
-  return createParameterizedDecorator(
+  return createSimpleDecorator(
     'IsPhoneNumber',
     (value: any) => isPhoneNumber(value, region),
     'must be a valid phone number'
@@ -142,7 +142,7 @@ export function IsPhoneNumber(region?: CountryCode, validationOptions?: Validati
 }
 
 export function IsUrl(options?: IsURLOptions, validationOptions?: ValidationOptions) {
-  return createParameterizedDecorator(
+  return createSimpleDecorator(
     'IsUrl',
     (value: any) => isURL(value, options),
     'must be a valid URL'
@@ -150,7 +150,7 @@ export function IsUrl(options?: IsURLOptions, validationOptions?: ValidationOpti
 }
 
 export function IsHash(algorithm: HashAlgorithm, validationOptions?: ValidationOptions) {
-  return createParameterizedDecorator(
+  return createSimpleDecorator(
     'IsHash',
     (value: any) => isHash(value, algorithm),
     'must be a valid hash'
@@ -165,6 +165,7 @@ export function IsHash(algorithm: HashAlgorithm, validationOptions?: ValidationO
 export function Expose(): PropertyDecorator {
   return function (object: Object, propertyName: string) {
     setExpose(object, propertyName);
+    Allow()(object, propertyName);
   };
 }
 
@@ -174,6 +175,7 @@ export function Expose(): PropertyDecorator {
 export function IsDefined(): PropertyDecorator {
   return function (object: Object, propertyName: string) {
     setExpose(object, propertyName);
+    Allow()(object, propertyName);
   };
 }
 
@@ -197,7 +199,8 @@ export function Valid(rule: ValidRules | ValidRules[] | Function, options?: stri
  */
 export async function checkValidated(
   args: any[],
-  paramTypes: any[]
+  paramTypes: any[],
+  partial = false
 ): Promise<{ validatedArgs: any[]; validationTargets: any[] }> {
   const validationTargets: any[] = [];
   
@@ -228,6 +231,8 @@ export async function checkValidated(
         const errors = await validate(validationTarget, {
           whitelist: whitelistPolicy.whitelist,
           forbidNonWhitelisted: whitelistPolicy.forbidNonWhitelisted,
+          forbidUnknownValues: true,
+          skipMissingProperties: partial,
         });
         
         if (errors.length > 0) {
@@ -252,7 +257,7 @@ export async function checkValidated(
     }
   }
   
-  return { validatedArgs: args, validationTargets };
+  return { validatedArgs: validationTargets, validationTargets };
 }
 
 /**
@@ -262,29 +267,37 @@ export async function checkValidated(
  *   - true: Async mode, validation is handled by IOC container in the framework (suitable for scenarios where parameter values need to be obtained asynchronously)
  *   - false: Sync mode, validation is performed immediately when the method is called (suitable for scenarios where parameter values are already prepared)
  */
-export function Validated(isAsync: boolean = true): MethodDecorator {
-  return function (target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor) {
+export interface ValidatedOptions {
+  async?: boolean;
+  partial?: boolean;
+  /** Explicit DTO parameter types for TC39, which does not emit design:paramtypes. */
+  types?: any[];
+}
+
+export function Validated(options: boolean | ValidatedOptions = true) {
+  const isAsync = typeof options === 'boolean' ? options : options.async !== false;
+  const partial = typeof options === 'boolean' ? false : options.partial === true;
+  const types = typeof options === 'boolean' ? undefined : options.types;
+  return IOCContainer.createDecorator(({ target, methodName, descriptor, method, context }) => {
     if (isAsync) {
-      // Async mode: Save metadata, validation will be performed by the framework after async parameter retrieval
-      IOCContainer.savePropertyData(PARAM_CHECK_KEY, {
-        dtoCheck: 1
-      }, target, propertyKey);
-    } else {
-      // Sync mode: Perform validation immediately when the method is called
-      const originalMethod = descriptor.value;
-      
-      descriptor.value = async function (...args: any[]) {
-        // Get parameter type metadata
-        const paramTypes = Reflect.getMetadata('design:paramtypes', target, propertyKey) || [];
-        
-        // Execute validation
-        await checkValidated(args, paramTypes);
-        
-        // Execute original method
-        return originalMethod.apply(this, args);
-      };
+      const save = (prototype: any) => IOCContainer.savePropertyData(PARAM_CHECK_KEY, {
+        dtoCheck: 1, partial
+      }, prototype, methodName);
+      if (context) context.addInitializer(function (this: any) { save(Object.getPrototypeOf(this)); });
+      else save(target);
+      return descriptor;
     }
-    
+    const original = method ?? descriptor!.value;
+    const wrapped = async function (this: any, ...args: any[]) {
+      const paramTypes = types ?? Reflect.getMetadata('design:paramtypes', target ?? Object.getPrototypeOf(this), methodName) ?? [];
+      if (context && args.length && !paramTypes.length) {
+        throw new Error('TC39 @Validated requires explicit parameter types via { types: [Dto] }.');
+      }
+      const { validatedArgs } = await checkValidated(args, paramTypes, partial);
+      return original.apply(this, validatedArgs);
+    };
+    if (context) return wrapped;
+    descriptor!.value = wrapped;
     return descriptor;
-  };
-} 
+  }, 'method');
+}

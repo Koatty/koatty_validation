@@ -106,7 +106,7 @@ Check the base types.
 </td></tr>
 <tr><td>
 
-[checkValidated(args, paramTypes)](./koatty_validation.checkvalidated.md)
+[checkValidated(args, paramTypes, partial)](./koatty_validation.checkvalidated.md)
 
 
 </td><td>
@@ -483,12 +483,10 @@ Parameter validation decorator
 </td></tr>
 <tr><td>
 
-[Validated(isAsync)](./koatty_validation.validated.md)
+[Validated(options)](./koatty_validation.validated.md)
 
 
 </td><td>
-
-Method validation decorator Automatically validates DTO objects in method parameters
 
 
 </td></tr>
@@ -559,6 +557,17 @@ Email validation options
 </td><td>
 
 URL validation options
+
+
+</td></tr>
+<tr><td>
+
+[ValidatedOptions](./koatty_validation.validatedoptions.md)
+
+
+</td><td>
+
+Method validation decorator Automatically validates DTO objects in method parameters
 
 
 </td></tr>

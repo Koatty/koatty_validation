@@ -41,8 +41,8 @@ describe("koatty_validation", function () {
 
     })
 
-    test("ClassValidator", () => {
-        ClassValidator.valid(TestClass, {
+    test("ClassValidator", async () => {
+        await ClassValidator.valid(TestClass, {
             id: 3,
             name: '12',
             text: 'aaa',

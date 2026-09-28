@@ -9,7 +9,7 @@ import * as helper from "koatty_lib";
 import { IOCContainer } from "koatty_container";
 import { CountryCode } from 'libphonenumber-js';
 import { IsEmailOptions, IsURLOptions, HashAlgorithm, ValidOtpions, ValidationOptions } from "./types";
-import { cnName, idNumber, mobile, plainToClass, plateNumber, zipCode } from "./util";
+import { cnName, idNumber, mobile, plainToClass, sanitizeDtoInput, plateNumber, zipCode } from "./util";
 import { createValidationErrors } from "./error-handler";
 import {
   contains, equals, isEmail, isHash, isIn, isIP, isNotIn, isPhoneNumber,
@@ -97,7 +97,9 @@ class ValidateClass {
     if (data instanceof Clazz) {
       obj = data;
     } else {
-      obj = plainToClass(Clazz, data, convert);
+      // Preserve unknown keys until class-validator can reject or strip them.
+      const converted = plainToClass(Clazz, data, convert);
+      obj = Object.assign(new Clazz(), sanitizeDtoInput(data), converted);
     }
     // SEC-03: whitelist stripping is enabled by default — fields not declared
     // on the DTO (without a validation decorator or @Allow) are removed
@@ -107,15 +109,16 @@ class ValidateClass {
     const base = {
       whitelist: whitelistPolicy.whitelist,
       forbidNonWhitelisted: whitelistPolicy.forbidNonWhitelisted,
+      forbidUnknownValues: true,
     };
     let errors: ValidationError[] = [];
     if (convert) {
-      errors = await validate(obj, base);
+      errors = await validate(obj, { ...base, skipMissingProperties: options?.partial ?? false });
     } else {
       // Non-convert mode keeps the legacy "partial" semantics: missing
       // properties are not validated (skipMissingProperties), but unknown
       // properties are still stripped/forbidden by the whitelist policy.
-      errors = await validate(obj, { ...base, skipMissingProperties: true });
+      errors = await validate(obj, { ...base, skipMissingProperties: options?.partial ?? true });
     }
     if (errors.length > 0) {
       // Check if user wants all errors or just the first one
@@ -133,7 +136,7 @@ class ValidateClass {
         );
       } else {
         // Default behavior (backward compatible): return only first error
-        throw new Error(Object.values(errors[0].constraints)[0]);
+        throw new Error(Object.values(errors[0].constraints || {})[0] || "DTO validation failed");
       }
     }
     return obj;

@@ -30,8 +30,10 @@ export function createValidationDecorator(options: DecoratorOptions) {
   
   return function decoratorFactory(...args: any[]) {
     // Handle parameters: last parameter is ValidationOptions, previous ones are validator function parameters
-    const validationOptions = args[args.length - 1] as ValidationOptions;
-    const validatorArgs = requiresValue ? args.slice(0, -1) : [];
+    const last = args[args.length - 1];
+    const hasOptions = !requiresValue || (args.length > 1 && (last === undefined || (last !== null && typeof last === "object" && !Array.isArray(last))));
+    const validationOptions = (hasOptions ? last : undefined) as ValidationOptions;
+    const validatorArgs = requiresValue ? (hasOptions ? args.slice(0, -1) : args) : [];
     
     return function propertyDecorator(object: Object, propertyName: string) {
       // Set property as exportable

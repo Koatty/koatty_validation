@@ -4,12 +4,10 @@
 
 ## Validated() function
 
-Method validation decorator Automatically validates DTO objects in method parameters
-
 **Signature:**
 
 ```typescript
-export declare function Validated(isAsync?: boolean): MethodDecorator;
+export declare function Validated(options?: boolean | ValidatedOptions): (...args: any[]) => any;
 ```
 
 ## Parameters
@@ -32,17 +30,17 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
-isAsync
+options
 
 
 </td><td>
 
-boolean
+boolean \| [ValidatedOptions](./koatty_validation.validatedoptions.md)
 
 
 </td><td>
 
-_(Optional)_ Whether to use async validation mode, default is true - true: Async mode, validation is handled by IOC container in the framework (suitable for scenarios where parameter values need to be obtained asynchronously) - false: Sync mode, validation is performed immediately when the method is called (suitable for scenarios where parameter values are already prepared)
+_(Optional)_
 
 
 </td></tr>
@@ -50,5 +48,5 @@ _(Optional)_ Whether to use async validation mode, default is true - true: Async
 
 **Returns:**
 
-MethodDecorator
+(...args: any\[\]) =&gt; any
 

@@ -56,6 +56,25 @@ _(Optional)_ Separator for joining multiple error messages  '; '
 </td></tr>
 <tr><td>
 
+[partial?](./koatty_validation.validationoptions.partial.md)
+
+
+</td><td>
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+_(Optional)_ Skip missing properties only when explicitly requested. Non-convert default remains partial.
+
+
+</td></tr>
+<tr><td>
+
 [returnAllErrors?](./koatty_validation.validationoptions.returnallerrors.md)
 
 

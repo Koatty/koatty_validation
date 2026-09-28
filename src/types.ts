@@ -53,6 +53,8 @@ export type ValidOtpions = {
  * Validation options for ClassValidator.valid()
  */
 export interface ValidationOptions {
+  /** Skip missing properties only when explicitly requested. Non-convert default remains partial. */
+  partial?: boolean;
   /**
    * Whether to return all validation errors or only the first one
    * @default false (backward compatibility - returns only first error)

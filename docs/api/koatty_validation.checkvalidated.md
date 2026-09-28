@@ -9,7 +9,7 @@ Synchronous validation function - Executes the actual validation logic
 **Signature:**
 
 ```typescript
-export declare function checkValidated(args: any[], paramTypes: any[]): Promise<{
+export declare function checkValidated(args: any[], paramTypes: any[], partial?: boolean): Promise<{
     validatedArgs: any[];
     validationTargets: any[];
 }>;
@@ -62,6 +62,22 @@ any\[\]
 </td><td>
 
 Parameter type metadata
+
+
+</td></tr>
+<tr><td>
+
+partial
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+_(Optional)_
 
 
 </td></tr>
