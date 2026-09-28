@@ -58,7 +58,6 @@
     "jest": "^29.x.x",
     "jest-html-reporters": "^3.x.x",
     "libphonenumber-js": "^1.x.x",
-    "reflect-metadata": "^0.2.2",
     "ts-jest": "^29.x.x",
     "tslib": "^2.x.x"
   },
@@ -67,7 +66,8 @@
     "koatty_container": "workspace:*",
     "koatty_lib": "workspace:*",
     "koatty_logger": "workspace:*",
-    "lru-cache": "^11.2.5"
+    "lru-cache": "^11.2.5",
+    "reflect-metadata": "^0.2.2"
   },
   "peerDependencies": {
     "koatty_container": "^4.0.0",

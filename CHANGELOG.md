@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased — Phase A–D completion
+
+- reflect-metadata 按运行期依赖声明。
+
+本轮尚未发布；验收边界见根目录 `docs/audits/phase-ad-completion-2026-09-28.md`。
+
 ## 4.0.0
 
 ### Patch Changes
