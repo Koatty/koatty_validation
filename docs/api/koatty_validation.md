@@ -682,6 +682,19 @@ Use functions or built-in rules for validation. Throws error if validation fails
 </td></tr>
 <tr><td>
 
+[PARAM\_DTO\_KEY](./koatty_validation.param_dto_key.md)
+
+
+</td><td>
+
+Explicit DTO parameter types bridged for runtime metadata consumers (roadmap Phase F, item F-1: `koatty_mcp` tool input schemas).
+
+Additive: `PARAM_CHECK_KEY` semantics are unchanged, so the router keeps treating `@Validated` exactly as before.
+
+
+</td></tr>
+<tr><td>
+
 [PARAM\_RULE\_KEY](./koatty_validation.param_rule_key.md)
 
 

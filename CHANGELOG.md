@@ -1,5 +1,11 @@
 # Changelog
 
+## 4.1.0
+
+- 新增 `PARAM_DTO_KEY` 元数据：`@Validated({ types: [Dto] })` 现在把声明的 DTO 类型（原生类 + 名字）桥接到 IoC 元数据，供运行期元数据消费者（`koatty_mcp` 工具 inputSchema）复用同一份声明；异步分支同样写入。`PARAM_CHECK_KEY` 语义保持不变，纯增量。
+
+迁移说明：`docs/migration/phase-f-mcp-host.md`。
+
 ## Unreleased — Phase A–D completion
 
 - reflect-metadata 按运行期依赖声明。

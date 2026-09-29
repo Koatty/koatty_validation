@@ -9,7 +9,7 @@ import { IOCContainer } from "koatty_container";
 import { createSimpleDecorator, createParameterizedDecorator } from "./decorator-factory";
 import { cnName, idNumber, mobile, plateNumber, sanitizeDtoInput, zipCode, setExpose } from "./util";
 import { IsEmailOptions, IsURLOptions, HashAlgorithm, ValidOtpions } from "./types";
-import { ValidRules, PARAM_CHECK_KEY, resolveWhitelistPolicy } from "./rule";
+import { ValidRules, PARAM_CHECK_KEY, PARAM_DTO_KEY, resolveWhitelistPolicy } from "./rule";
 import { createValidationErrors } from "./error-handler";
 
 // Chinese localization validation decorators
@@ -279,10 +279,25 @@ export function Validated(options: boolean | ValidatedOptions = true) {
   const partial = typeof options === 'boolean' ? false : options.partial === true;
   const types = typeof options === 'boolean' ? undefined : options.types;
   return IOCContainer.createDecorator(({ target, methodName, descriptor, method, context }) => {
-    if (isAsync) {
-      const save = (prototype: any) => IOCContainer.savePropertyData(PARAM_CHECK_KEY, {
-        dtoCheck: 1, partial
+    // Phase F (F-1): bridge the declared DTO types so runtime metadata consumers
+    // (koatty_mcp tool schemas) do not re-implement DTO discovery. Written under
+    // its own key on purpose: PARAM_CHECK_KEY keeps its existing meaning for the
+    // router's parameter injection.
+    const saveDtoTypes = (prototype: any) => {
+      if (!types || !types.length) return;
+      IOCContainer.savePropertyData(PARAM_DTO_KEY, {
+        partial,
+        types: types.map((item: any) => item?.name).filter(Boolean),
+        dtoTypes: [...types],
       }, prototype, methodName);
+    };
+    if (isAsync) {
+      const save = (prototype: any) => {
+        IOCContainer.savePropertyData(PARAM_CHECK_KEY, {
+          dtoCheck: 1, partial
+        }, prototype, methodName);
+        saveDtoTypes(prototype);
+      };
       if (context) context.addInitializer(function (this: any) { save(Object.getPrototypeOf(this)); });
       else save(target);
       return descriptor;
@@ -296,7 +311,11 @@ export function Validated(options: boolean | ValidatedOptions = true) {
       const { validatedArgs } = await checkValidated(args, paramTypes, partial);
       return original.apply(this, validatedArgs);
     };
-    if (context) return wrapped;
+    if (context) {
+      context.addInitializer(function (this: any) { saveDtoTypes(Object.getPrototypeOf(this)); });
+      return wrapped;
+    }
+    saveDtoTypes(target);
     descriptor!.value = wrapped;
     return descriptor;
   }, 'method');

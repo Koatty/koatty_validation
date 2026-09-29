@@ -22,6 +22,14 @@ import { validationCache } from "./performance-cache";
 export const PARAM_RULE_KEY = 'PARAM_RULE_KEY';
 export const PARAM_CHECK_KEY = 'PARAM_CHECK_KEY';
 export const ENABLE_VALIDATED = "ENABLE_VALIDATED";
+/**
+ * Explicit DTO parameter types bridged for runtime metadata consumers
+ * (roadmap Phase F, item F-1: `koatty_mcp` tool input schemas).
+ *
+ * Additive: `PARAM_CHECK_KEY` semantics are unchanged, so the router keeps
+ * treating `@Validated` exactly as before.
+ */
+export const PARAM_DTO_KEY = 'PARAM_DTO_KEY';
 
 /**
  * Resolve the DTO whitelist policy (SEC-03 / B-3).
