@@ -1,11 +1,11 @@
 {
   "name": "koatty_validation",
-  "version": "4.1.0",
+  "version": "4.0.0",
   "description": "Validation Util for Koatty and ThinkORM.",
   "scripts": {
     "build": "pnpm run build:js && pnpm run build:dts && pnpm run build:doc && pnpm run build:cp",
     "build:js": "tsup",
-    "build:dts": "bash ../../scripts/build-dts.sh",
+    "build:dts": "bash ../../scripts/build-dts.sh && tsc src/schema-rules.ts --declaration --emitDeclarationOnly --skipLibCheck --target ES2020 --module commonjs --outDir dist",
     "build:doc": "api-documenter markdown --input temp --output docs/api",
     "build:cp": "node ../../scripts/postBuild.js && cp temp/schema-rules.d.ts dist/schema-rules.d.ts",
     "clean": "rimraf dist temp docs/api",
@@ -67,6 +67,7 @@
     "tslib": "^2.x.x"
   },
   "dependencies": {
+    "class-transformer": "^0.5.1",
     "class-validator": "^0.14.3",
     "koatty_container": "workspace:*",
     "koatty_lib": "workspace:*",

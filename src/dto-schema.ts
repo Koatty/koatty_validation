@@ -127,6 +127,7 @@ export function dtoToJsonSchema(Dto: any, depth = 0, partial = false): JsonSchem
       // `@ValidateIf` / other conditional checks are runtime-only.
       if (rawType === 'conditionalvalidation') { optional = true; unresolved.push(`${property}:conditionalValidation`); continue; }
       if (key === 'isdefined' || key === 'allow') continue;
+      if (key === 'nestedvalidation') { unresolved.push(`${property}:nested-transformation`); continue; }
       const applied = applyDtoConstraint(metadata.each ? itemSchema : propertySchema, key, Array.isArray(metadata.constraints) ? metadata.constraints : []);
       if (!applied) unresolved.push(`${property}:${metadata.name ?? metadata.type}`);
     }
@@ -136,6 +137,7 @@ export function dtoToJsonSchema(Dto: any, depth = 0, partial = false): JsonSchem
     }
 
     const resolved = each ? { ...propertySchema, type: 'array', items: itemSchema } : propertySchema;
+    if (typeof safeDesignType(Dto, property) === 'function' && !PRIMITIVE_TYPES.includes(safeDesignType(Dto, property))) unresolved.push(`${property}:nested-runtime-policy`);
     schema.properties[property] = list.some(item => item.name === 'isOptional') ? { anyOf: [resolved, { type: 'null' }] } : resolved;
 
     if (!optional && (!partial || list.some(item => item.type === 'isDefined' || item.name === 'isDefined'))) required.push(property);

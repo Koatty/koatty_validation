@@ -50,6 +50,7 @@ describe("SEC-03: DTO whitelist validation", () => {
         name: "tom", age: 21, role: "admin",
       });
       await expect(ClassValidator.valid(Sec03UserDto, dto, true)).rejects.toThrow();
+      await expect(ClassValidator.valid(Sec03UserDto, { name: "tom", age: 21, role: "admin" }, true)).rejects.toThrow();
     } finally {
       (IOCContainer as any).app = originalApp;
     }

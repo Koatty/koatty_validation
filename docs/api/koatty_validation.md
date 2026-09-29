@@ -84,6 +84,17 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
+[applyDtoConstraint(schema, name, constraints)](./koatty_validation.applydtoconstraint.md)
+
+
+</td><td>
+
+Shared by static manifest extraction and runtime DTO schemas. False means the rule is only partially represented and must be marked unresolved.
+
+
+</td></tr>
+<tr><td>
+
 [cached(validator, ttl)](./koatty_validation.cached.md)
 
 
@@ -110,8 +121,6 @@ Check the base types.
 
 
 </td><td>
-
-Synchronous validation function - Executes the actual validation logic
 
 
 </td></tr>
@@ -220,6 +229,28 @@ Create validation error
 </td><td>
 
 Create validation errors in batch
+
+
+</td></tr>
+<tr><td>
+
+[dtoToJsonSchema(Dto, depth, partial)](./koatty_validation.dtotojsonschema.md)
+
+
+</td><td>
+
+Convert a DTO class into a JSON Schema object.
+
+
+</td></tr>
+<tr><td>
+
+[emptyInputSchema()](./koatty_validation.emptyinputschema.md)
+
+
+</td><td>
+
+Empty object schema used when a tool declares no DTO.
 
 
 </td></tr>

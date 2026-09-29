@@ -3,8 +3,9 @@
  * @author richen
  */
 import * as helper from "koatty_lib";
+import { plainToInstance } from 'class-transformer';
 import { CountryCode } from 'libphonenumber-js';
-import { ValidationOptions, isEmail, isIP, isPhoneNumber, isURL, isHash, validate, Allow } from "class-validator";
+import { getMetadataStorage, ValidationOptions, isEmail, isIP, isPhoneNumber, isURL, isHash, validate, Allow } from "class-validator";
 import { IOCContainer } from "koatty_container";
 import { createSimpleDecorator, createParameterizedDecorator } from "./decorator-factory";
 import { cnName, idNumber, mobile, plateNumber, sanitizeDtoInput, zipCode, setExpose } from "./util";
@@ -197,6 +198,21 @@ export function Valid(rule: ValidRules | ValidRules[] | Function, options?: stri
  * @param paramTypes Parameter type metadata
  * @returns Validated parameters and validation targets
  */
+function transformDto(Dto: any, input: any, depth = 0): any {
+  if (depth > 32 || !input || typeof input !== 'object' || Array.isArray(input)) throw new Error('Invalid DTO object');
+  const value: any = plainToInstance(Dto, sanitizeDtoInput(input), { enableImplicitConversion: false });
+  const metadata = getMetadataStorage().getTargetValidationMetadatas(Dto, Dto.name, false, false);
+  for (const field of new Set(metadata.map(item => item.propertyName))) {
+    const type = Reflect.getMetadata('design:type', Dto.prototype, field);
+    const child = value[field];
+    if (type === Date && typeof child === 'string' && /^\d{4}-\d{2}-\d{2}T/.test(child)) value[field] = new Date(child);
+    else if (child && typeof child === 'object' && type && ![Object, Array, Date, String, Number, Boolean].includes(type)) {
+      value[field] = transformDto(type, child, depth + 1);
+    }
+  }
+  return value;
+}
+
 export async function checkValidated(
   args: any[],
   paramTypes: any[],
@@ -223,7 +239,7 @@ export async function checkValidated(
         // whitelist option below.
         let validationTarget = arg;
         if (!(arg instanceof paramType)) {
-          validationTarget = Object.assign(new paramType(), sanitizeDtoInput(arg));
+          validationTarget = transformDto(paramType, arg);
         }
 
         // Same whitelist policy as ClassValidator.valid (SEC-03 / B-3)

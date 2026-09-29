@@ -4,8 +4,6 @@
 
 ## checkValidated() function
 
-Synchronous validation function - Executes the actual validation logic
-
 **Signature:**
 
 ```typescript
@@ -45,8 +43,6 @@ any\[\]
 
 </td><td>
 
-Method parameters
-
 
 </td></tr>
 <tr><td>
@@ -60,8 +56,6 @@ any\[\]
 
 
 </td><td>
-
-Parameter type metadata
 
 
 </td></tr>
@@ -86,6 +80,4 @@ _(Optional)_
 **Returns:**
 
 Promise&lt;{ validatedArgs: any\[\]; validationTargets: any\[\]; }&gt;
-
-Validated parameters and validation targets
 

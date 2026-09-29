@@ -1,3 +1,9 @@
+## Unreleased — Phase A–F review (2026-09-30)
+
+Transform explicit JSON Date/nested DTO input without primitive coercion; mark approximate schema rules unresolved; emit schema-rules subpath declarations. Restore pre-release version baseline for Changesets.
+
+Migration: `docs/migration/phase-a-f-review-fixes.md` in the monorepo. No release has been applied.
+
 # Changelog
 
 ## Unreleased — Phase F audit fixes (2026-09-29)

@@ -464,3 +464,7 @@ const validatedData = await ClassValidator.valid(UserSchema, rawData, true);
 - [koatty](https://github.com/koatty/koatty) - 基于 Koa2 的 Node.js 框架
 - [class-validator](https://github.com/typestack/class-validator) - 基础验证库
 
+
+## Decorator/runtime compatibility
+
+`@Validated({ types: [Dto] })` supports legacy and TC39 **method** decorators. Third-party class-validator/class-transformer property decorators still require DTOs compiled with legacy decorators and metadata; this release does not migrate them to TC39. Nested arrays require `@Type(() => ChildDto)` plus `@ValidateNested({ each: true })`. Approximate schema rules are reported as unresolved, not advertised as equivalent runtime validation. See the monorepo `docs/migration/phase-a-f-review-fixes.md`.
