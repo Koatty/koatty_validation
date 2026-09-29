@@ -7,7 +7,7 @@
     "build:js": "tsup",
     "build:dts": "bash ../../scripts/build-dts.sh",
     "build:doc": "api-documenter markdown --input temp --output docs/api",
-    "build:cp": "node ../../scripts/postBuild.js",
+    "build:cp": "node ../../scripts/postBuild.js && cp temp/schema-rules.d.ts dist/schema-rules.d.ts",
     "clean": "rimraf dist temp docs/api",
     "lint": "eslint --ext .ts,.js ./src",
     "test": "pnpm run lint && jest --passWithNoTests",
@@ -19,6 +19,11 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
       "require": "./dist/index.js"
+    },
+    "./schema-rules": {
+      "types": "./dist/schema-rules.d.ts",
+      "import": "./dist/schema-rules.mjs",
+      "require": "./dist/schema-rules.js"
     }
   },
   "repository": {
@@ -74,5 +79,12 @@
     "koatty_lib": "^1.6.0",
     "koatty_logger": "^3.1.0"
   },
-  "types": "./dist/index.d.ts"
+  "types": "./dist/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "schema-rules": [
+        "dist/schema-rules.d.ts"
+      ]
+    }
+  }
 }

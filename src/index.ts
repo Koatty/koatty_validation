@@ -8,6 +8,7 @@
 
 // export for manual verification
 export * from "./rule";
+export { dtoToJsonSchema, emptyInputSchema, applyDtoConstraint } from './dto-schema';
 // 导出装饰器（使用装饰器工厂模式）
 export * from "./decorators";
 // 导出装饰器工厂，供高级用户自定义装饰器

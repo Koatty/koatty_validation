@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased — Phase F audit fixes (2026-09-29)
+
+- 修复 TC39 方法 DTO 元数据提前发现；集中导出 DTO JSON Schema 及纯 schema-rules 入口供 CLI 共用，修复字符串、nested、optional/each/partial 语义。
+- 迁移说明：`docs/migration/phase-f-audit-fixes.md`（主仓库）。
+
+
 ## 4.1.0
 
 - 新增 `PARAM_DTO_KEY` 元数据：`@Validated({ types: [Dto] })` 现在把声明的 DTO 类型（原生类 + 名字）桥接到 IoC 元数据，供运行期元数据消费者（`koatty_mcp` 工具 inputSchema）复用同一份声明；异步分支同样写入。`PARAM_CHECK_KEY` 语义保持不变，纯增量。

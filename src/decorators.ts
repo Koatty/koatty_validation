@@ -279,6 +279,8 @@ export function Validated(options: boolean | ValidatedOptions = true) {
   const partial = typeof options === 'boolean' ? false : options.partial === true;
   const types = typeof options === 'boolean' ? undefined : options.types;
   return IOCContainer.createDecorator(({ target, methodName, descriptor, method, context }) => {
+    const dtoMetadata = types?.length ? { partial, types: types.map((item: any) => item?.name).filter(Boolean), dtoTypes: [...types] } : undefined;
+    if (context && method && dtoMetadata) Reflect.defineMetadata(PARAM_DTO_KEY, dtoMetadata, method);
     // Phase F (F-1): bridge the declared DTO types so runtime metadata consumers
     // (koatty_mcp tool schemas) do not re-implement DTO discovery. Written under
     // its own key on purpose: PARAM_CHECK_KEY keeps its existing meaning for the
@@ -312,6 +314,10 @@ export function Validated(options: boolean | ValidatedOptions = true) {
       return original.apply(this, validatedArgs);
     };
     if (context) {
+      // Preserve metadata on the callable itself, so lazy TC39 components are
+      // discoverable before their first instance (in either decorator order).
+      for (const key of Reflect.getOwnMetadataKeys(original)) Reflect.defineMetadata(key, Reflect.getOwnMetadata(key, original), wrapped);
+      if (dtoMetadata) Reflect.defineMetadata(PARAM_DTO_KEY, dtoMetadata, wrapped);
       context.addInitializer(function (this: any) { saveDtoTypes(Object.getPrototypeOf(this)); });
       return wrapped;
     }
