@@ -7,6 +7,8 @@
 
 ## ✨ 特性
 
+- 🤖 **MCP/LLM 就绪(5.0)**: HTTP body、MCP 工具入参、LLM 结构化输出共用同一批 DTO——**全链路唯一的校验真相源**
+- 🧬 **DTO 实例转换(5.0)**: 入参经 `class-transformer` 转换为真实 DTO 实例(不开原始类型隐式转换)，`Date` 字段、嵌套 DTO、DTO 数组按设计类型转换后再校验
 - 🚀 **高性能**: 内置缓存机制，提升验证性能
 - 🌏 **中文支持**: 内置中文验证规则（姓名、身份证、手机号等）
 - 🔧 **自定义装饰器**: 支持装饰器工厂模式，轻松创建自定义验证器
@@ -21,6 +23,13 @@ npm install koatty_validation
 # 或
 yarn add koatty_validation
 ```
+
+## 🆕 v5.0 变更要点
+
+- **PARAM_DTO_KEY**: `@Validated({ types: [Dto] })` 现在同时写入 DTO 类型桥接元数据(`PARAM_DTO_KEY`)，供 `koatty_mcp` 等消费者读取工具入参 schema；`PARAM_CHECK_KEY` 语义不变
+- **required 语义**: 静态 schema(manifest)中 required 仅由装饰器决定(`@IsOptional` / `@ValidateIf` 豁免)，不再被 TS `?` 误导；未装饰属性被跳过并标记 `dto.undecorated`
+- **保守 schema 诊断**: 无法等价表达的规则(自定义约束、嵌套运行时策略)输出 `unresolved` 诊断而非假装合法
+- 迁移细节见主仓库 `docs/migration/phase-a-f-review-fixes.md`
 
 ## 🎯 快速开始
 
